@@ -8,6 +8,7 @@ import Login from "./Pages/auth/login";
 import { accessTokenAtom, userDetailsAtom } from "./atoms/atom";
 import { useAtom } from "jotai/react";
 import RazorpayButton from "./Pages/payment/razorpay";
+import Home from "./Pages/home/home";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -19,11 +20,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        {!(accessToken && userDetails) ? (
-          <Login path="/" />
-        ) : (
-          <RazorpayButton path="/" />
-        )}
+        {!(accessToken && userDetails) ? <Login path="/" /> : <Home path="/" />}
       </Router>
     </QueryClientProvider>
   );

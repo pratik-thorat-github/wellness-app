@@ -2,6 +2,8 @@ import * as React from "react";
 import { useState } from "react";
 
 import axios from "axios";
+import { Button, Flex, Segmented } from "antd";
+import { GoogleCircleFilled } from "@ant-design/icons";
 
 import { RouteComponentProps } from "@reach/router";
 import {
@@ -60,23 +62,25 @@ const Login: React.FC<ILoginProps> = ({}) => {
     mutationFn: getUserByEmail,
     onMutate: () => {},
     onSuccess: (res: any) => {
+      console.log(res);
       setAccessTokenAtom(res.accessToken);
       setUserDetailsAtom(res.user);
     },
     onError: () => {
       console.log("Error in getting user from email");
+      if (profileFromGoogle)
+        _addUser({
+          name: profileFromGoogle?.name,
+          email: profileFromGoogle?.email,
+        });
       setNewUser(true);
     },
   });
 
   const { mutate: _addUser } = useMutation({
     mutationFn: addUser,
-    onSuccess: (data: any) => {
-      setAccessTokenAtom(data.accessToken);
-      setUserDetailsAtom(data.user);
-      console.log(data);
-      console.log(_accessTokenAtom);
-      console.log(_userDetailsAtom);
+    onSuccess: () => {
+      if (profileFromGoogle) _getUserByEmail(profileFromGoogle?.email);
     },
     onError: (error: Error) => {
       console.log(error);
@@ -98,64 +102,70 @@ const Login: React.FC<ILoginProps> = ({}) => {
   }, [userGoogleLogin]);
 
   return (
-    <div>
-      <h2>React Google Login</h2>
-      <br />
-      <br />
-      {profileFromGoogle ? (
-        <div>
-          <img src={profileFromGoogle.picture} alt="user image" />
-          <h3>User Logged in</h3>
-          <p>Name: {profileFromGoogle.name}</p>
-          <p>Email Address: {profileFromGoogle.email}</p>
-          <br />
-          <br />
+    <Flex flex={1} align="center" justify="center" vertical>
+      <div>
+        <h2>Welcome to One Pass</h2>
+      </div>
+      <div>
+        <br />
+        <br />
+        {profileFromGoogle ? (
+          <div>
+            <img src={profileFromGoogle.picture} alt="user image" />
+            <h3>User Logged in</h3>
+            <p>Name: {profileFromGoogle.name}</p>
+            <p>Email Address: {profileFromGoogle.email}</p>
+            <br />
+            <br />
 
-          {newUser ? (
-            <div>
-              <input type="text" title="Phone" />
-              <select>
-                <option>M</option>
-                <option>F</option>
-                <option>O</option>
-              </select>
-              <input type="date" title="DOB" />
-              <input type="text" title="AddressLine1" />
-              <input type="text" title="AddressLine2" />
-              <br />
-              <br />
+            {newUser ? (
+              <div>
+                <input type="text" title="Phone" />
+                <select>
+                  <option>M</option>
+                  <option>F</option>
+                  <option>O</option>
+                </select>
+                <input type="date" title="DOB" />
+                <input type="text" title="AddressLine1" />
+                <input type="text" title="AddressLine2" />
+                <br />
+                <br />
 
-              <button
-                onClick={() => {
-                  {
-                    _addUser({
-                      name: "Tejas",
-                      email: profileFromGoogle.email,
-                      dob: new Date("1998-08-26T00:00:00Z"),
-                      addressLine1: "abcd",
-                      addressLine2: "abcd",
-                      phone: "1234",
-                      gender: "M",
-                    });
-                  }
-                }}
-              >
-                submit
-              </button>
-            </div>
-          ) : null}
-        </div>
-      ) : (
-        <button
-          onClick={() => {
-            login();
-          }}
-        >
-          Sign in with Google 🚀{" "}
-        </button>
-      )}
-      {newUser}
-    </div>
+                <button
+                  onClick={() => {
+                    {
+                      _addUser({
+                        name: "Tejas",
+                        email: profileFromGoogle.email,
+                        // dob: new Date("1998-08-26T00:00:00Z"),
+                        // addressLine1: "abcd",
+                        // addressLine2: "abcd",
+                        // phone: "1234",
+                        // gender: "M",
+                      });
+                    }
+                  }}
+                >
+                  submit
+                </button>
+              </div>
+            ) : null}
+          </div>
+        ) : (
+          <GoogleCircleFilled
+            size={20}
+            style={{ fontSize: "50px" }}
+            onClick={() => {
+              login();
+            }}
+          >
+            Sign in with Google 🚀{" "}
+          </GoogleCircleFilled>
+        )}
+        {newUser}
+      </div>
+    </Flex>
   );
 };
 
