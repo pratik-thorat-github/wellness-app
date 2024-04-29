@@ -39,13 +39,25 @@ const Gallery = () => {
   return (
     <Carousel cols={1} loop>
       <Carousel.Item>
-        <img width="100%" src="https://picsum.photos/800/600?random=1" />
+        <img
+          width="100%"
+          height="60%"
+          src="https://picsum.photos/800/600?random=1"
+        />
       </Carousel.Item>
       <Carousel.Item>
-        <img width="100%" src="https://picsum.photos/800/600?random=2" />
+        <img
+          width="100%"
+          height="60%"
+          src="https://picsum.photos/800/600?random=2"
+        />
       </Carousel.Item>
       <Carousel.Item>
-        <img width="100%" src="https://picsum.photos/800/600?random=3" />
+        <img
+          width="100%"
+          height="60%"
+          src="https://picsum.photos/800/600?random=3"
+        />
       </Carousel.Item>
       {/* ... */}
     </Carousel>
@@ -73,7 +85,7 @@ const CentersAroundYou: React.FC = () => {
             borderColor: "black",
           }}
         >
-          <Flex
+          {/* <Flex
             flex={2}
             style={{
               borderWidth: "10px",
@@ -83,7 +95,7 @@ const CentersAroundYou: React.FC = () => {
             }}
           >
             {Gallery()}
-          </Flex>
+          </Flex> */}
 
           <Flex flex={1} vertical style={{ background: "red" }}>
             <Flex flex={1}>

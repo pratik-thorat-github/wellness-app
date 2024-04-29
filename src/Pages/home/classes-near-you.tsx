@@ -9,21 +9,30 @@ import { ReactComponent as Strength } from "../../images/home/class-images/stren
 
 function createUpperCardTiles() {
   let yogaTile = (
-    <Card>
-      <Yoga />
-    </Card>
+    <Flex justify="center" align="center" vertical>
+      <Card>
+        <Yoga />
+      </Card>
+      <span> Yoga </span>
+    </Flex>
   );
 
   let pilateTile = (
-    <Card>
-      <Pilate />
-    </Card>
+    <Flex justify="center" align="center" vertical>
+      <Card>
+        <Pilate />
+      </Card>
+      <span> Pilate </span>
+    </Flex>
   );
 
   let swimmingTile = (
-    <Card>
-      <Swimming />
-    </Card>
+    <Flex justify="center" align="center" vertical>
+      <Card>
+        <Swimming />
+      </Card>
+      <span> Swimming </span>
+    </Flex>
   );
 
   return (
@@ -44,21 +53,30 @@ function createUpperCardTiles() {
 
 function createLowerCardTiles() {
   let badmintonTile = (
-    <Card>
-      <Badminton />
-    </Card>
+    <Flex justify="center" align="center" vertical>
+      <Card>
+        <Badminton />
+      </Card>
+      <span> Badminton </span>
+    </Flex>
   );
 
   let hiitTile = (
-    <Card>
-      <Hiit />
-    </Card>
+    <Flex justify="center" align="center" vertical>
+      <Card>
+        <Hiit />
+      </Card>
+      <span> Hiit </span>
+    </Flex>
   );
 
   let strengthTile = (
-    <Card>
-      <Strength />
-    </Card>
+    <Flex justify="center" align="center" vertical>
+      <Card>
+        <Strength />
+      </Card>
+      <span> Strength </span>
+    </Flex>
   );
 
   return (
