@@ -13,6 +13,7 @@ import PlusPaymentSuccess from "./Pages/checkout/plus-payment-success";
 import Login from "./Pages/auth/login";
 import VerifyMagicLink from "./Pages/auth/verify";
 import Profile from "./Pages/profile/Profle";
+import LandingPage from "./Pages/landing/Landing";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
+        <LandingPage path="/" />
         {/* <Login path="/login" />
         <VerifyMagicLink path="/verify" />
 
