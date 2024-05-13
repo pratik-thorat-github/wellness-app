@@ -1,4 +1,4 @@
-import React from "react";
+import "@fontsource/plus-jakarta-sans";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
@@ -10,13 +10,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <GoogleOAuthProvider clientId="396103304924-vmr6eu83uq789oonk7k6jr3eq5oukloi.apps.googleusercontent.com">
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <App />
   </GoogleOAuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
+// to log results (for example: reportWebVitals(console))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

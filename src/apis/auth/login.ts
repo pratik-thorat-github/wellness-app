@@ -1,17 +1,16 @@
-import axios from "axios";
-import { BE_URL } from "../../constants/network";
 import IUser from "../../types/user";
+import networkAdapter from "../network";
 
 export async function getUserByEmail(email: string) {
-  // let response = await axios.get(`${BE_URL}/users?email=${email}`);
+  let response = await networkAdapter.get(`/auth/user/email?email=${email}`);
 
-  // return response.data;
+  return response.data;
 
-  throw new Error("Testing user not found");
+  // throw new Error("Testing user not found");
 }
 
 export async function getDetailsFromGoogleProfile(accessToken: string) {
-  let response = await axios.get(
+  let response = await networkAdapter.get(
     `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`,
     {
       headers: {
@@ -25,20 +24,29 @@ export async function getDetailsFromGoogleProfile(accessToken: string) {
 }
 
 export async function addUser(userDetails: IUser) {
-  let payload = {
-    Name: userDetails.name,
-    Dob: userDetails.dob,
-    Email: userDetails.email,
-    Phone: userDetails.phone,
-    Gender: userDetails.gender,
-    addressLine1: userDetails.addressLine1,
-    addressLine2: userDetails.addressLine2,
-  };
-  // let response = await axios.post(`${BE_URL}/users`, payload);
-  // return response.data;
+  let response = await networkAdapter.post(`/users`, userDetails);
+  return response.data;
+}
 
-  return {
-    accessToken: "abcd",
-    user: userDetails,
-  };
+export async function checkUserPhoneAndSendOtplessMagicLink(phone: string) {
+  let url = `/auth/user/otplessLink?phone=${phone}`;
+
+  let response = await networkAdapter.get(url);
+  return response.data;
+}
+
+export async function verifyOtplessMagicLink({
+  code,
+  phone,
+}: {
+  code: string;
+  phone?: string;
+}) {
+  let url = `/auth/user/otplessCode`;
+  if (phone) url += `?phone=${phone}`;
+
+  console.log(url);
+
+  let response = await networkAdapter.post(url, { code });
+  return response.data;
 }

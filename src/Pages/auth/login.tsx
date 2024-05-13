@@ -1,161 +1,213 @@
-import * as React from "react";
-import { useState } from "react";
-
-import axios from "axios";
-
 import { RouteComponentProps } from "@reach/router";
-import {
-  CredentialResponse,
-  GoogleLogin,
-  useGoogleLogin,
-} from "@react-oauth/google";
+import { Button, Flex } from "antd";
+import colors from "../../constants/colours";
+import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import {
   addUser,
-  getDetailsFromGoogleProfile,
-  getUserByEmail,
+  checkUserPhoneAndSendOtplessMagicLink,
 } from "../../apis/auth/login";
-import { accessTokenAtom, userDetailsAtom } from "../../atoms/atom";
-import { useAtom } from "jotai/react";
+import useAuthRedirect from "./redirect-hook";
+import { Mixpanel } from "../../mixpanel/init";
 
 interface ILoginProps extends RouteComponentProps {}
+const Login: React.FC<ILoginProps> = () => {
+  const submitClicked = useRef(false);
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [input, setInput] = useState({
+    phone: "",
+    name: "",
+  });
 
-interface IProfileInterface {
-  picture: string;
-  name: string;
-  email: string;
-}
+  useAuthRedirect();
 
-const Login: React.FC<ILoginProps> = ({}) => {
-  const responseMessage = (response: CredentialResponse) => {
-    console.log(response);
-  };
-  const errorMessage = () => {
-    console.log("Something went wrong in google login");
-  };
+  function setValue(e: React.ChangeEvent<HTMLInputElement>) {
+    var toSet = { ...input };
+    //@ts-ignore
+    toSet[e.target.name as keyof object] = e.target.value;
 
-  const [userGoogleLogin, setUserGoogleLogin] = useState<{
-    access_token: string;
-  } | null>(null);
-  const [profileFromGoogle, setProfileFromGoogle] =
-    useState<IProfileInterface | null>(null);
-  const [newUser, setNewUser] = useState(false);
+    setInput(toSet);
+  }
 
-  const [_accessTokenAtom, setAccessTokenAtom] = useAtom(accessTokenAtom);
-  const [_userDetailsAtom, setUserDetailsAtom] = useAtom(userDetailsAtom);
+  const { mutate: _checkUserPhoneAndSendOtplessMagicLink } = useMutation({
+    mutationFn: checkUserPhoneAndSendOtplessMagicLink,
+    onError: (response) => {
+      setMagicLinkSent(false);
+      submitClicked.current = false;
 
-  const { mutate: _getDetailsFromGoogleProfile } = useMutation({
-    mutationFn: getDetailsFromGoogleProfile,
-    onMutate: () => {},
-    onSuccess: (res: any) => {
-      setProfileFromGoogle(res);
-      _getUserByEmail(res.email);
+      Mixpanel.track("login_link_send_error", {
+        phone: input.phone,
+      });
     },
-    onError: () => {
-      console.log("Error in getting user details from google");
+    onSuccess: () => {
+      setMagicLinkSent(true);
+      Mixpanel.track("login_link_send_success", {
+        phone: input.phone,
+      });
     },
   });
 
-  const { mutate: _getUserByEmail } = useMutation({
-    mutationFn: getUserByEmail,
-    onMutate: () => {},
-    onSuccess: (res: any) => {
-      setAccessTokenAtom(res.accessToken);
-      setUserDetailsAtom(res.user);
-    },
-    onError: () => {
-      console.log("Error in getting user from email");
-      setNewUser(true);
-    },
-  });
-
-  const { mutate: _addUser } = useMutation({
+  const { mutate: _createUser } = useMutation({
     mutationFn: addUser,
-    onSuccess: (data: any) => {
-      setAccessTokenAtom(data.accessToken);
-      setUserDetailsAtom(data.user);
-      console.log(data);
-      console.log(_accessTokenAtom);
-      console.log(_userDetailsAtom);
+    onError: (response) => {
+      Mixpanel.track("user_creation_error", {
+        phone: input.phone,
+        name: input.name,
+        error: response.message,
+      });
     },
-    onError: (error: Error) => {
-      console.log(error);
+    onSuccess: () => {
+      Mixpanel.track("user_creation_success", {
+        phone: input.phone,
+        name: input.name,
+      });
+    },
+    onSettled: () => {
+      _checkUserPhoneAndSendOtplessMagicLink(input.phone);
     },
   });
 
-  const login = useGoogleLogin({
-    onSuccess: (codeResponse) => {
-      if (codeResponse.scope)
-        setUserGoogleLogin({ access_token: codeResponse.access_token });
-    },
-    onError: (error) => console.log("Login Failed:", error),
-  });
+  useEffect(() => {}, []);
 
-  React.useEffect(() => {
-    if (userGoogleLogin) {
-      _getDetailsFromGoogleProfile(userGoogleLogin.access_token);
-    }
-  }, [userGoogleLogin]);
+  function submitButton() {
+    submitClicked.current = true;
+
+    _createUser({ name: input.name, phone: input.phone });
+  }
+
+  const buttonDisabled = () => {
+    if (submitClicked.current) return true;
+
+    return Boolean(input.phone.length !== 10 || !input.name);
+  };
 
   return (
-    <div>
-      <h2>React Google Login</h2>
-      <br />
-      <br />
-      {profileFromGoogle ? (
-        <div>
-          <img src={profileFromGoogle.picture} alt="user image" />
-          <h3>User Logged in</h3>
-          <p>Name: {profileFromGoogle.name}</p>
-          <p>Email Address: {profileFromGoogle.email}</p>
-          <br />
-          <br />
-
-          {newUser ? (
-            <div>
-              <input type="text" title="Phone" />
-              <select>
-                <option>M</option>
-                <option>F</option>
-                <option>O</option>
-              </select>
-              <input type="date" title="DOB" />
-              <input type="text" title="AddressLine1" />
-              <input type="text" title="AddressLine2" />
-              <br />
-              <br />
-
-              <button
-                onClick={() => {
-                  {
-                    _addUser({
-                      name: "Tejas",
-                      email: profileFromGoogle.email,
-                      dob: new Date("1998-08-26T00:00:00Z"),
-                      addressLine1: "abcd",
-                      addressLine2: "abcd",
-                      phone: "1234",
-                      gender: "M",
-                    });
-                  }
-                }}
-              >
-                submit
-              </button>
-            </div>
-          ) : null}
-        </div>
-      ) : (
-        <button
-          onClick={() => {
-            login();
+    <Flex flex={1} style={{ padding: "24px" }} vertical justify="center">
+      <Flex
+        flex={1}
+        vertical
+        style={{ paddingTop: "12px", paddingBottom: "12px" }}
+      >
+        <span style={{ fontSize: "24px", fontWeight: "bold" }}>
+          {" "}
+          Welcome To Zenfit!{" "}
+        </span>
+        <span
+          style={{
+            fontSize: "14px",
+            marginTop: "4px",
+            color: colors.secondary,
           }}
         >
-          Sign in with Google 🚀{" "}
-        </button>
-      )}
-      {newUser}
-    </div>
+          {" "}
+          Login with your mobile number{" "}
+        </span>
+      </Flex>
+
+      <Flex
+        flex={1}
+        style={{ marginTop: "16px" }}
+        vertical
+        // align="center"
+        justify="center"
+      >
+        <Flex
+          flex={1}
+          vertical
+          style={{
+            justifySelf: "stretch",
+            alignSelf: "stretch",
+          }}
+        >
+          <span>Enter Name</span>
+          <span style={{ marginTop: "8px" }}>
+            <input
+              name="name"
+              value={input.name}
+              onChange={setValue}
+              style={{
+                width: "95%",
+                borderRadius: "5px",
+                height: "30px",
+              }}
+              type="text"
+            />{" "}
+          </span>
+        </Flex>
+
+        <Flex
+          flex={1}
+          vertical
+          style={{
+            justifySelf: "stretch",
+            alignSelf: "stretch",
+            marginTop: "16px",
+          }}
+        >
+          <span>Mobile Number</span>
+          <span style={{ marginTop: "8px" }}>
+            <input
+              style={{
+                width: "95%",
+                height: "30px",
+                borderRadius: "5px",
+              }}
+              type="number"
+              onChange={setValue}
+              name="phone"
+              value={input.phone}
+            />{" "}
+          </span>
+        </Flex>
+      </Flex>
+
+      <Flex
+        flex={1}
+        vertical
+        align="flex-start"
+        justify="center"
+        style={{ marginTop: "32px" }}
+      >
+        {magicLinkSent ? (
+          <Flex
+            flex={1}
+            align="center"
+            justify="center"
+            style={{
+              justifySelf: "center",
+              alignSelf: "center",
+              marginBottom: "4px",
+              color: colors.secondary,
+              fontSize: "12px",
+            }}
+          >
+            We have sent a link on your whatsapp to verify that its you!
+          </Flex>
+        ) : null}
+
+        <Button
+          disabled={buttonDisabled()}
+          onClick={() => {
+            submitButton();
+          }}
+          style={{
+            flex: 1,
+            backgroundColor: buttonDisabled() ? colors.secondary : "black",
+            color: "white",
+            height: "20%",
+            width: "100%",
+
+            justifySelf: "center",
+            paddingTop: "16px",
+            paddingBottom: "16px",
+            borderRadius: "5px",
+            fontWeight: "bolder",
+          }}
+        >
+          Get OTP
+        </Button>
+      </Flex>
+    </Flex>
   );
 };
 
