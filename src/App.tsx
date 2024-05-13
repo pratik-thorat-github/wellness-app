@@ -24,7 +24,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <Login path="/login" />
+        {/* <Login path="/login" />
         <VerifyMagicLink path="/verify" />
 
         <Home path="/home" />
@@ -33,7 +33,7 @@ function App() {
         <BatchCheckout path="/checkout/batch/:batchId" />
         <PlusCheckout path="/checkout/plus" />
         <BatchPaymentSuccess path="/checkout/success" />
-        <PlusPaymentSuccess path="/plus/success" />
+        <PlusPaymentSuccess path="/plus/success" /> */}
       </Router>
     </QueryClientProvider>
   );
