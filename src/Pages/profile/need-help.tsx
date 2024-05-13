@@ -1,9 +1,8 @@
 import { PhoneOutlined } from "@ant-design/icons";
 import { Flex } from "antd";
+import { helpLine } from "../../constants/info";
 
 const NeedHelpBanner: React.FC = () => {
-  const helpLine = "9002782111";
-
   return (
     <Flex vertical flex={1} style={{ padding: "16px" }}>
       <Flex flex={1} style={{ fontWeight: "bold" }}>
