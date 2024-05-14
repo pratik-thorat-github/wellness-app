@@ -6,12 +6,16 @@ import { ReactComponent as LocationSVG } from "../../images/home/location.svg";
 import { Rs } from "../../constants/symbols";
 import { IBookings } from "../../types/user";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
+import useWindowDimensions from "../../hooks/getWindowDimensions";
+import { toLetterCase } from "../../utils/string-operation";
 
 interface BookingClassCard {
   booking: IBookings;
 }
 
 const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
+  const dimensions = useWindowDimensions();
+
   return (
     <Flex
       flex={1}
@@ -19,7 +23,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
         alignSelf: "stretch",
         backgroundColor: "white",
         borderRadius: "12px",
-        minWidth: "300px",
+        minWidth: "90vw",
         marginBottom: "10px",
       }}
     >
@@ -47,7 +51,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
               style={{ color: colors.secondary, fontSize: "14px" }}
             >
               {" "}
-              {booking.activity} . {booking.durationMin}min{" "}
+              {toLetterCase(booking.activity)} . {booking.durationMin}min{" "}
             </Flex>
 
             <Flex flex={1} style={{ fontSize: "16px", marginTop: "4px" }}>
@@ -64,23 +68,22 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
                 marginTop: "8px",
               }}
             >
-              <span style={{ justifyContent: "flex-start" }}>
+              <Flex
+                flex={1}
+                justify="flex-start"
+                style={{ justifyContent: "flex-start" }}
+              >
                 {Rs}
                 {booking.bookingPrice}
-              </span>
-              <span
-                style={{
-                  justifyContent: "flex-end",
-                  marginLeft: "10px",
-                }}
-              >
-                Booking Id: <i>{booking.bookingId}</i>
-              </span>
+              </Flex>
+              <Flex flex={1} justify="flex-end">
+                Booking Id: {booking.bookingId}
+              </Flex>
             </Flex>
           </Flex>
         </Flex>
 
-        <Flex flex={1} style={{ paddingTop: "16px" }}>
+        <Flex flex={1} style={{ paddingTop: "16px", fontSize: "12px" }}>
           <Flex flex={1} justify="flex-start">
             <span style={{ marginRight: "8px" }}>
               {" "}

@@ -46,7 +46,7 @@ const Profile: React.FC<IProfile> = () => {
 
   useEffect(() => {
     if (plusDetails) _getBookingOfUser();
-  }, [navigate]);
+  }, [navigate, plusDetails]);
 
   return (
     <Flex

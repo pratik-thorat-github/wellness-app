@@ -106,7 +106,7 @@ function noBatchComponent() {
       align="center"
       justify="center"
       vertical
-      style={{ marginTop: "48px" }}
+      style={{ marginTop: "48px", paddingBottom: "20px" }}
     >
       <NoBatchImage />
       <span style={{ marginTop: "8px" }}>No slots available!</span>
@@ -152,7 +152,7 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
 
     let selectedStyle: React.CSSProperties = {
       ...style,
-      borderBottomWidth: "1px",
+      borderBottomWidth: "2px",
       borderBottomStyle: "solid",
       fontWeight: "bold",
     };

@@ -8,69 +8,37 @@ import { ReactComponent as Hiit } from "../../images/class-images/hiit.svg";
 import { ReactComponent as Strength } from "../../images/class-images/strength.svg";
 import { navigate } from "@reach/router";
 import { Mixpanel } from "../../mixpanel/init";
+import activityToSvgMap from "../../images/class-images/activity-map";
+import { toLetterCase } from "../../utils/string-operation";
 
 async function navigateToHome(activity: string) {
   Mixpanel.track("clicked_classes_tile_home", {
     activity,
   });
-  return await navigate("/", {
+  return await navigate("/home", {
     state: {
-      activitySelected: "yoga",
-      activitySelectedFromFilters: "yoga",
+      activitySelected: activity,
+      activitySelectedFromFilters: activity,
     },
     replace: true,
   });
 }
 
+const classTile = (activity: string) => (
+  <Flex
+    onClick={async () => {
+      await navigateToHome(activity);
+    }}
+    justify="center"
+    align="center"
+    vertical
+  >
+    <Flex>{activityToSvgMap(activity)}</Flex>
+    <span style={{ marginTop: "4px" }}> {toLetterCase(activity)} </span>
+  </Flex>
+);
+
 function createUpperFlexTiles() {
-  let yogaTile = (
-    <Flex
-      onClick={async () => {
-        await navigateToHome("yoga");
-      }}
-      justify="center"
-      align="center"
-      vertical
-    >
-      <Flex>
-        <Yoga />
-      </Flex>
-      <span> Yoga </span>
-    </Flex>
-  );
-
-  let pilateTile = (
-    <Flex
-      onClick={async () => {
-        await navigateToHome("pilate");
-      }}
-      justify="center"
-      align="center"
-      vertical
-    >
-      <Flex>
-        <Pilate />
-      </Flex>
-      <span> Pilate </span>
-    </Flex>
-  );
-
-  let swimmingTile = (
-    <Flex
-      onClick={async () => {
-        await navigateToHome("pilate");
-      }}
-      justify="center"
-      align="center"
-      vertical
-    >
-      <Flex>
-        <Swimming />
-      </Flex>
-      <span> Swimming </span>
-    </Flex>
-  );
-
   return (
     <Flex
       style={{
@@ -79,10 +47,9 @@ function createUpperFlexTiles() {
         marginBottom: "16px",
       }}
     >
-      <span>{yogaTile}</span>
-      <span>{pilateTile}</span>
-      <span> {swimmingTile} </span>
-      <span> {swimmingTile} </span>
+      <span>{classTile("yoga")}</span>
+      <span>{classTile("pilate")}</span>
+      <span> {classTile("swimming")} </span>
     </Flex>
   );
 }
@@ -144,10 +111,9 @@ function createLowerFlexTiles() {
         alignContent: "center",
       }}
     >
-      <span>{badmintonTile}</span>
-      <span>{hiitTile}</span>
-      <span> {strengthTile} </span>
-      <span> {strengthTile} </span>
+      <span>{classTile("badminton")}</span>
+      <span>{classTile("hiit")}</span>
+      <span> {classTile("strength")} </span>
     </Flex>
   );
 }
@@ -172,7 +138,7 @@ const ClassesNearYou: React.FC = () => {
         <Flex flex={1} vertical>
           <div
             style={{
-              width: "360px",
+              width: "90vw",
               overflow: "auto",
             }}
           >

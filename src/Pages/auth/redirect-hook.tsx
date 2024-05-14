@@ -9,7 +9,7 @@ const useAuthRedirect = () => {
 
   useEffect(() => {
     if (!accessToken || !userDetails) navigate("/login");
-    else navigate("/");
+    else navigate("/home");
   }, [accessToken, userDetails]);
 };
 

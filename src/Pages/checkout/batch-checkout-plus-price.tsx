@@ -30,7 +30,9 @@ const BatchCheckoutPlusPrice: React.FC<IBatchCheckoutPlusPrice> = ({
 }) => {
   const discountPercentage = plusDetails?.plusDiscountPercent as number;
   const plusMembershipPrice = plusDetails?.plusMemberShipPrice as number;
-  const discountedPrice = (1 - discountPercentage / 100) * batchDetails.price;
+  const discountedPrice = Math.floor(
+    (1 - discountPercentage / 100) * batchDetails.price
+  );
   const saving = batchDetails.price - discountedPrice;
 
   const [selectedPlan, setSelectedPlan] = selectedPlanState;

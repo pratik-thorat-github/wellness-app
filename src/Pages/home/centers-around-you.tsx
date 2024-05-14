@@ -89,7 +89,11 @@ function getListOfCenters(
         <Flex
           flex={1}
           vertical
-          style={{ paddingLeft: "16px", paddingRight: "16px" }}
+          style={{
+            paddingLeft: "16px",
+            paddingRight: "16px",
+            marginBottom: "12px",
+          }}
         >
           <Flex flex={1}>
             <Flex
@@ -98,7 +102,6 @@ function getListOfCenters(
               vertical
               style={{
                 width: "73%",
-                paddingBottom: "16px",
                 paddingTop: "16px",
               }}
             >
@@ -122,7 +125,9 @@ function getListOfCenters(
                 flex={1}
               >
                 {" "}
-                {concatAndUpperCaseActivities(gymCard.activities)}{" "}
+                {concatAndUpperCaseActivities(
+                  gymCard.activities.slice(0, 3)
+                )}{" "}
               </Flex>
               <Flex
                 style={{
@@ -162,12 +167,20 @@ function getListOfCenters(
               </Flex>
             </Flex>
           </Flex>
-          {!plusDetails?.isPlusMember ? (
-            <Flex flex={1}>
-              <PlusOfferBanner />
-            </Flex>
-          ) : null}
         </Flex>
+
+        {!plusDetails?.isPlusMember ? (
+          <Flex
+            flex={1}
+            style={{
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginBottom: "16px",
+            }}
+          >
+            <PlusOfferBanner />
+          </Flex>
+        ) : null}
       </Flex>
     );
   });
@@ -198,7 +211,7 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
       Mixpanel.track("clicked_activity_pill_home", {
         activity,
       });
-      await navigate("/", {
+      await navigate("/home", {
         state: {
           activitySelected: activity,
           activitySelectedFromFilters: activity,

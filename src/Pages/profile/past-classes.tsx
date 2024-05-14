@@ -19,7 +19,7 @@ interface IPastBookings {
 
 const PastClasses: React.FC<IPastBookings> = ({ bookings }) => {
   return (
-    <Flex vertical style={{ padding: "16px", paddingLeft: "24px" }}>
+    <Flex vertical style={{ padding: "16px" }}>
       <Flex style={{ fontWeight: "bold", fontSize: "16px" }}>
         Past Classes{" "}
       </Flex>

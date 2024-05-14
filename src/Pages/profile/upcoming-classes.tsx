@@ -19,7 +19,7 @@ interface IUpcomingBookings {
 
 const UpcomingClasses: React.FC<IUpcomingBookings> = ({ bookings }) => {
   return (
-    <Flex vertical style={{ padding: "16px", paddingLeft: "24px" }}>
+    <Flex vertical style={{ padding: "16px" }}>
       <Flex vertical>
         <span style={{ fontWeight: "bold", fontSize: "16px" }}>
           Upcoming Classes

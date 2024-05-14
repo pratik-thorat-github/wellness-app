@@ -33,7 +33,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
       }}
     >
       <Flex flex={1}>
-        <Flex flex={3} vertical justify="center" align="left">
+        <Flex flex={1} vertical justify="flex-start" align="left">
           <span
             style={{
               fontSize: "16",
@@ -48,13 +48,17 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           </span>
         </Flex>
         <Flex
+          onClick={() => {
+            if (gymData.lat && gymData.long)
+              window.open(`geo:0,0?q=${gymData.lat},${gymData.long}`);
+          }}
           style={{
             color: colors.secondary,
             fontSize: "14px",
             marginBottom: "8px",
           }}
           flex={1}
-          justify="center"
+          justify="flex-end"
           align="right"
         >
           <LocationLogo /> <u> {gymData.area}</u>

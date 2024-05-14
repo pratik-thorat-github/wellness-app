@@ -109,11 +109,10 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
           <Flex flex={1}>
             <ProfileBanner />
           </Flex>
-          {!pluDetails.isPlusMember ? (
-            <Flex flex={3}>
-              <HomeBanner />
-            </Flex>
-          ) : null}
+
+          <Flex flex={3}>
+            <HomeBanner />
+          </Flex>
 
           <Flex flex={3}>
             <ClassesNearYou />

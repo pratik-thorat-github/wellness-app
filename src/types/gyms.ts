@@ -19,4 +19,6 @@ export interface IBatch {
 export interface IGymDetails extends IGymCard {
   description: string;
   batches: IBatch[];
+  lat: number;
+  long: number;
 }

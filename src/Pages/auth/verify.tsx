@@ -40,7 +40,7 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({}) => {
       setUserDetailsAtom(res.user);
       mixpanelEvents(res.user);
 
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     },
     onError: () => {
       errorToast("Error in verification");

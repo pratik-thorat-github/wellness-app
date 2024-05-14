@@ -126,6 +126,7 @@ const Login: React.FC<ILoginProps> = () => {
               value={input.name}
               onChange={setValue}
               style={{
+                padding: "10px",
                 width: "95%",
                 borderRadius: "5px",
                 height: "30px",
@@ -151,6 +152,7 @@ const Login: React.FC<ILoginProps> = () => {
                 width: "95%",
                 height: "30px",
                 borderRadius: "5px",
+                padding: "10px",
               }}
               type="number"
               onChange={setValue}

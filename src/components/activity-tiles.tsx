@@ -53,7 +53,7 @@ const ActivityTiles: React.FC<IActivityTiles> = ({
   return (
     <div
       style={{
-        width: "360px",
+        width: "100vw",
         overflow: "auto",
         marginTop: "21px",
         marginBottom: "21px",

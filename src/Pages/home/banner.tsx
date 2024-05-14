@@ -5,8 +5,13 @@ import { navigate } from "@reach/router";
 
 import { ReactComponent as PlusBanner } from "../../images/home/plus-banner.svg";
 import { Mixpanel } from "../../mixpanel/init";
+import { useAtom } from "jotai/react";
+import { plusDetailsAtom } from "../../atoms/atom";
+import PlusClassRemaining from "../profile/plus-classes-remaining";
 
 const HomeBanner: React.FC = () => {
+  const [plusDetails] = useAtom(plusDetailsAtom);
+
   return (
     <Flex
       onClick={() => {
@@ -20,7 +25,12 @@ const HomeBanner: React.FC = () => {
         // borderRadius: "10px",
       }}
     >
-      <PlusBanner width={"100%"} height={"100%"} />
+      {plusDetails?.isPlusMember ? (
+        <PlusClassRemaining />
+      ) : (
+        <PlusBanner width={"100%"} height={"100%"} />
+      )}
+
       {/* <Flex
         flex={1}
         vertical
