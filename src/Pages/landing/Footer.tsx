@@ -47,7 +47,17 @@ const LandingFooter: React.FC = () => {
           </a>
         </u>
       </Flex>
-      {/* <Flex flex={1}>Refund And Cancellation policy</Flex> */}
+      <Flex flex={1}>
+        <u>
+          <a
+            style={{ color: "white" }}
+            href={require("../../docs/Refund-Cancellation-Policy.pdf")}
+            download="ZenfitX-Refund&Cancellation"
+          >
+            Refund And Cancellation policy
+          </a>
+        </u>
+      </Flex>
     </Flex>
   );
 };
