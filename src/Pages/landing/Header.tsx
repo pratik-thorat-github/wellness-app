@@ -1,3 +1,4 @@
+import { navigate } from "@reach/router";
 import { Flex } from "antd";
 
 const LandingHeader: React.FC = () => {
@@ -18,9 +19,15 @@ const LandingHeader: React.FC = () => {
         ZenFitX
       </Flex>
 
-      {/* <Flex flex={1} justify="flex-end">
+      <Flex
+        onClick={() => {
+          navigate("/login");
+        }}
+        flex={1}
+        justify="flex-end"
+      >
         Login
-      </Flex> */}
+      </Flex>
     </Flex>
   );
 };

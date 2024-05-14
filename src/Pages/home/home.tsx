@@ -16,6 +16,7 @@ import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import IUser, { IPlusDetails } from "../../types/user";
 import useAuthRedirect from "../auth/redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
+import LandingFooter from "../landing/Footer";
 
 interface IHome extends RouteComponentProps {
   activitySelected?: string;
@@ -102,30 +103,38 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
     return <Loader />;
 
   return (
-    <Flex flex={1} vertical style={{ margin: "10px", marginLeft: "5%" }}>
+    <Flex flex={1} vertical style={{ margin: "10px" }}>
       {!activitySelected || activitySelected == "all" ? (
         <div>
           <Space></Space>
-          <Flex flex={1}>
+          <Flex style={{ marginLeft: "5%" }} flex={1}>
             <ProfileBanner />
           </Flex>
 
-          <Flex flex={3}>
+          <Flex style={{ marginLeft: "5%" }} flex={3}>
             <HomeBanner />
           </Flex>
 
-          <Flex flex={3}>
+          <Flex style={{ marginLeft: "5%" }} flex={3}>
             <ClassesNearYou />
           </Flex>
         </div>
       ) : null}
 
-      <Flex flex={3}>
+      <Flex flex={3} style={{ marginLeft: "5%" }}>
         <CentersAroundYou
           activities={activities}
           activitySelected={activitySelected}
           gymCardsData={gymCardsData}
         />
+      </Flex>
+
+      <Flex
+        flex={1}
+        align="flex-end"
+        style={{ marginLeft: "0px", marginRight: "0px" }}
+      >
+        <LandingFooter />
       </Flex>
     </Flex>
   );
