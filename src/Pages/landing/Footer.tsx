@@ -11,7 +11,7 @@ const LandingFooter: React.FC = () => {
         backgroundColor: "#05070B",
         color: "white",
         padding: "24px",
-        fontSize: "8px",
+        fontSize: "12px",
       }}
       justify="space-evenly"
     >
@@ -47,7 +47,7 @@ const LandingFooter: React.FC = () => {
           </a>
         </u>
       </Flex>
-      <Flex flex={1}>Refund And Cancellation policy</Flex>
+      {/* <Flex flex={1}>Refund And Cancellation policy</Flex> */}
     </Flex>
   );
 };
