@@ -108,7 +108,7 @@ function getListOfCenters(
                 </span>
               </Flex>
             </Flex>
-            {/* <Flex
+            <Flex
               flex={1}
               align="flex-start"
               style={{
@@ -126,10 +126,13 @@ function getListOfCenters(
                 align="center"
                 justify="flex-start"
               >
-                <span style={{ fontSize: "16px" }}>{Rs}300</span>
+                <span style={{ fontSize: "16px" }}>
+                  {Rs}
+                  {gymCard.minPrice}
+                </span>
                 <span style={{ fontSize: "12px" }}>per class </span>
               </Flex>
-            </Flex> */}
+            </Flex>
           </Flex>
         </Flex>
 

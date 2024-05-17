@@ -6,6 +6,7 @@ export interface IGymCard {
   name: string;
   photos: string[];
   activities: string[];
+  minPrice?: number;
 }
 
 export interface IBatch {

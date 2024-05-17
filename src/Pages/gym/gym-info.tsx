@@ -7,6 +7,8 @@ import colors from "../../constants/colours";
 import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
 import { checkIpad, checkIphone } from "../../utils/navigator";
 
+import parser from "html-react-parser";
+
 const maxChar = 75;
 
 interface IGymInfo {
@@ -14,10 +16,11 @@ interface IGymInfo {
 }
 
 const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
-  const description = gymData.description;
+  const description = `${gymData.addressLine1},${gymData.addressLine2}<br>${gymData.description}`;
 
   let [isTruncated, setIsTruncated] = useState(description.length > maxChar);
   let shortDescription = useRef(description.substring(0, maxChar));
+  shortDescription.current.replace(/<br>/, "");
 
   const mapsLink = checkIphone() || checkIpad() ? "maps://0,0?q" : "geo:0,0?q";
 
@@ -75,7 +78,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           </u>
         </Flex>
       </Flex>
-      <Flex
+      {/* <Flex
         flex={1}
         style={{ marginTop: "4px", fontSize: "14px", color: colors.secondary }}
       >
@@ -85,7 +88,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         <Flex flex={4} justify="stretch">
           {gymData.addressLine1},{gymData.addressLine2}
         </Flex>
-      </Flex>
+      </Flex> */}
       <Flex
         flex={1}
         style={{
@@ -108,11 +111,11 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           </div>
         ) : description.length > maxChar ? (
           <div>
-            {description}
+            {parser(description)}
             <span>{seeLess}</span>
           </div>
         ) : (
-          <div>{description}</div>
+          <div>{parser(description)}</div>
         )}
       </Flex>
     </Flex>

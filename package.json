@@ -19,6 +19,7 @@
     "@types/react-dom": "^18.0.0",
     "antd": "^5.16.4",
     "axios": "^1.6.8",
+    "html-react-parser": "^5.1.10",
     "jotai": "^2.8.0",
     "mdb-react-ui-kit": "^8.0.0",
     "mixpanel-browser": "^2.50.0",
