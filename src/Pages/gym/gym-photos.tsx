@@ -1,31 +1,54 @@
-import Carousel from "better-react-carousel";
+import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
+import "mdb-react-ui-kit/dist/css/mdb.min.css";
 
-const GymPhotos: React.FC = () => {
+interface IGymPhotos {
+  photos?: string[];
+}
+
+const GymPhotos: React.FC<IGymPhotos> = ({ photos }) => {
+  if (photos?.length) {
+    const images = photos.map((p, ind) => {
+      return (
+        <MDBCarouselItem itemId={ind}>
+          <img src={p} width="100%" />
+        </MDBCarouselItem>
+      );
+    });
+
+    return (
+      <MDBCarousel showIndicators fade touch showControls>
+        {images}
+      </MDBCarousel>
+    );
+  }
+
   return (
-    <Carousel cols={1} loop>
-      <Carousel.Item>
+    <MDBCarousel showIndicators fade touch showControls>
+      <MDBCarouselItem itemId={1}>
         <img
+          src="https://zfx-gyms.zenfitx.link/images/prod/1/Yog-Gurukul-1.jpg"
           width="100%"
-          // height="100%"
-          src="https://picsum.photos/800/600?random=1"
+          // className="d-block w-100"
+          alt="..."
         />
-      </Carousel.Item>
-      <Carousel.Item>
+      </MDBCarouselItem>
+      <MDBCarouselItem itemId={2}>
         <img
+          src="https://zfx-gyms.zenfitx.link/images/1/badminton-1.jpg"
           width="100%"
-          // height="100%"
-          src="https://picsum.photos/800/600?random=2"
+          // className="d-block w-100"
+          alt="..."
         />
-      </Carousel.Item>
-      <Carousel.Item>
+      </MDBCarouselItem>
+      <MDBCarouselItem itemId={3}>
         <img
+          src="https://zfx-gyms.zenfitx.link/images/1/badminton-2.jpg"
           width="100%"
-          // height="100%"
-          src="https://picsum.photos/800/600?random=3"
+          // className="d-block w-100"
+          alt="..."
         />
-      </Carousel.Item>
-      {/* ... */}
-    </Carousel>
+      </MDBCarouselItem>
+    </MDBCarousel>
   );
 };
 

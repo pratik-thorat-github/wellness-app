@@ -105,7 +105,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData, batchDetails }) => {
         </Flex>
       </Flex>
 
-      {!plusDetails?.isPlusMember ? (
+      {/* {!plusDetails?.isPlusMember ? (
         <Flex
           flex={3}
           vertical
@@ -120,7 +120,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData, batchDetails }) => {
             />
           </Flex>
         </Flex>
-      ) : null}
+      ) : null} */}
 
       <Flex flex={1} align="flex-end">
         <BookNowFooter

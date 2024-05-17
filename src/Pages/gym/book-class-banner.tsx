@@ -18,16 +18,14 @@ const BookClassBanner: React.FC = () => {
       }}
     >
       <Flex flex={1} align="left" justify="left">
-        <span style={{ fontWeight: "bold", marginBottom: "16px" }}>
-          Book a class
-        </span>
+        <span style={{ fontWeight: "bold" }}>Book a class</span>
       </Flex>
 
-      {!plusDetails?.isPlusMember ? (
+      {/* {!plusDetails?.isPlusMember ? (
         <Flex flex={1}>
           <PlusOfferBanner />
         </Flex>
-      ) : null}
+      ) : null} */}
     </Flex>
   );
 };

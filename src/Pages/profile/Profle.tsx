@@ -59,11 +59,11 @@ const Profile: React.FC<IProfile> = () => {
       </Flex>
 
       <Flex flex={4} vertical>
-        {plusDetails?.isPlusMember ? (
+        {/* {plusDetails?.isPlusMember ? (
           <Flex flex={1} align="flex-start">
             <PlusClassRemaining />
           </Flex>
-        ) : null}
+        ) : null} */}
 
         {upcomingBookings.length ? (
           <Flex flex={1} align="center">

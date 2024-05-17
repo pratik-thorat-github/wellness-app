@@ -14,6 +14,7 @@ export interface IBatch {
   price: number;
   startTime: number;
   activity: string;
+  activityName: string;
 }
 
 export interface IGymDetails extends IGymCard {

@@ -45,74 +45,30 @@ function createUpperFlexTiles() {
         flex: 1,
         justifyContent: "space-around",
         marginBottom: "16px",
+        gap: "8px",
       }}
     >
       <span>{classTile("yoga")}</span>
       <span>{classTile("pilate")}</span>
+      <span> {classTile("swimming")} </span>
       <span> {classTile("swimming")} </span>
     </Flex>
   );
 }
 
 function createLowerFlexTiles() {
-  let badmintonTile = (
-    <Flex
-      onClick={async () => {
-        await navigateToHome("badminton");
-      }}
-      justify="center"
-      align="center"
-      vertical
-    >
-      <Flex>
-        <Badminton />
-      </Flex>
-      <span> Badminton </span>
-    </Flex>
-  );
-
-  let hiitTile = (
-    <Flex
-      onClick={async () => {
-        await navigateToHome("hiit");
-      }}
-      justify="center"
-      align="center"
-      vertical
-    >
-      <Flex>
-        <Hiit />
-      </Flex>
-      <span> Hiit </span>
-    </Flex>
-  );
-
-  let strengthTile = (
-    <Flex
-      onClick={async () => {
-        await navigateToHome("strength");
-      }}
-      justify="center"
-      align="center"
-      vertical
-    >
-      <Flex>
-        <Strength />
-      </Flex>
-      <span> Strength </span>
-    </Flex>
-  );
-
   return (
     <Flex
       style={{
         flex: 1,
         justifyContent: "space-evenly",
         alignContent: "center",
+        gap: "8px",
       }}
     >
       <span>{classTile("badminton")}</span>
       <span>{classTile("hiit")}</span>
+      <span> {classTile("strength")} </span>
       <span> {classTile("strength")} </span>
     </Flex>
   );
@@ -127,7 +83,7 @@ const ClassesNearYou: React.FC = () => {
         style={{
           fontWeight: "bold",
           paddingTop: "16px",
-          paddingBottom: "16px",
+          paddingBottom: "8px",
         }}
       >
         {" "}

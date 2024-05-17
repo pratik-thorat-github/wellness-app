@@ -103,19 +103,19 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
     return <Loader />;
 
   return (
-    <Flex flex={1} vertical style={{ margin: "10px" }}>
+    <Flex flex={1} vertical style={{}}>
       {!activitySelected || activitySelected == "all" ? (
         <div>
           <Space></Space>
-          <Flex style={{ marginLeft: "5%" }} flex={1}>
+          <Flex style={{ marginLeft: "16px" }} flex={1}>
             <ProfileBanner />
           </Flex>
 
-          <Flex style={{ marginLeft: "5%" }} flex={3}>
+          {/* <Flex style={{ marginLeft: "16px" }} flex={3}>
             <HomeBanner />
-          </Flex>
+          </Flex> */}
 
-          <Flex style={{ marginLeft: "5%" }} flex={3}>
+          <Flex style={{ marginLeft: "16px" }} flex={3}>
             <ClassesNearYou />
           </Flex>
         </div>

@@ -61,7 +61,9 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           justify="flex-end"
           align="right"
         >
-          <LocationLogo /> <u> {gymData.area}</u>
+          <u>
+            <LocationLogo /> {gymData.area}
+          </u>
         </Flex>
       </Flex>
       <Flex

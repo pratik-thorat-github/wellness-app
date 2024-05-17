@@ -38,7 +38,7 @@ const ActivityTiles: React.FC<IActivityTiles> = ({
     >
       <span
         style={{
-          paddingRight: "33%",
+          // paddingRight: "33%",
           alignItems: "center",
           justifyContent: "center",
           //   paddingBottom: "16%",
@@ -53,7 +53,7 @@ const ActivityTiles: React.FC<IActivityTiles> = ({
   return (
     <div
       style={{
-        width: "100vw",
+        width: "90vw",
         overflow: "auto",
         marginTop: "21px",
         marginBottom: "21px",

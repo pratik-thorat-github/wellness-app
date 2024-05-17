@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import LandingFooter from "./Footer";
 import LandingContent from "./Content";
 
+import LandingBG from "../../images/landing/landing-background.png";
+
 interface ILandingPage extends RouteComponentProps {}
 
 const LandingPage: React.FC<ILandingPage> = () => {
@@ -20,6 +22,9 @@ const LandingPage: React.FC<ILandingPage> = () => {
       flex={1}
       style={{
         minHeight: `${dimensions.height * 0.13}vh`,
+        backgroundImage: `url("${LandingBG}")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%",
       }}
       vertical
     >

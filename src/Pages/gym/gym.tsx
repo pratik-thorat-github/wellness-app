@@ -46,7 +46,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   return (
     <Flex flex={1} vertical style={{ marginTop: "10px" }}>
       <Flex flex={1}>
-        <GymPhotos />
+        <GymPhotos photos={gym.photos} />
       </Flex>
 
       <Flex flex={2} vertical justify="center">

@@ -68,7 +68,7 @@ function generateBatchTile(gymData: IGymDetails, batches: IBatch[]) {
           >
             <Flex flex={2} vertical>
               <Flex flex={1} style={{ fontWeight: "bold" }}>
-                {batch.activity}
+                {batch.activityName}
               </Flex>
               <Flex style={{ color: colors.secondary }} flex={1}>
                 {batch.duration} min

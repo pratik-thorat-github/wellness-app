@@ -1,6 +1,5 @@
 import { Card, Flex } from "antd";
 
-import Carousel from "better-react-carousel";
 import { Link, NavigateFn, navigate, useNavigate } from "@reach/router";
 import { IGymCard } from "../../types/gyms";
 import { useEffect } from "react";
@@ -15,43 +14,7 @@ import { useAtom } from "jotai/react";
 import { plusDetailsAtom } from "../../atoms/atom";
 import { IPlusDetails } from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
-
-// function generateActivityFilters(
-//   activities: string[],
-//   activitySelected: string = "all",
-//   onClickFunction: (activity: string) => void
-// ) {
-
-// }
-
-const Gallery = () => {
-  return (
-    <Carousel cols={1} loop>
-      <Carousel.Item>
-        <img
-          width="100%"
-          // height="60%"
-          src="https://picsum.photos/800/600?random=1"
-        />
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          width="100%"
-          // height="60%"
-          src="https://picsum.photos/800/600?random=2"
-        />
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          width="100%"
-          // height="60%"
-          src="https://picsum.photos/800/600?random=3"
-        />
-      </Carousel.Item>
-      {/* ... */}
-    </Carousel>
-  );
-};
+import GymPhotos from "../gym/gym-photos";
 
 function getListOfCenters(
   gymCardsData: IGymCard[],
@@ -69,24 +32,25 @@ function getListOfCenters(
           borderStyle: "solid",
           marginBottom: "24px",
           height: "31%",
-          width: "87%",
-        }}
-        onClick={() => {
-          navigate(`/gym/${gymCard.gymId}`, {
-            state: { gymId: gymCard.gymId.toString() },
-          });
+          width: "90vw",
         }}
       >
         <Flex
           flex={1}
           style={{
             borderWidth: "10px",
+            borderRadius: "10px",
           }}
         >
-          {Gallery()}
+          <GymPhotos photos={gymCard.photos} />
         </Flex>
 
         <Flex
+          onClick={() => {
+            navigate(`/gym/${gymCard.gymId}`, {
+              state: { gymId: gymCard.gymId.toString() },
+            });
+          }}
           flex={1}
           vertical
           style={{
@@ -144,7 +108,7 @@ function getListOfCenters(
                 </span>
               </Flex>
             </Flex>
-            <Flex
+            {/* <Flex
               flex={1}
               align="flex-start"
               style={{
@@ -165,11 +129,11 @@ function getListOfCenters(
                 <span style={{ fontSize: "16px" }}>{Rs}300</span>
                 <span style={{ fontSize: "12px" }}>per class </span>
               </Flex>
-            </Flex>
+            </Flex> */}
           </Flex>
         </Flex>
 
-        {!plusDetails?.isPlusMember ? (
+        {/* {!plusDetails?.isPlusMember ? (
           <Flex
             flex={1}
             style={{
@@ -180,7 +144,7 @@ function getListOfCenters(
           >
             <PlusOfferBanner />
           </Flex>
-        ) : null}
+        ) : null} */}
       </Flex>
     );
   });

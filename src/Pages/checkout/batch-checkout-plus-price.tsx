@@ -42,7 +42,7 @@ const BatchCheckoutPlusPrice: React.FC<IBatchCheckoutPlusPrice> = ({
       flex={1}
       style={{
         paddingLeft: "16px",
-        paddingRight: "16px",
+        paddingRight: "24px",
         cursor: "pointer",
       }}
       vertical

@@ -28,7 +28,7 @@ const HomeBanner: React.FC = () => {
       {plusDetails?.isPlusMember ? (
         <PlusClassRemaining />
       ) : (
-        <PlusBanner width={"100%"} height={"100%"} />
+        <PlusBanner width={"90vw"} height={"100%"} />
       )}
 
       {/* <Flex

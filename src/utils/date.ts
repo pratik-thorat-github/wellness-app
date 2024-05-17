@@ -30,6 +30,8 @@ export function formatDate(date: string | number | Date) {
 }
 
 export function formatTimeIntToAmPm(time: number) {
-  const toReturn = moment(time, "HHmm");
+  let timeString = time.toString();
+  if (timeString.length == 3) timeString = `0${timeString}`;
+  const toReturn = moment(timeString, "HHmm");
   return toReturn.format("hh:mm A");
 }

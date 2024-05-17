@@ -27,7 +27,9 @@ const NeedHelpBanner: React.FC = () => {
         <span style={{ marginRight: "12px" }}>
           <PhoneOutlined style={{ transform: "rotate(90deg)" }} />
         </span>
-        <span>Call at {helpLine}</span>
+        <span>
+          <u>Call at {helpLine} </u>
+        </span>
       </Flex>
     </Flex>
   );
