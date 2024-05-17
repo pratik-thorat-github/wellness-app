@@ -77,6 +77,17 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
       </Flex>
       <Flex
         flex={1}
+        style={{ marginTop: "4px", fontSize: "14px", color: colors.secondary }}
+      >
+        <Flex flex={1} justify="flex-start">
+          Address :
+        </Flex>
+        <Flex flex={4} justify="stretch">
+          {gymData.addressLine1},{gymData.addressLine2}
+        </Flex>
+      </Flex>
+      <Flex
+        flex={1}
         style={{
           marginTop: "12px",
           fontSize: "14px",

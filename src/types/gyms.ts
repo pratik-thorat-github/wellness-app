@@ -1,6 +1,7 @@
 export interface IGymCard {
   area: string;
-  address: string;
+  addressLine1: string;
+  addressLine2: string;
   gymId: number;
   name: string;
   photos: string[];
