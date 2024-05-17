@@ -193,8 +193,7 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
       justify="space-evenly"
     >
       <Flex flex={2} style={{ fontWeight: "bold", paddingTop: "16px" }}>
-        {gymCardsData.length > 1 ? `${gymCardsData.length - 1}+` : ""} fitness
-        centres around you
+        Explore fitness centres
       </Flex>
 
       <Flex flex={1}>

@@ -15,8 +15,8 @@ const HomeBanner: React.FC = () => {
   return (
     <Flex
       onClick={() => {
-        Mixpanel.track("clicked_plus_banner_home");
-        navigate("/checkout/plus");
+        // Mixpanel.track("clicked_plus_banner_home");
+        // navigate("/checkout/plus");
       }}
       flex={1}
       // className="home-banner"

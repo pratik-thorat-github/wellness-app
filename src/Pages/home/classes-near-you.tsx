@@ -1,11 +1,5 @@
 import { Flex } from "antd";
 
-import { ReactComponent as Yoga } from "../../images/class-images/yoga.svg";
-import { ReactComponent as Pilate } from "../../images/class-images/pilate.svg";
-import { ReactComponent as Swimming } from "../../images/class-images/swimming.svg";
-import { ReactComponent as Badminton } from "../../images/class-images/badminton.svg";
-import { ReactComponent as Hiit } from "../../images/class-images/hiit.svg";
-import { ReactComponent as Strength } from "../../images/class-images/strength.svg";
 import { navigate } from "@reach/router";
 import { Mixpanel } from "../../mixpanel/init";
 import activityToSvgMap from "../../images/class-images/activity-map";
@@ -86,8 +80,7 @@ const ClassesNearYou: React.FC = () => {
           paddingBottom: "8px",
         }}
       >
-        {" "}
-        Book classes near you{" "}
+        Popular activities{" "}
       </Flex>
 
       <Flex flex={3}>
