@@ -17,11 +17,13 @@ import { ReactComponent as NoBatchImage } from "../../images/gym/no-batch.svg";
 import { navigate } from "@reach/router";
 import colors from "../../constants/colours";
 import { Rs } from "../../constants/symbols";
-import { toLetterCase } from "../../utils/string-operation";
+import { checkIfDayPass, toLetterCase } from "../../utils/string-operation";
 import { Mixpanel } from "../../mixpanel/init";
 
 function generateBatchTile(gymData: IGymDetails, batches: IBatch[]) {
   const batchTile = (batch: IBatch) => {
+    const isDayPass = checkIfDayPass(batch.activityName);
+
     return (
       <Card
         style={{
@@ -52,7 +54,7 @@ function generateBatchTile(gymData: IGymDetails, batches: IBatch[]) {
                   padding: "5px",
                 }}
               >
-                {formatTimeIntToAmPm(batch.startTime)}
+                {isDayPass ? "All Day" : formatTimeIntToAmPm(batch.startTime)}
               </span>
             </span>
           </Flex>
@@ -70,9 +72,11 @@ function generateBatchTile(gymData: IGymDetails, batches: IBatch[]) {
               <Flex flex={1} style={{ fontWeight: "bold" }}>
                 {batch.activityName}
               </Flex>
-              <Flex style={{ color: colors.secondary }} flex={1}>
-                {batch.duration} min
-              </Flex>
+              {!isDayPass ? (
+                <Flex style={{ color: colors.secondary }} flex={1}>
+                  {batch.duration} min
+                </Flex>
+              ) : null}
             </Flex>
             <Flex flex={1}>
               <span>
