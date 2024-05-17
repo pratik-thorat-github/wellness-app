@@ -109,8 +109,8 @@ function noBatchComponent() {
       style={{ marginTop: "48px", paddingBottom: "20px" }}
     >
       <NoBatchImage />
-      <span style={{ marginTop: "8px" }}>No slots available!</span>
-      <span style={{ marginTop: "8px" }}>
+      <span style={{ marginTop: "8px" }}>No slots for today!</span>
+      <span style={{ marginTop: "4px" }}>
         Try searching for slots in other dates
       </span>
     </Flex>
