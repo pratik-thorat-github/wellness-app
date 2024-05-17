@@ -5,9 +5,10 @@ import { Counter } from "./carousel-indicator";
 
 interface IGymPhotos {
   gym?: IGymCard;
+  showArray?: boolean;
 }
 
-const GymPhotos: React.FC<IGymPhotos> = ({ gym }) => {
+const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
   let c = new Counter();
 
   if (gym?.photos?.length) {
@@ -20,7 +21,13 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym }) => {
     });
 
     return (
-      <MDBCarousel key={gym.gymId} showIndicators fade touch showControls>
+      <MDBCarousel
+        key={gym.gymId}
+        showIndicators
+        fade
+        touch
+        showControls={showArray}
+      >
         {images}
       </MDBCarousel>
     );

@@ -14,7 +14,6 @@ const BookClassBanner: React.FC = () => {
       style={{
         paddingLeft: "24px",
         paddingRight: "24px",
-        marginBottom: "16px",
       }}
     >
       <Flex flex={1} align="left" justify="left">

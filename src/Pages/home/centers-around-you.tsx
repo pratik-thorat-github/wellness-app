@@ -23,6 +23,11 @@ function getListOfCenters(
   const generateCards = gymCardsData.map((gymCard) => {
     return (
       <Flex
+        onClick={() => {
+          navigate(`/gym/${gymCard.gymId}`, {
+            state: { gymId: gymCard.gymId.toString() },
+          });
+        }}
         key={gymCard.gymId}
         flex={1}
         vertical
@@ -42,15 +47,10 @@ function getListOfCenters(
             borderRadius: "10px",
           }}
         >
-          <GymPhotos gym={gymCard} />
+          <GymPhotos gym={gymCard} showArray={false} />
         </Flex>
 
         <Flex
-          onClick={() => {
-            navigate(`/gym/${gymCard.gymId}`, {
-              state: { gymId: gymCard.gymId.toString() },
-            });
-          }}
           flex={1}
           vertical
           style={{
@@ -73,7 +73,7 @@ function getListOfCenters(
                 style={{
                   fontWeight: "bold",
                   fontSize: "16px",
-                  marginBottom: "8px",
+                  marginBottom: "4px",
                 }}
                 flex={1}
               >
@@ -90,7 +90,7 @@ function getListOfCenters(
               >
                 {" "}
                 {concatAndUpperCaseActivities(
-                  gymCard.activities.slice(0, 3)
+                  gymCard.activities.slice(0, 8)
                 )}{" "}
               </Flex>
               <Flex
@@ -100,9 +100,9 @@ function getListOfCenters(
                 }}
                 flex={1}
               >
-                <span style={{ marginRight: "4px" }}>
+                {/* <span style={{ marginRight: "4px" }}>
                   <LocationLogo />
-                </span>
+                </span> */}
                 <span>
                   {""} {gymCard.area}
                 </span>

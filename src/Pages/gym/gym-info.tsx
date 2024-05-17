@@ -24,6 +24,12 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     </span>
   );
 
+  const seeLess = (
+    <span>
+      ...<u>See less</u>{" "}
+    </span>
+  );
+
   return (
     <Flex
       flex={1}
@@ -85,6 +91,11 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           <div>
             {shortDescription.current}
             <span>{seeMore}</span>
+          </div>
+        ) : description.length > maxChar ? (
+          <div>
+            {description}
+            <span>{seeLess}</span>
           </div>
         ) : (
           <div>{description}</div>
