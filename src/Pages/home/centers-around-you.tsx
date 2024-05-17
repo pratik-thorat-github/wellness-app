@@ -42,7 +42,7 @@ function getListOfCenters(
             borderRadius: "10px",
           }}
         >
-          <GymPhotos photos={gymCard.photos} />
+          <GymPhotos gym={gymCard} />
         </Flex>
 
         <Flex

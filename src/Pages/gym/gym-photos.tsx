@@ -1,22 +1,26 @@
 import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
+import { IGymCard } from "../../types/gyms";
+import { Counter } from "./carousel-indicator";
 
 interface IGymPhotos {
-  photos?: string[];
+  gym?: IGymCard;
 }
 
-const GymPhotos: React.FC<IGymPhotos> = ({ photos }) => {
-  if (photos?.length) {
-    const images = photos.map((p, ind) => {
+const GymPhotos: React.FC<IGymPhotos> = ({ gym }) => {
+  let c = new Counter();
+
+  if (gym?.photos?.length) {
+    const images = gym?.photos.map((p, ind) => {
       return (
-        <MDBCarouselItem itemId={ind}>
+        <MDBCarouselItem key={`${gym.gymId}-${ind}`} itemId={ind}>
           <img src={p} width="100%" />
         </MDBCarouselItem>
       );
     });
 
     return (
-      <MDBCarousel showIndicators fade touch showControls>
+      <MDBCarousel key={gym.gymId} showIndicators fade touch showControls>
         {images}
       </MDBCarousel>
     );
