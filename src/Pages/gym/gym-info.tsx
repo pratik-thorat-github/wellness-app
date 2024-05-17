@@ -5,6 +5,7 @@ import { concatAndUpperCaseActivities } from "../../utils/activities";
 import colors from "../../constants/colours";
 
 import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
+import { checkIpad, checkIphone } from "../../utils/navigator";
 
 const maxChar = 75;
 
@@ -17,6 +18,8 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
 
   let [isTruncated, setIsTruncated] = useState(description.length > maxChar);
   let shortDescription = useRef(description.substring(0, maxChar));
+
+  const mapsLink = checkIphone() || checkIpad() ? "maps://0,0?q" : "geo:0,0?q";
 
   const seeMore = (
     <span>
@@ -56,7 +59,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         <Flex
           onClick={() => {
             if (gymData.lat && gymData.long)
-              window.open(`geo:0,0?q=${gymData.lat},${gymData.long}`);
+              window.open(`${mapsLink}=${gymData.lat},${gymData.long}`);
           }}
           style={{
             color: colors.secondary,
