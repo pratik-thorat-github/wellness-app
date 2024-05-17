@@ -22,9 +22,9 @@ const LandingPage: React.FC<ILandingPage> = () => {
       flex={1}
       style={{
         minHeight: `${dimensions.height * 0.13}vh`,
-        backgroundImage: `url("${LandingBG}")`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "100% 100%",
+        // backgroundImage: `url("${LandingBG}")`,
+        // backgroundRepeat: "no-repeat",
+        // backgroundSize: "100% 100%",
       }}
       vertical
     >
