@@ -20,10 +20,12 @@ const HomeBanner: React.FC = () => {
       }}
       flex={1}
       // className="home-banner"
-      style={{
-        padding: "0px",
-        // borderRadius: "10px",
-      }}
+      style={
+        {
+          // padding: "0px",
+          // borderRadius: "10px",
+        }
+      }
     >
       {/* {plusDetails?.isPlusMember ? (
         <PlusClassRemaining />
@@ -31,7 +33,7 @@ const HomeBanner: React.FC = () => {
         <PlusBanner width={"90vw"} height={"100%"} />
       )} */}
 
-      <HomeBannerWithoutPlus />
+      <HomeBannerWithoutPlus width={"90vw"} height={"100%"} />
 
       {/* <Flex
         flex={1}

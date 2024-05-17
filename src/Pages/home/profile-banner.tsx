@@ -21,7 +21,7 @@ const ProfileBanner: React.FC = () => {
       }}
     >
       <Flex flex={1} justify="left" align="center">
-        Hi {firstName}!
+        Hi {firstName}
       </Flex>
       <Flex
         onClick={() => {
