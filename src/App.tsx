@@ -25,8 +25,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <LandingPage path="/" />
-        <Login path="/login" />
+        {/* <LandingPage path="/" /> */}
+        <Login path="/" />
         <VerifyMagicLink path="/verify" />
 
         <Home path="/home" />

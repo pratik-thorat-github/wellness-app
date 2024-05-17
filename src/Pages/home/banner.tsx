@@ -3,7 +3,7 @@ import { Flex } from "antd";
 import "./style.css";
 import { navigate } from "@reach/router";
 
-import { ReactComponent as PlusBanner } from "../../images/home/plus-banner.svg";
+import { ReactComponent as HomeBannerWithoutPlus } from "../../images/home/home-banner-without-plus.svg";
 import { Mixpanel } from "../../mixpanel/init";
 import { useAtom } from "jotai/react";
 import { plusDetailsAtom } from "../../atoms/atom";
@@ -25,11 +25,13 @@ const HomeBanner: React.FC = () => {
         // borderRadius: "10px",
       }}
     >
-      {plusDetails?.isPlusMember ? (
+      {/* {plusDetails?.isPlusMember ? (
         <PlusClassRemaining />
       ) : (
         <PlusBanner width={"90vw"} height={"100%"} />
-      )}
+      )} */}
+
+      <HomeBannerWithoutPlus />
 
       {/* <Flex
         flex={1}

@@ -99,8 +99,18 @@ const Login: React.FC<ILoginProps> = () => {
             color: colors.secondary,
           }}
         >
-          {" "}
-          Login with your mobile number{" "}
+          Discover & book fitness activities near you.
+        </span>
+
+        <span
+          style={{
+            fontWeight: "bold",
+            fontSize: "14px",
+            marginTop: "16px",
+            color: colors.secondary,
+          }}
+        >
+          Login with your mobile number
         </span>
       </Flex>
 

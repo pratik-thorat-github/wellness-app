@@ -8,7 +8,7 @@ const useAuthRedirect = () => {
   const [userDetails] = useAtom(userDetailsAtom);
 
   useEffect(() => {
-    if (!accessToken || !userDetails) navigate("/login");
+    if (!accessToken || !userDetails) navigate("/");
     else navigate("/home");
   }, [accessToken, userDetails]);
 };

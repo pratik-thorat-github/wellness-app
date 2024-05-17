@@ -30,7 +30,7 @@ const LandingContent: React.FC = () => {
       <Flex flex={1}>& Wellness Activities Near You!</Flex>
       <Flex
         onClick={() => {
-          navigate("/login");
+          navigate("/");
         }}
         flex={1}
         className="try-now"

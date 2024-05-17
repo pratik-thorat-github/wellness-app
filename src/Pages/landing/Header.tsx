@@ -21,7 +21,7 @@ const LandingHeader: React.FC = () => {
 
       <Flex
         onClick={() => {
-          navigate("/login");
+          navigate("/");
         }}
         flex={1}
         justify="flex-end"

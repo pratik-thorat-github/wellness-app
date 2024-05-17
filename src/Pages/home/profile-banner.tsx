@@ -8,6 +8,8 @@ import { Mixpanel } from "../../mixpanel/init";
 const ProfileBanner: React.FC = () => {
   const [userDetails] = useAtom(userDetailsAtom);
 
+  let firstName = userDetails?.name.split(" ")[0];
+
   return (
     <Flex
       flex={1}
@@ -18,13 +20,8 @@ const ProfileBanner: React.FC = () => {
         fontSize: 24,
       }}
     >
-      <Flex
-        flex={1}
-        justify="left"
-        align="center"
-        style={{ fontFamily: "plus-jakarta-sans" }}
-      >
-        Hi {userDetails?.name}!
+      <Flex flex={1} justify="left" align="center">
+        Hi {firstName}!
       </Flex>
       <Flex
         onClick={() => {

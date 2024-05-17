@@ -1,6 +1,5 @@
 import mixpanel, { Dict } from "mixpanel-browser";
 mixpanel.init("241176b2340e1f8f3ada8f6945749d3e", {
-  debug: true,
   persistence: "localStorage",
 });
 

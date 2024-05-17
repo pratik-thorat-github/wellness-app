@@ -111,9 +111,9 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
             <ProfileBanner />
           </Flex>
 
-          {/* <Flex style={{ marginLeft: "16px" }} flex={3}>
+          <Flex style={{ marginLeft: "16px" }} flex={3}>
             <HomeBanner />
-          </Flex> */}
+          </Flex>
 
           <Flex style={{ marginLeft: "16px" }} flex={3}>
             <ClassesNearYou />
@@ -127,14 +127,6 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
           activitySelected={activitySelected}
           gymCardsData={gymCardsData}
         />
-      </Flex>
-
-      <Flex
-        flex={1}
-        align="flex-end"
-        style={{ marginLeft: "0px", marginRight: "0px" }}
-      >
-        <LandingFooter />
       </Flex>
     </Flex>
   );

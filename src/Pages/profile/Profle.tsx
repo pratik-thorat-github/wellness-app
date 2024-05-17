@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { getBookingOfUser } from "../../apis/user/bookings";
 import { IBookings, IPlusDetails } from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
+import LandingFooter from "../landing/Footer";
 
 interface IProfile extends RouteComponentProps {}
 
@@ -81,6 +82,19 @@ const Profile: React.FC<IProfile> = () => {
       <Flex flex={1} align="flex-end">
         <NeedHelpBanner />
       </Flex>
+
+      <Flex flex={1} vertical align="flex-end">
+        <LandingFooter />
+      </Flex>
+
+      {/* <Flex flex={1} vertical align="flex-end">
+        <Flex flex={1}>
+          <NeedHelpBanner />
+        </Flex>
+        <Flex flex={1}>
+        <LandingFooter />
+        </Flex>
+      </Flex> */}
     </Flex>
   );
 };
