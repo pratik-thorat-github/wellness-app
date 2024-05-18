@@ -130,7 +130,16 @@ async function displayCashfree(
     if (result.paymentDetails) {
       // This will be called whenever the payment is completed irrespective of transaction status
       console.log("Payment has been completed, Check for Payment Status");
-      navigate("/plus/success");
+      if (props.checkoutType == ECheckoutType.BATCH)
+        navigate("/checkout/success", {
+          state: {
+            gymData: props.gymData,
+            batchDetails: props.batchDetails,
+          },
+        });
+      else if (props.checkoutType === ECheckoutType.PLUS) {
+        navigate("/plus/success");
+      }
     }
   });
 }
