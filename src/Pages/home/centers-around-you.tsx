@@ -130,7 +130,7 @@ function getListOfCenters(
                   {Rs}
                   {gymCard.minPrice}
                 </span>
-                <span style={{ fontSize: "12px" }}>per class </span>
+                <span style={{ fontSize: "12px" }}>per session </span>
               </Flex>
             </Flex>
           </Flex>
