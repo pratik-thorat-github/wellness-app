@@ -84,7 +84,7 @@ const Login: React.FC<ILoginProps> = () => {
   };
 
   return (
-    <Flex flex={1} vertical justify="center">
+    <Flex flex={1} style={{ minHeight: "40vh" }} vertical justify="center">
       <Flex
         flex={1}
         vertical
