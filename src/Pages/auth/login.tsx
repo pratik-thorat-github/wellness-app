@@ -90,7 +90,7 @@ const Login: React.FC<ILoginProps> = () => {
       >
         <span style={{ fontSize: "24px", fontWeight: "bold" }}>
           {" "}
-          Welcome To Zenfit!{" "}
+          Welcome To ZenfitX!{" "}
         </span>
         <span
           style={{
