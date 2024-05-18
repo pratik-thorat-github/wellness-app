@@ -10,6 +10,8 @@ import {
 import useAuthRedirect from "./redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
 
+import "./style.css";
+
 interface ILoginProps extends RouteComponentProps {}
 const Login: React.FC<ILoginProps> = () => {
   const submitClicked = useRef(false);
@@ -82,11 +84,19 @@ const Login: React.FC<ILoginProps> = () => {
   };
 
   return (
-    <Flex flex={1} style={{ padding: "24px" }} vertical justify="center">
+    <Flex flex={1} vertical justify="center">
       <Flex
         flex={1}
         vertical
-        style={{ paddingTop: "12px", paddingBottom: "12px" }}
+        style={{
+          paddingTop: "24px",
+          paddingBottom: "24px",
+          paddingLeft: "24px",
+          borderBottomRightRadius: "24px",
+          borderBottomLeftRadius: "24px",
+          // padding: "0px",
+        }}
+        className="login-banner"
       >
         <span style={{ fontSize: "24px", fontWeight: "bold" }}>
           {" "}
@@ -96,128 +106,131 @@ const Login: React.FC<ILoginProps> = () => {
           style={{
             fontSize: "14px",
             marginTop: "4px",
-            color: colors.secondary,
           }}
         >
           Discover & book fitness activities near you.
         </span>
-
-        <span
-          style={{
-            fontWeight: "bold",
-            fontSize: "14px",
-            marginTop: "16px",
-            color: colors.secondary,
-          }}
-        >
-          Login with your mobile number
-        </span>
       </Flex>
 
-      <Flex
-        flex={1}
-        style={{ marginTop: "16px" }}
-        vertical
-        // align="center"
-        justify="center"
-      >
-        <Flex
-          flex={1}
-          vertical
-          style={{
-            justifySelf: "stretch",
-            alignSelf: "stretch",
-          }}
-        >
-          <span>Enter Name</span>
-          <span style={{ marginTop: "8px" }}>
-            <input
-              name="name"
-              value={input.name}
-              onChange={setValue}
-              style={{
-                padding: "10px",
-                width: "95%",
-                borderRadius: "5px",
-                height: "30px",
-              }}
-              type="text"
-            />{" "}
-          </span>
-        </Flex>
-
-        <Flex
-          flex={1}
-          vertical
-          style={{
-            justifySelf: "stretch",
-            alignSelf: "stretch",
-            marginTop: "16px",
-          }}
-        >
-          <span>Mobile Number</span>
-          <span style={{ marginTop: "8px" }}>
-            <input
-              style={{
-                width: "95%",
-                height: "30px",
-                borderRadius: "5px",
-                padding: "10px",
-              }}
-              type="number"
-              onChange={setValue}
-              name="phone"
-              value={input.phone}
-            />{" "}
-          </span>
-        </Flex>
-      </Flex>
-
-      <Flex
-        flex={1}
-        vertical
-        align="flex-start"
-        justify="center"
-        style={{ marginTop: "32px" }}
-      >
-        {magicLinkSent ? (
-          <Flex
-            flex={1}
-            align="center"
-            justify="center"
+      <Flex flex={1} style={{ padding: "24px" }} vertical>
+        <Flex flex={1}>
+          <span
             style={{
-              justifySelf: "center",
-              alignSelf: "center",
-              marginBottom: "4px",
+              fontWeight: "bold",
+              fontSize: "14px",
+              marginTop: "16px",
               color: colors.secondary,
-              fontSize: "12px",
             }}
           >
-            We have sent a link on your whatsapp to verify that its you!
-          </Flex>
-        ) : null}
+            Login with your mobile number
+          </span>
+        </Flex>
 
-        <Button
-          disabled={buttonDisabled()}
-          onClick={() => {
-            submitButton();
-          }}
-          style={{
-            flex: 1,
-            backgroundColor: buttonDisabled() ? colors.secondary : "black",
-            color: "white",
-            height: "20%",
-            width: "100%",
-
-            justifySelf: "center",
-            paddingTop: "16px",
-            paddingBottom: "16px",
-            borderRadius: "5px",
-            fontWeight: "bolder",
-          }}
+        <Flex
+          flex={1}
+          style={{ marginTop: "16px" }}
+          vertical
+          // align="center"
+          justify="center"
         >
-          Get OTP
-        </Button>
+          <Flex
+            flex={1}
+            vertical
+            style={{
+              justifySelf: "stretch",
+              alignSelf: "stretch",
+            }}
+          >
+            <span>Enter Name</span>
+            <span style={{ marginTop: "8px" }}>
+              <input
+                name="name"
+                value={input.name}
+                onChange={setValue}
+                style={{
+                  padding: "10px",
+                  width: "95%",
+                  borderRadius: "5px",
+                  height: "30px",
+                }}
+                type="text"
+              />{" "}
+            </span>
+          </Flex>
+
+          <Flex
+            flex={1}
+            vertical
+            style={{
+              justifySelf: "stretch",
+              alignSelf: "stretch",
+              marginTop: "16px",
+            }}
+          >
+            <span>Mobile Number</span>
+            <span style={{ marginTop: "8px" }}>
+              <input
+                style={{
+                  width: "95%",
+                  height: "30px",
+                  borderRadius: "5px",
+                  padding: "10px",
+                }}
+                type="number"
+                onChange={setValue}
+                name="phone"
+                value={input.phone}
+              />{" "}
+            </span>
+          </Flex>
+        </Flex>
+
+        <Flex
+          flex={1}
+          vertical
+          align="flex-start"
+          justify="center"
+          style={{ marginTop: "32px" }}
+        >
+          {magicLinkSent ? (
+            <Flex
+              flex={1}
+              align="center"
+              justify="center"
+              style={{
+                justifySelf: "center",
+                alignSelf: "center",
+                marginBottom: "4px",
+                color: colors.secondary,
+                fontSize: "12px",
+              }}
+            >
+              We have sent a link on your whatsapp to verify that its you!
+            </Flex>
+          ) : null}
+
+          <Button
+            disabled={buttonDisabled()}
+            onClick={() => {
+              submitButton();
+            }}
+            style={{
+              flex: 1,
+              backgroundColor: buttonDisabled() ? colors.secondary : "black",
+              color: "white",
+              height: "20%",
+              width: "100%",
+
+              justifySelf: "center",
+              paddingTop: "16px",
+              paddingBottom: "16px",
+              borderRadius: "5px",
+              fontWeight: "bolder",
+            }}
+          >
+            Get OTP
+          </Button>
+        </Flex>
       </Flex>
     </Flex>
   );
