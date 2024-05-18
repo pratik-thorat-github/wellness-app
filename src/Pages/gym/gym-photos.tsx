@@ -1,7 +1,7 @@
-import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
-import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import { IGymCard } from "../../types/gyms";
-import { Counter } from "./carousel-indicator";
+
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 interface IGymPhotos {
   gym?: IGymCard;
@@ -9,58 +9,16 @@ interface IGymPhotos {
 }
 
 const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
-  let c = new Counter();
-
   if (gym?.photos?.length) {
     const images = gym?.photos.map((p, ind) => {
-      return (
-        <MDBCarouselItem key={`${gym.gymId}-${ind}`} itemId={ind}>
-          <img src={p} width="100%" />
-        </MDBCarouselItem>
-      );
+      return <img src={p} width="100%" />;
     });
-
     return (
-      <MDBCarousel
-        key={gym.gymId}
-        showIndicators
-        fade
-        touch
-        showControls={showArray}
-      >
-        {images}
-      </MDBCarousel>
+      <div className="h-56 sm:h-64 xl:h-80 2xl:h-96">
+        <Carousel showThumbs={false}>{images}</Carousel>
+      </div>
     );
-  }
-
-  return (
-    <MDBCarousel showIndicators fade touch showControls>
-      <MDBCarouselItem itemId={1}>
-        <img
-          src="https://zfx-gyms.zenfitx.link/images/prod/1/Yog-Gurukul-1.jpg"
-          width="100%"
-          // className="d-block w-100"
-          alt="..."
-        />
-      </MDBCarouselItem>
-      <MDBCarouselItem itemId={2}>
-        <img
-          src="https://zfx-gyms.zenfitx.link/images/1/badminton-1.jpg"
-          width="100%"
-          // className="d-block w-100"
-          alt="..."
-        />
-      </MDBCarouselItem>
-      <MDBCarouselItem itemId={3}>
-        <img
-          src="https://zfx-gyms.zenfitx.link/images/1/badminton-2.jpg"
-          width="100%"
-          // className="d-block w-100"
-          alt="..."
-        />
-      </MDBCarouselItem>
-    </MDBCarousel>
-  );
+  } else return null;
 };
 
 export default GymPhotos;
