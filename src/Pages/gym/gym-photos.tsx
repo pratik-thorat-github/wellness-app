@@ -15,7 +15,15 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
     });
     return (
       <div className="h-56 sm:h-64 xl:h-80 2xl:h-96">
-        <Carousel showThumbs={false}>{images}</Carousel>
+        <Carousel
+          swipeable={showArray}
+          showArrows={showArray}
+          showIndicators={showArray}
+          swipeScrollTolerance={100}
+          showThumbs={false}
+        >
+          {images}
+        </Carousel>
       </div>
     );
   } else return null;
