@@ -42,10 +42,10 @@ function createUpperFlexTiles() {
         gap: "8px",
       }}
     >
-      <span>{classTile("yoga")}</span>
-      <span>{classTile("pilate")}</span>
-      <span> {classTile("swimming")} </span>
-      <span> {classTile("swimming")} </span>
+      <span>{classTile("badminton")}</span>
+      <span>{classTile("swimming")}</span>
+      <span> {classTile("boxing")} </span>
+      <span> {classTile("hiit")} </span>
     </Flex>
   );
 }
@@ -60,10 +60,10 @@ function createLowerFlexTiles() {
         gap: "8px",
       }}
     >
-      <span>{classTile("badminton")}</span>
-      <span>{classTile("hiit")}</span>
-      <span> {classTile("strength")} </span>
-      <span> {classTile("strength")} </span>
+      <span>{classTile("yoga")}</span>
+      <span>{classTile("strength")}</span>
+      <span> {classTile("zumba")} </span>
+      <span> {classTile("pt")} </span>
     </Flex>
   );
 }

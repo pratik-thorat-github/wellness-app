@@ -68,8 +68,8 @@ const BatchPaymentSuccess: React.FC<IPaymentSuccess> = ({
             fontSize: "12px",
           }}
         >
-          We’ve requested the centre for your booking, in-case of slot
-          unavailability, We’ll refund your money!
+          You can find your booking in the profile section, please show the
+          booking ID at the center.
         </Flex>
         <Flex
           style={{ cursor: "pointer", fontWeight: "bold" }}
