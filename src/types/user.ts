@@ -21,12 +21,12 @@ export interface IBookings {
   bookingId: string;
   bookingPrice: number;
   name: string;
-  lat: number;
-  long: number;
   activity: string;
   startTime: number;
   durationMin: number;
   date: Date;
+  addressLine1: string;
+  addressLine2: string;
 }
 
 export default IUser;

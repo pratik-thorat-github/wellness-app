@@ -3,6 +3,7 @@ export function toLetterCase(str: string) {
   let restString = str.slice(1);
 
   if (str == "hiit") return "HIIT";
+  if (str === "pt") return "PT";
 
   return `${firstChar.toUpperCase()}${restString.toLowerCase()}`;
 }

@@ -14,7 +14,7 @@ interface BookingClassCard {
 }
 
 const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
-  const dimensions = useWindowDimensions();
+  const mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${booking.addressLine1},${booking.addressLine2}`;
 
   return (
     <Flex
@@ -97,6 +97,9 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
             style={{
               fontWeight: "bold",
               marginLeft: "8px",
+            }}
+            onClick={() => {
+              window.open(mapsLink);
             }}
           >
             <u> Get Direction </u>

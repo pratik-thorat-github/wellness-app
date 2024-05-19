@@ -89,7 +89,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   useEffect(() => {
     _getAllActivities();
     _getGymsByActivities(activitySelected);
-    _getPlusDetailsOfUser(userDetails?.phone as string);
+    // _getPlusDetailsOfUser(userDetails?.phone as string);
   }, [activitySelected, navigate]);
 
   useEffect(() => {
@@ -99,8 +99,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
     }
   }, [userDetails]);
 
-  if (!activities.length || !gymCardsData.length || !pluDetails)
-    return <Loader />;
+  if (!activities.length || !gymCardsData.length) return <Loader />;
 
   return (
     <Flex flex={1} vertical style={{}}>

@@ -23,7 +23,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   shortDescription.current.replace(/<br>/, "");
 
   // const mapsLink = checkIphone() || checkIpad() ? "maps://0,0?q" : "geo:0,0?q";
-  const mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${gymData.lat},${gymData.long}&dir_action=navigate`;
+  const mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${gymData.addressLine1},${gymData.addressLine2}`;
 
   const seeMore = (
     <span>
@@ -62,7 +62,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         </Flex>
         <Flex
           onClick={() => {
-            if (gymData.lat && gymData.long) window.open(mapsLink);
+            window.open(mapsLink);
           }}
           style={{
             color: colors.secondary,
