@@ -14,7 +14,7 @@ const UserDetails: React.FC = () => {
         backgroundColor: "black",
         color: "white",
         padding: "16px",
-        marginTop: "8px",
+        // marginTop: "8px",
       }}
     >
       <span

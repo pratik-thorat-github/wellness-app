@@ -14,9 +14,7 @@ const ProfileBanner: React.FC = () => {
     <Flex
       flex={1}
       style={{
-        paddingLeft: "10px",
-        paddingRight: "10px",
-        marginBottom: "10px",
+        padding: "10px",
         fontSize: 24,
       }}
     >
