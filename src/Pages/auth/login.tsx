@@ -69,7 +69,9 @@ const Login: React.FC<ILoginProps> = () => {
     },
   });
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    Mixpanel.track("open_login_page");
+  }, []);
 
   function submitButton() {
     submitClicked.current = true;
