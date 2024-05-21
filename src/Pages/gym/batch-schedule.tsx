@@ -72,13 +72,12 @@ function generateBatchTile(gymData: IGymDetails, batches: IBatch[]) {
               <Flex flex={1} style={{ fontWeight: "bold" }}>
                 {batch.activityName}
               </Flex>
-              {batch.trainer ? (
-                <Flex flex={1} style={{ fontWeight: "bold" }}>
-                  By {batch.trainer}
-                </Flex>
-              ) : null}
+              {batch.trainer ? <Flex flex={1}>By {batch.trainer}</Flex> : null}
               {!isDayPass ? (
-                <Flex style={{ color: colors.secondary }} flex={1}>
+                <Flex
+                  style={{ color: colors.secondary, marginTop: "4px" }}
+                  flex={1}
+                >
                   {batch.duration} min
                 </Flex>
               ) : null}

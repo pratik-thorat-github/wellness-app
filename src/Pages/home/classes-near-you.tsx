@@ -45,7 +45,7 @@ function createUpperFlexTiles() {
       <span>{classTile("badminton")}</span>
       <span>{classTile("swimming")}</span>
       <span> {classTile("boxing")} </span>
-      <span> {classTile("gym")} </span>
+      <span> {classTile("gymming")} </span>
     </Flex>
   );
 }

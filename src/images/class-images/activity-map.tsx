@@ -76,7 +76,7 @@ const activityToSvgMap = (activity: string): JSX.Element => {
     boxing: boxing,
     zumba: zumba,
     "kick boxing": boxing,
-    gym: gym,
+    gymming: gym,
   };
 
   if (map[activity as keyof object]) return map[activity as keyof object];
