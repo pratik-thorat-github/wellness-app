@@ -17,6 +17,7 @@ export interface IBatch {
   startTime: number;
   activity: string;
   activityName: string;
+  trainer?: string;
 }
 
 export interface IGymDetails extends IGymCard {
