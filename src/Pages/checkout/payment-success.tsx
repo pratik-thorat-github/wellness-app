@@ -41,7 +41,7 @@ const BatchPaymentSuccess: React.FC<IPaymentSuccess> = ({
 
   useEffect(() => {
     setTimeout(() => {
-      navigate("/home");
+      navigate("/");
     }, 3000);
   }, []);
 
@@ -74,7 +74,7 @@ const BatchPaymentSuccess: React.FC<IPaymentSuccess> = ({
         <Flex
           style={{ cursor: "pointer", fontWeight: "bold" }}
           onClick={() => {
-            navigate("/home");
+            navigate("/");
           }}
         >
           Redirect to home ...

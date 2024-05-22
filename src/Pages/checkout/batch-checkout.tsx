@@ -1,4 +1,4 @@
-import { RouteComponentProps, useLocation } from "@reach/router";
+import { RouteComponentProps, navigate, useLocation } from "@reach/router";
 import { Flex } from "antd";
 import BatchInfoOnCheckout from "./batch-info";
 import BatchPrice from "./batch-price";
@@ -68,7 +68,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData, batchDetails }) => {
         marginLeft: "8px",
         marginRight: "8px",
         backgroundColor: "#F8F8F8",
-        minHeight: "88vh",
+        minHeight: "90vh",
       }}
     >
       <Flex
@@ -77,6 +77,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData, batchDetails }) => {
           backgroundColor: "white",
           borderRadius: "10px",
           marginBottom: "10px",
+          maxHeight: "36vh",
         }}
       >
         <BatchInfoOnCheckout
@@ -94,6 +95,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData, batchDetails }) => {
           borderBottomLeftRadius: "16px",
           borderBottomRightRadius: "16px",
           marginBottom: "12px",
+          maxHeight: "7vh",
         }}
       >
         <Flex flex={1}>

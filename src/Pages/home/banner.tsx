@@ -19,13 +19,18 @@ const HomeBanner: React.FC = () => {
         // navigate("/checkout/plus");
       }}
       flex={1}
+      className="home-banner"
+      vertical
+      justify="center"
       // className="home-banner"
-      style={
-        {
-          // padding: "0px",
-          // borderRadius: "10px",
-        }
-      }
+      style={{
+        paddingTop: "16px",
+        paddingLeft: "24px",
+        paddingBottom: "16px",
+        marginRight: "16px",
+
+        borderRadius: "24px",
+      }}
     >
       {/* {plusDetails?.isPlusMember ? (
         <PlusClassRemaining />
@@ -33,7 +38,14 @@ const HomeBanner: React.FC = () => {
         <PlusBanner width={"90vw"} height={"100%"} />
       )} */}
 
-      <HomeBannerWithoutPlus width={"90vw"} height={"100%"} />
+      <span
+        style={{ marginBottom: "4px", fontSize: "16px", fontWeight: "bolder" }}
+      >
+        Welcome to ZenfitX!
+      </span>
+      <span style={{ fontSize: "14px" }}>
+        Discover & book fitness activities near you.
+      </span>
 
       {/* <Flex
         flex={1}

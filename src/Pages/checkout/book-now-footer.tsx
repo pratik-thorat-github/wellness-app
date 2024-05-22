@@ -6,17 +6,17 @@ import {
   createCfOrder,
   createRzpOrder,
 } from "../../apis/payments/payments";
-import { navigate } from "@reach/router";
+import { navigate, useLocation } from "@reach/router";
 import { IBatch, IGymDetails } from "../../types/gyms";
 import colors from "../../constants/colours";
 import { ECheckoutType } from "../../types/checkout";
 import { useAtom } from "jotai/react";
-import { userDetailsAtom } from "../../atoms/atom";
+import { checkoutSdkRedirectAtom, userDetailsAtom } from "../../atoms/atom";
 import IUser from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import { useEffect } from "react";
 
-interface IBookNowFooter extends ICreateRzpOrder {
+export interface IBookNowFooter extends ICreateRzpOrder {
   batchDetails?: IBatch;
   gymData?: IGymDetails;
   checkoutType: ECheckoutType;
@@ -156,12 +156,33 @@ function MixpanelBookNowFooterInit(
 
 const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [userDetails] = useAtom(userDetailsAtom);
+  const [_, setCheckoutSdkRedirectAtom] = useAtom(checkoutSdkRedirectAtom);
+
+  let locationStates = useLocation().state;
+  console.log(locationStates);
+
+  function checkIfLoggedIn() {
+    if (!userDetails) {
+      setCheckoutSdkRedirectAtom(props);
+
+      navigate("/login");
+    } else {
+      MixpanelBookNowFooterInit(props, props.checkoutType);
+      // displayRazorpay(props, userDetails);
+      displayCashfree(props, userDetails);
+    }
+  }
+
+  useEffect(() => {
+    setCheckoutSdkRedirectAtom(null);
+  }, []);
 
   return (
     <Flex
       flex={1}
       justify="stretch"
       style={{
+        maxHeight: "18vh",
         backgroundColor: "white",
         borderTopStyle: "solid",
         borderTopColor: colors.border,
@@ -172,36 +193,72 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         paddingLeft: "24px",
       }}
     >
-      <Flex flex={2} vertical justify="center" align="left">
-        <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-          {Rs}
-          {props.totalAmount}
-        </span>
-        <span style={{ color: colors.secondary, fontSize: "12px" }}>
-          Total Amount
-        </span>
-      </Flex>
-
-      <Flex
-        flex={1}
-        vertical
-        justify="center"
-        align="center"
-        style={{
-          color: "white",
-          fontWeight: "bold",
-          fontSize: "16px",
-          backgroundColor: "#05070B",
-          borderRadius: "10px",
-        }}
-        onClick={() => {
-          MixpanelBookNowFooterInit(props, props.checkoutType);
-          // displayRazorpay(props, userDetails);
-          displayCashfree(props, userDetails);
-        }}
-      >
-        <span>Book Now</span>
-      </Flex>
+      {!userDetails ? (
+        <Flex flex={1} vertical>
+          <Flex flex={1} style={{ fontWeight: "bolder", fontSize: "16px" }}>
+            Almost There
+          </Flex>
+          <Flex
+            flex={1}
+            style={{
+              fontSize: "12px",
+              marginTop: "4px",
+              color: colors.secondary,
+            }}
+          >
+            Login quickly to finish the class booking
+          </Flex>
+          <Flex
+            onClick={() => {
+              checkIfLoggedIn();
+            }}
+            flex={1}
+            justify="center"
+            align="center"
+            style={{
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "16px",
+              backgroundColor: "#05070B",
+              borderRadius: "10px",
+              marginTop: "16px",
+              padding: "16px",
+            }}
+          >
+            Proceed with Phone Number
+          </Flex>
+        </Flex>
+      ) : (
+        <Flex flex={1}>
+          <Flex flex={2} vertical justify="center" align="left">
+            <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+              {Rs}
+              {props.totalAmount}
+            </span>
+            <span style={{ color: colors.secondary, fontSize: "12px" }}>
+              Total Amount
+            </span>
+          </Flex>
+          <Flex
+            flex={1}
+            vertical
+            justify="center"
+            align="center"
+            style={{
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "16px",
+              backgroundColor: "#05070B",
+              borderRadius: "10px",
+            }}
+            onClick={() => {
+              checkIfLoggedIn();
+            }}
+          >
+            <span>Book Now</span>
+          </Flex>
+        </Flex>
+      )}
     </Flex>
   );
 };

@@ -18,35 +18,19 @@ const BatchInfoOnCheckout: React.FC<IBatchInfoOnCheckout> = ({
 }) => {
   return (
     <Flex flex={1} vertical>
-      <Flex
-        flex={1}
-        vertical
-        justify="center"
-        align="center"
-        style={{ paddingTop: "24px", marginBottom: "12px" }}
-      >
+      <Flex flex={1} vertical justify="center" align="center" style={{}}>
         <span>{logoTsx}</span>
 
-        <span style={{ fontSize: "24px" }}>
-          {batchDetails.activity} • {batchDetails.duration}min
+        <span style={{ fontSize: "24px", marginBottom: "20px" }}>
+          {batchDetails.activity} •{" "}
+          {batchDetails.isDayPass ? "All Day" : `${batchDetails.duration}min`}
         </span>
-      </Flex>
 
-      <Flex
-        flex={1}
-        vertical
-        justify="center"
-        align="center"
-        style={{
-          marginBottom: "12px",
-          color: colors.secondary,
-        }}
-      >
-        <span style={{ marginBottom: "4px" }}>
+        <span style={{ marginBottom: "4px", color: colors.secondary }}>
           {formatTimeIntToAmPm(batchDetails.startTime)},{" "}
           {formatDate(batchDetails.date)["date suffix - Day"]}
         </span>
-        <span>
+        <span style={{ color: colors.secondary }}>
           At {gymData?.name}, {gymData?.area}
         </span>
       </Flex>

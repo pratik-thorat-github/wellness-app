@@ -19,18 +19,20 @@ const ProfileBanner: React.FC = () => {
       }}
     >
       <Flex flex={1} justify="left" align="center">
-        Hi {firstName}
+        {userDetails ? `Hi {firstName}` : "Hello there"}
       </Flex>
-      <Flex
-        onClick={() => {
-          navigate("/profile");
-        }}
-        flex={1}
-        justify="right"
-        align="center"
-      >
-        <UserOutlined />
-      </Flex>
+      {userDetails ? (
+        <Flex
+          onClick={() => {
+            navigate("/profile");
+          }}
+          flex={1}
+          justify="right"
+          align="center"
+        >
+          <UserOutlined />
+        </Flex>
+      ) : null}
     </Flex>
   );
 };

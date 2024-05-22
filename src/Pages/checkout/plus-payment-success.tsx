@@ -12,7 +12,7 @@ const PlusPaymentSuccess: React.FC<IPlusPaymentSuccess> = ({}) => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigate("/home");
+      navigate("/");
     }, 3000);
   }, []);
 
@@ -64,7 +64,7 @@ const PlusPaymentSuccess: React.FC<IPlusPaymentSuccess> = ({}) => {
         <Flex
           style={{ cursor: "pointer", fontWeight: "bold" }}
           onClick={() => {
-            navigate("/home");
+            navigate("/");
           }}
         >
           <u> Book Classes</u>

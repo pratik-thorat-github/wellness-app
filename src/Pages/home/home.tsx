@@ -35,7 +35,7 @@ function MixpanelHomeInit(user: IUser) {
 }
 
 const Home: React.FC<IHome> = ({ activitySelected }) => {
-  useAuthRedirect();
+  // useAuthRedirect();
 
   const navigate = useNavigate();
 
@@ -106,6 +106,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
       {!activitySelected || activitySelected == "all" ? (
         <div>
           <Space></Space>
+
           <Flex style={{ marginLeft: "16px" }} flex={1}>
             <ProfileBanner />
           </Flex>

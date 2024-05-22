@@ -26,10 +26,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         {/* <LandingPage path="/" /> */}
-        <Login path="/" />
+        <Login path="/login" />
         <VerifyMagicLink path="/verify" />
 
-        <Home path="/home" />
+        <Home path="/" />
         <Profile path="/profile" />
         <Gym path="/gym/:gymId" />
         <BatchCheckout path="/checkout/batch/:batchId" />

@@ -6,7 +6,11 @@ import { verifyOtplessMagicLink } from "../../apis/auth/login";
 import { errorToast } from "../../components/Toast";
 import { useEffect } from "react";
 
-import { accessTokenAtom, userDetailsAtom } from "../../atoms/atom";
+import {
+  accessTokenAtom,
+  checkoutSdkRedirectAtom,
+  userDetailsAtom,
+} from "../../atoms/atom";
 import { useAtom } from "jotai/react";
 import useAuthRedirect from "./redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
@@ -27,11 +31,12 @@ function mixpanelEvents(verificationApiResponseUser: any) {
 }
 
 const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({}) => {
-  useAuthRedirect();
+  // useAuthRedirect();
   const locationQueryParams = useLocation().search;
 
   const [, setAccessTokenAtom] = useAtom(accessTokenAtom);
   const [, setUserDetailsAtom] = useAtom(userDetailsAtom);
+  const [checkoutSdkRedirectProps] = useAtom(checkoutSdkRedirectAtom);
 
   const { mutate: _verifyOtplessMagicLink } = useMutation({
     mutationFn: verifyOtplessMagicLink,
@@ -40,7 +45,10 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({}) => {
       setUserDetailsAtom(res.user);
       mixpanelEvents(res.user);
 
-      navigate("/home", { replace: true });
+      navigate(`/checkout/batch/${checkoutSdkRedirectProps?.batchId}`, {
+        replace: true,
+        state: { ...checkoutSdkRedirectProps },
+      });
     },
     onError: () => {
       errorToast("Error in verification");

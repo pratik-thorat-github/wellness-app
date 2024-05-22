@@ -21,7 +21,7 @@ const Login: React.FC<ILoginProps> = () => {
     name: "",
   });
 
-  useAuthRedirect();
+  // useAuthRedirect();
 
   function setValue(e: React.ChangeEvent<HTMLInputElement>) {
     var toSet = { ...input };
@@ -102,16 +102,17 @@ const Login: React.FC<ILoginProps> = () => {
       >
         <span style={{ fontSize: "24px", fontWeight: "bold" }}>
           {" "}
-          Welcome To ZenfitX!{" "}
+          {/* Welcome To ZenfitX!{" "} */}
+          One step to go!
         </span>
-        <span
+        {/* <span
           style={{
             fontSize: "14px",
             marginTop: "4px",
           }}
         >
           Discover & book fitness activities near you.
-        </span>
+        </span> */}
       </Flex>
 
       <Flex flex={1} style={{ padding: "24px" }} vertical>

@@ -178,7 +178,7 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
       Mixpanel.track("clicked_activity_pill_home", {
         activity,
       });
-      await navigate("/home", {
+      await navigate("/", {
         state: {
           activitySelected: activity,
           activitySelectedFromFilters: activity,

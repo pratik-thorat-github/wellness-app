@@ -9,7 +9,7 @@ async function navigateToHome(activity: string) {
   Mixpanel.track("clicked_classes_tile_home", {
     activity,
   });
-  return await navigate("/home", {
+  return await navigate("/", {
     state: {
       activitySelected: activity,
       activitySelectedFromFilters: activity,
