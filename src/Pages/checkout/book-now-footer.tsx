@@ -57,7 +57,7 @@ async function displayRazorpay(
     key: "rzp_live_d5m3ZneVyX6pu2",
     amount: props.totalAmount * 100,
     currency: "INR",
-    name: "Wellness One Pass",
+    name: "ZenFitX",
     description,
     image: { logo },
     order_id: orderResult.orderId,
