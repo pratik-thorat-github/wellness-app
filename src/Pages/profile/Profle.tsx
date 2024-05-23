@@ -17,15 +17,15 @@ import LandingFooter from "../landing/Footer";
 
 interface IProfile extends RouteComponentProps {}
 
-function MixpanelProfileInit(noOfBookings: number, plusDetails: IPlusDetails) {
+function MixpanelProfileInit(noOfBookings: number, plusDetails?: IPlusDetails) {
   Mixpanel.track("open_profile_page", {
     noOfBookings,
-    ...plusDetails,
+    // ...plusDetails,
   });
 }
 
 const Profile: React.FC<IProfile> = () => {
-  const [plusDetails] = useAtom(plusDetailsAtom);
+  // const [plusDetails] = useAtom(plusDetailsAtom);
 
   const [pastBookings, setPastBookings] = useState<IBookings[]>([]);
   const [upcomingBookings, setUpcomingBookings] = useState<IBookings[]>([]);
@@ -38,16 +38,16 @@ const Profile: React.FC<IProfile> = () => {
 
       MixpanelProfileInit(
         result.bookings.pastBookings.length +
-          result.bookings.upcomingBookings.length,
-        plusDetails as IPlusDetails
+          result.bookings.upcomingBookings.length
+        // plusDetails as IPlusDetails
       );
     },
     onError: () => {},
   });
 
   useEffect(() => {
-    if (plusDetails) _getBookingOfUser();
-  }, [navigate, plusDetails]);
+    _getBookingOfUser();
+  }, [navigate]);
 
   return (
     <Flex
