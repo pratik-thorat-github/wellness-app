@@ -19,7 +19,7 @@ const ProfileBanner: React.FC = () => {
       }}
     >
       <Flex flex={1} justify="left" align="center">
-        {userDetails ? `Hi {firstName}` : "Hello there"}
+        {userDetails ? `Hi ${firstName}` : "Hello there"}
       </Flex>
       {userDetails ? (
         <Flex

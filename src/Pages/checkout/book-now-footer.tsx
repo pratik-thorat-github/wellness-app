@@ -163,13 +163,20 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
 
   function checkIfLoggedIn() {
     if (!userDetails) {
+      Mixpanel.track("open_batch_checkout_login_with_phone", {
+        batchId: props.batchId,
+      });
       setCheckoutSdkRedirectAtom(props);
 
       navigate("/login");
     } else {
+      Mixpanel.track("open_batch_checkout_pay_now", {
+        batchId: props.batchId,
+        phone: userDetails.phone,
+      });
       MixpanelBookNowFooterInit(props, props.checkoutType);
-      // displayRazorpay(props, userDetails);
-      displayCashfree(props, userDetails);
+      displayRazorpay(props, userDetails);
+      // displayCashfree(props, userDetails);
     }
   }
 

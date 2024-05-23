@@ -13,18 +13,9 @@ let actions = {
     mixpanel.alias(id);
   },
   track: (eventName: string, props?: Dict) => {
-    console.log("Before track - ", eventName, props);
-
-    mixpanel.track(
-      eventName,
-      props,
-      {
-        send_immediately: true,
-      },
-      (res) => {
-        console.log("After track - ", res);
-      }
-    );
+    mixpanel.track(eventName, props, {
+      send_immediately: true,
+    });
   },
   people: {
     set: (props: Dict) => {
