@@ -2840,6 +2840,11 @@ ansi-styles@^6.1.0:
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.1.tgz#0e62320cf99c21afff3b3012192546aacbfb05c5"
   integrity sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==
 
+antd-input-otp@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/antd-input-otp/-/antd-input-otp-2.1.0.tgz#6b485afce3b7fac8839bc145b332749a55549bdd"
+  integrity sha512-igyTfFALQXZFiuUxUPk91zkGwCXtbt6+Gynk6bZJsXPU9Dpgs9vK9SVKwAadjP08MZjks1RKnCgcyUR8dQj1tA==
+
 antd@^5.16.4:
   version "5.16.4"
   resolved "https://registry.yarnpkg.com/antd/-/antd-5.16.4.tgz#41515c8ff2e866d08e36310a761f187d584d85a7"

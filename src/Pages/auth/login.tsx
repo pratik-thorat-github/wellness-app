@@ -1,10 +1,11 @@
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, navigate } from "@reach/router";
 import { Button, Flex } from "antd";
 import colors from "../../constants/colours";
 import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import {
   addUser,
+  checkUserPhoneAndSendOtp,
   checkUserPhoneAndSendOtplessMagicLink,
 } from "../../apis/auth/login";
 import useAuthRedirect from "./redirect-hook";
@@ -30,6 +31,30 @@ const Login: React.FC<ILoginProps> = () => {
 
     setInput(toSet);
   }
+
+  const { mutate: _checkUserPhoneAndSendOtp } = useMutation({
+    mutationFn: checkUserPhoneAndSendOtp,
+    onError: (response) => {
+      setMagicLinkSent(false);
+      submitClicked.current = false;
+
+      Mixpanel.track("login_otp_send_error", {
+        phone: input.phone,
+      });
+    },
+    onSuccess: (response) => {
+      setMagicLinkSent(true);
+      Mixpanel.track("login_otp_send_success", {
+        phone: input.phone,
+      });
+      navigate("/verify", {
+        state: {
+          phoneNumber: input.phone,
+          otpLessOrderId: response.orderId,
+        },
+      });
+    },
+  });
 
   const { mutate: _checkUserPhoneAndSendOtplessMagicLink } = useMutation({
     mutationFn: checkUserPhoneAndSendOtplessMagicLink,
@@ -65,7 +90,8 @@ const Login: React.FC<ILoginProps> = () => {
       });
     },
     onSettled: () => {
-      _checkUserPhoneAndSendOtplessMagicLink(input.phone);
+      // _checkUserPhoneAndSendOtplessMagicLink(input.phone);
+      _checkUserPhoneAndSendOtp(input.phone);
     },
   });
 
