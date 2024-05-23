@@ -22,9 +22,7 @@ interface IHome extends RouteComponentProps {
   activitySelected?: string;
 }
 
-function MixpanelHomeInit(user: IUser) {
-  console.log("Sending mixpanel home events");
-
+function MixpanelHomeInit(user: IUser | null) {
   Mixpanel.identify(user?.phone as string);
   Mixpanel.people.set({
     $name: user?.name as string,
@@ -93,7 +91,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   }, [activitySelected, navigate]);
 
   useEffect(() => {
-    if (userDetails && !mixpanelSet.current) {
+    if (!mixpanelSet.current) {
       MixpanelHomeInit(userDetails);
       mixpanelSet.current = true;
     }
