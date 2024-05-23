@@ -54,7 +54,7 @@ async function displayRazorpay(
     description += `, and plus membership for onePass`;
 
   const options = {
-    key: "rzp_test_Gl4FFTP1YywZlb",
+    key: "rzp_live_d5m3ZneVyX6pu2",
     amount: props.totalAmount * 100,
     currency: "INR",
     name: "Wellness One Pass",
