@@ -189,13 +189,13 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       flex={1}
       justify="stretch"
       style={{
-        maxHeight: "18vh",
+        // maxHeight: "18vh",
         backgroundColor: "white",
         borderTopStyle: "solid",
         borderTopColor: colors.border,
         borderTopWidth: "1px",
         paddingTop: "16px",
-        paddingBottom: "16px",
+        paddingBottom: "20px",
         paddingRight: "24px",
         paddingLeft: "24px",
       }}
