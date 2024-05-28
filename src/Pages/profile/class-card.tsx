@@ -77,7 +77,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
                 {booking.bookingPrice}
               </Flex>
               <Flex flex={1} justify="flex-end">
-                Booking Id: {booking.bookingId}
+                Booking Id: {booking.bookingId.replace(/book_/g, "")}
               </Flex>
             </Flex>
           </Flex>

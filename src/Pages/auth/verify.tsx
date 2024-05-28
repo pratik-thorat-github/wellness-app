@@ -72,6 +72,13 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
     });
   }
 
+  //@ts-ignore
+  window.history.replaceState(
+    { otpLessOrderId, phoneNumber },
+    "",
+    `/gym/${checkoutSdkRedirectProps?.gymData?.gymId}`
+  );
+
   const { mutate: _verifyOtplessMagicLink } = useMutation({
     mutationFn: verifyOtplessMagicLink,
     onSuccess: onSuccessfulLogin,
