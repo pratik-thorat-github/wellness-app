@@ -1,16 +1,14 @@
 import { RouteComponentProps, navigate, useLocation } from "@reach/router";
 import { Button, Flex, Input } from "antd";
-import Loader from "../../components/Loader";
 import { useMutation } from "@tanstack/react-query";
 import {
   checkUserPhoneAndResendOtp,
-  checkUserPhoneAndSendOtp,
   verifyOtplessMagicLink,
   verifyOtplessOtp,
 } from "../../apis/auth/login";
 import { errorToast } from "../../components/Toast";
-import { useEffect, useState } from "react";
-import { InputOTP } from "antd-input-otp"; // Don't forget to import this too!
+import { useEffect, useRef, useState } from "react";
+import OtpInput from "react-otp-input";
 
 import "./style.css";
 
@@ -20,9 +18,9 @@ import {
   userDetailsAtom,
 } from "../../atoms/atom";
 import { useAtom } from "jotai/react";
-import useAuthRedirect from "./redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
 import colors from "../../constants/colours";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 interface IVerifyMagicLink extends RouteComponentProps {
   otpLessOrderId?: string;
@@ -46,9 +44,6 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
   otpLessOrderId,
   phoneNumber,
 }) => {
-  // useAuthRedirect();
-  const locationQueryParams = useLocation().search;
-
   let locationStates = useLocation().state;
   let phoneNumberFromState = locationStates
     ? (locationStates as any).phoneNumber
@@ -89,6 +84,7 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
     mutationFn: verifyOtplessOtp,
     onSuccess: onSuccessfulLogin,
     onError: () => {
+      wrongOtp.current = true;
       errorToast("Error in verification");
     },
   });
@@ -107,32 +103,12 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
     },
   });
 
-  // useEffect(() => {
-  //   let codeToSend = "";
-  //   let phoneToSend = "";
-
-  //   let codeValue = locationQueryParams.split("code=");
-  //   if (codeValue.length && codeValue[1]) {
-  //     codeToSend = codeValue[1].includes("&")
-  //       ? codeValue[1].split("&") && codeValue[1].split("&")[0]
-  //       : codeValue[1];
-  //   }
-
-  //   let phoneValue = locationQueryParams.split("phone=");
-  //   if (phoneValue.length && phoneValue[1]) {
-  //     phoneToSend = phoneValue[1].includes("&")
-  //       ? phoneValue[1].split("&") && phoneValue[1].split("&")[0]
-  //       : phoneValue[1];
-  //   }
-
-  //   if (codeToSend)
-  //     _verifyOtplessMagicLink({ code: codeToSend, phone: phoneToSend });
-  // }, [locationQueryParams]);
-
-  const [otp, setOtp] = useState<string[]>([]);
+  const [otp, setOtp] = useState("");
+  const wrongOtp = useRef(false);
 
   const buttonDisabled = () => {
-    return otp.length != 4 || !otp.every((e) => e);
+    // return otp.length != 4 || !otp.every((e) => e);
+    return otp.length != 4;
   };
 
   useEffect(() => {
@@ -149,24 +125,44 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
       justify="center"
     >
       <Flex vertical flex={1}>
+        {/* Header line */}
         <span
           style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "12px" }}
         >
           {" "}
           Enter one time password{" "}
         </span>
+        {/* OTP Input */}
         <span style={{ paddingTop: "16px", paddingBottom: "16px" }}>
-          <InputOTP
-            inputType="numeric"
-            wrapperStyle={{
-              justifyContent: "flex-start",
-            }}
-            onChange={(v) => setOtp(v)}
+          <OtpInput
             value={otp}
-            variant="filled"
-            length={4}
-          ></InputOTP>
+            onChange={setOtp}
+            numInputs={4}
+            renderSeparator={<span>{`    `}</span>}
+            renderInput={(props) => <input {...props} />}
+            inputType="number"
+            inputStyle={{
+              height: "48px",
+              width: "32px",
+              marginLeft: "4px",
+              background: colors.screenBackground,
+              borderStyle: "none",
+              borderBottomStyle: "solid",
+              borderBottomColor: "black",
+              borderRadius: "4px",
+              fontWeight: "bold",
+              fontSize: "18px",
+            }}
+          />
         </span>
+        {/* Wrong OTP */}
+        {wrongOtp.current ? (
+          <span style={{ color: "red", fontSize: "12px" }}>
+            <ExclamationCircleOutlined /> Incorrect OTP, please re-enter
+          </span>
+        ) : null}
+
+        {/* Didnt get code */}
         <span
           style={{
             paddingTop: "16px",
@@ -176,6 +172,7 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
         >
           Didn't get the code yet?
         </span>
+        {/* Resend */}
         <span
           onClick={() => {
             _checkUserPhoneAndResendOtp(otpLessOrderIdState as string);
@@ -188,14 +185,15 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
         >
           RESEND
         </span>
-
+        {/* Confirm */}
         <span style={{ marginTop: "30px" }}>
           <Button
             disabled={buttonDisabled()}
             onClick={() => {
               _verifyOtplessOtp({
                 phone: phoneNumber as string,
-                otp: otp.join(""),
+                // otp: otp.join(""),
+                otp,
                 orderId: otpLessOrderIdState as string,
               });
             }}
