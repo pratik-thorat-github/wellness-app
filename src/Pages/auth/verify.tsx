@@ -102,16 +102,23 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
       Mixpanel.track("login_otp_resend_error", {
         phone: phoneNumber,
       });
+
+      resend.current = -1;
     },
     onSuccess: (response) => {
       Mixpanel.track("login_otp_resend_success", {
         phone: phoneNumber,
       });
+
+      resend.current = 1;
     },
   });
 
   const [otp, setOtp] = useState("");
   const wrongOtp = useRef(false);
+
+  // -1 = resend failed, 0 = not resent, 1 = successfully resent
+  const resend = useRef(0);
 
   const buttonDisabled = () => {
     // return otp.length != 4 || !otp.every((e) => e);
@@ -192,6 +199,19 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
         >
           RESEND
         </span>
+        {/* Wrong OTP */}
+        {resend.current ? (
+          resend.current < 0 ? (
+            <span style={{ color: "red", fontSize: "12px" }}>
+              <ExclamationCircleOutlined /> Re-sending failed, please try after
+              a few seconds
+            </span>
+          ) : (
+            <span style={{ color: "green", fontSize: "12px" }}>
+              OTP Resent successfully
+            </span>
+          )
+        ) : null}
         {/* Confirm */}
         <span style={{ marginTop: "30px" }}>
           <Button
