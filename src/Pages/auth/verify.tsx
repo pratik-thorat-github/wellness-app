@@ -72,12 +72,6 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
     });
   }
 
-  //@ts-ignore
-  window.history.replaceState(
-    { otpLessOrderId, phoneNumber },
-    "",
-    `/gym/${checkoutSdkRedirectProps?.gymData?.gymId}`
-  );
 
   const { mutate: _verifyOtplessMagicLink } = useMutation({
     mutationFn: verifyOtplessMagicLink,
@@ -153,7 +147,7 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
             onChange={setOtp}
             numInputs={4}
             renderSeparator={<span>{`    `}</span>}
-            renderInput={(props) => <input {...props} />}
+            renderInput={(props:any) => <input {...props} />}
             inputType="number"
             inputStyle={{
               height: "48px",
