@@ -1,7 +1,5 @@
 export interface IGymCard {
   area: string;
-  addressLine1: string;
-  addressLine2: string;
   gymId: number;
   name: string;
   photos: string[];
@@ -26,4 +24,6 @@ export interface IGymDetails extends IGymCard {
   batches: IBatch[];
   lat: number;
   long: number;
+  addressLine1: string;
+  addressLine2: string;
 }
