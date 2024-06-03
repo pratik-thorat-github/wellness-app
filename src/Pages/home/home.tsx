@@ -97,7 +97,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   });
 
   useEffect(() => {
-    const userDetails = JSON.parse(window.localStorage['zenfitx-user-details'])
+    const userDetails = window.localStorage['zenfitx-user-details'] && JSON.parse(window.localStorage['zenfitx-user-details'])
    
     if(userDetails && userDetails.noOfBookings <1 ){
       _getUserDeatils()
