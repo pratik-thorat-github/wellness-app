@@ -17,6 +17,7 @@ import IUser, { IPlusDetails } from "../../types/user";
 import useAuthRedirect from "../auth/redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
+import { getUserDeatils } from "../../apis/user/userDetails";
 
 interface IHome extends RouteComponentProps {
   activitySelected?: string;
@@ -47,7 +48,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
 
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
-  const [userDetails] = useAtom(userDetailsAtom);
+  const [userDetails,setUserDetailsAtom] = useAtom(userDetailsAtom);
 
   const mixpanelSet = useRef(false);
 
@@ -59,6 +60,17 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
     onSuccess: (result) => {
       console.log("activities - ", result);
       setActivities(result.activities);
+    },
+  });
+
+  const { mutate: _getUserDeatils } = useMutation({
+    mutationFn: getUserDeatils,
+    onError: () => {
+      errorToast("Error in getting user details");
+    },
+    onSuccess: (result) => {
+      console.log("deatils - ", result);
+      setUserDetailsAtom(result.user);
     },
   });
 
@@ -85,6 +97,11 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   });
 
   useEffect(() => {
+    const userDetails = JSON.parse(window.localStorage['zenfitx-user-details'])
+   
+    if(userDetails && userDetails.noOfBookings <1 ){
+      _getUserDeatils()
+    }
     _getAllActivities();
     _getGymsByActivities(activitySelected);
     // _getPlusDetailsOfUser(userDetails?.phone as string);
@@ -109,7 +126,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
             <ProfileBanner />
           </Flex>
 
-          <Flex style={{ marginLeft: "16px" }} flex={3}>
+          <Flex flex={3}>
             <HomeBanner />
           </Flex>
 
@@ -119,7 +136,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
         </div>
       ) : null}
 
-      <Flex flex={3} style={{ marginLeft: "5%" }}>
+      <Flex flex={3} style={{ margin: "0 5%" }}>
         <CentersAroundYou
           activities={activities}
           activitySelected={activitySelected}

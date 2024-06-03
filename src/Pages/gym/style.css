@@ -1,0 +1,18 @@
+.customDots{
+    border-radius: 100px;
+background: rgba(201, 201, 201, 0.55);
+backdrop-filter: blur(1.5px);
+width: 14px;
+height: 2px;
+}
+
+.control-dots{
+    display: flex;
+    justify-content: center;
+    margin:16px 0px !important;
+    gap:4px;
+}
+
+.carousel-status{
+    display: none;
+}

@@ -15,6 +15,7 @@ interface IUser {
   dob?: Date;
   addressLine1?: string;
   addressLine2?: string;
+  noOfBookings:number;
 }
 
 export interface IBookings {

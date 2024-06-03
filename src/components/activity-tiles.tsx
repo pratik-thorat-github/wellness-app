@@ -38,11 +38,7 @@ const ActivityTiles: React.FC<IActivityTiles> = ({
     >
       <span
         style={{
-          // paddingRight: "33%",
-          alignItems: "center",
-          justifyContent: "center",
-          //   paddingBottom: "16%",
-          //   paddingTop: "16%",
+         whiteSpace:'nowrap'
         }}
       >
         {toLetterCase(activity)}
@@ -57,6 +53,9 @@ const ActivityTiles: React.FC<IActivityTiles> = ({
         overflow: "auto",
         marginTop: "21px",
         marginBottom: "21px",
+        scrollbarWidth: "none",
+        scrollBehavior:'smooth'
+
       }}
     >
       <Flex

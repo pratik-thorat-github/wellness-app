@@ -11,150 +11,129 @@ import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
 import { Rs } from "../../constants/symbols";
 import PlusOfferBanner from "../../components/plus-offer-banner";
 import { useAtom } from "jotai/react";
-import { plusDetailsAtom } from "../../atoms/atom";
-import { IPlusDetails } from "../../types/user";
+import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
+import IUser, { IPlusDetails } from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import GymPhotos from "../gym/gym-photos";
+import { min } from "moment";
 
 function getListOfCenters(
   gymCardsData: IGymCard[],
-  plusDetails: IPlusDetails | null
+  plusDetails: IPlusDetails | null,
+  userDetails: IUser | null
 ) {
-  const generateCards = gymCardsData.map((gymCard) => {
+
+
+  const discountTxt="50% off on your first class booking"
+
+
+  const locationIcon = ()=>{
     return (
-      <Flex
+      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+  <path d="M8.49984 8.66732C9.60441 8.66732 10.4998 7.77189 10.4998 6.66732C10.4998 5.56275 9.60441 4.66732 8.49984 4.66732C7.39527 4.66732 6.49984 5.56275 6.49984 6.66732C6.49984 7.77189 7.39527 8.66732 8.49984 8.66732Z" stroke="#4F4F4F" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8.49984 14.6673C11.1665 12.0007 13.8332 9.61284 13.8332 6.66732C13.8332 3.7218 11.4454 1.33398 8.49984 1.33398C5.55432 1.33398 3.1665 3.7218 3.1665 6.66732C3.1665 9.61284 5.83317 12.0007 8.49984 14.6673Z" stroke="#4F4F4F" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+    )
+  }
+
+  const discountIcon =()=>{
+    return(<svg width="17" height="18" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M13.2209 3.39881C13.3857 3.79723 13.7019 4.11392 14.1 4.27926L15.4962 4.85758C15.8946 5.02263 16.2112 5.33919 16.3762 5.73765C16.5413 6.1361 16.5413 6.58379 16.3762 6.98225L15.7983 8.37744C15.6332 8.77607 15.633 9.22422 15.7989 9.62265L16.3757 11.0174C16.4576 11.2148 16.4997 11.4263 16.4997 11.64C16.4998 11.8536 16.4577 12.0651 16.3759 12.2625C16.2942 12.4599 16.1743 12.6392 16.0233 12.7903C15.8722 12.9413 15.6928 13.0611 15.4954 13.1428L14.1003 13.7207C13.7019 13.8854 13.3852 14.2016 13.2199 14.5998L12.6416 15.996C12.4765 16.3945 12.16 16.711 11.7615 16.8761C11.3631 17.0411 10.9154 17.0411 10.517 16.8761L9.12183 16.2982C8.72338 16.1335 8.27586 16.1339 7.87766 16.2991L6.48151 16.8766C6.0833 17.0413 5.63601 17.0411 5.23789 16.8762C4.83978 16.7113 4.5234 16.3951 4.35825 15.9971L3.77978 14.6005C3.61504 14.2021 3.29884 13.8854 2.90068 13.72L1.50453 13.1417C1.10627 12.9767 0.789805 12.6604 0.624706 12.2621C0.459607 11.8639 0.459383 11.4164 0.624083 11.018L1.20197 9.62284C1.3666 9.22438 1.36627 8.77684 1.20104 8.37863L0.623978 6.98143C0.542162 6.78408 0.500034 6.57254 0.5 6.35891C0.499966 6.14527 0.542026 5.93372 0.623778 5.73635C0.70553 5.53897 0.825372 5.35964 0.976454 5.2086C1.12754 5.05756 1.3069 4.93777 1.50429 4.85608L2.89944 4.27817C3.2975 4.11358 3.61399 3.79776 3.77944 3.40004L4.35775 2.00385C4.52278 1.6054 4.83934 1.28883 5.23778 1.12378C5.63622 0.958739 6.08389 0.958739 6.48233 1.12378L7.87748 1.70169C8.27592 1.86633 8.72344 1.86599 9.12164 1.70076L10.5184 1.12468C10.9168 0.959728 11.3643 0.959762 11.7627 1.12477C12.1611 1.28978 12.4776 1.60626 12.6426 2.00461L13.2211 3.40122L13.2209 3.39881Z" stroke="#05C270" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    )
+  }
+
+  const exclusiveIcon = () => {
+    return (
+      <div className="specialWrap">
+        <span className="specialTxt">Specials</span>
+
+        <span className="specialIcon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="13"
+            viewBox="0 0 12 13"
+            fill="none"
+          >
+            <path
+              opacity="0.8"
+              d="M7.73192 1.88364L8.61499 3.40904L10.3478 3.73162L8.82239 4.61468L8.49981 6.34748L7.61674 4.82208L5.88394 4.4995L7.40934 3.61644L7.73192 1.88364Z"
+              fill="#FFF7CC"
+            />
+            <path
+              d="M3.88235 3.25586L4.93094 6.08962L7.76471 7.13821L4.93094 8.1868L3.88235 11.0206L2.83377 8.1868L0 7.13821L2.83377 6.08962L3.88235 3.25586Z"
+              fill="#FFF7CC"
+            />
+          </svg>
+        </span>
+      </div>
+    );
+  };
+
+  const discountCard=(price:number)=>{
+    return(
+    <div className="dCard">
+      <div className="dPrice">₹{price}</div>
+      <div className="sPrice slash">₹{price*2}</div>
+      <div className="sPrice">avg/class</div>
+    </div>
+    )
+  }
+
+  const cardWidget = (gymCard:any)=>{
+    console.log(gymCard)
+    const {photos,name,activities,area,minPrice,isExclusive}=gymCard
+    return (
+      <div
+        className="cardWrapper"
         onClick={() => {
           navigate(`/gym/${gymCard.gymId}`, {
             state: { gymId: gymCard.gymId.toString() },
           });
         }}
         key={gymCard.gymId}
-        flex={1}
-        vertical
-        style={{
-          borderRadius: "10px",
-          borderColor: colors.border,
-          borderStyle: "solid",
-          marginBottom: "24px",
-          height: "31%",
-          width: "90vw",
-        }}
       >
-        <Flex
-          flex={1}
-          style={{
-            borderWidth: "10px",
-            borderRadius: "10px",
-          }}
-        >
-          <GymPhotos gym={gymCard} showArray={false} />
-        </Flex>
+        <div className="activityImg">
+          {(isExclusive || true) && (
+            <span className="sWrap">
+              {exclusiveIcon()}
+            </span>
+          )}
+          <img src={photos[0]} alt="activity pic" />
+        </div>
+        <div className="activityDetailWrapper">
+          <div className="activityDetail">
+            <div className="name">
+              {name} {discountCard(minPrice)}
+            </div>
+            <div className="activity">
+              {concatAndUpperCaseActivities(activities.slice(0, 8))}
+            </div>
+            <div className="separator"></div>
+            <div className="location">
+              {locationIcon()}
+              {area}
+            </div>
+          </div>
 
-        <Flex
-          flex={1}
-          vertical
-          style={{
-            paddingLeft: "16px",
-            paddingRight: "16px",
-            marginBottom: "12px",
-          }}
-        >
-          <Flex flex={1}>
-            <Flex
-              flex={2}
-              align="left"
-              vertical
-              style={{
-                width: "73%",
-                paddingTop: "16px",
-              }}
-            >
-              <Flex
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "16px",
-                  marginBottom: "4px",
-                }}
-                flex={1}
-              >
-                {" "}
-                {gymCard.name}{" "}
-              </Flex>
-              <Flex
-                style={{
-                  fontSize: "12px",
-                  color: colors.secondary,
-                  marginBottom: "4px",
-                }}
-                flex={1}
-              >
-                {" "}
-                {concatAndUpperCaseActivities(
-                  gymCard.activities.slice(0, 8)
-                )}{" "}
-              </Flex>
-              <Flex
-                style={{
-                  fontSize: "12px",
-                  color: colors.secondary,
-                }}
-                flex={1}
-              >
-                {/* <span style={{ marginRight: "4px" }}>
-                  <LocationLogo />
-                </span> */}
-                <span>
-                  {""} {gymCard.area}
-                </span>
-              </Flex>
-            </Flex>
-            <Flex
-              flex={1}
-              align="flex-start"
-              style={{
-                paddingTop: "16px",
-              }}
-            >
-              <Flex
-                flex={1}
-                style={{
-                  backgroundColor: colors.border,
-                  borderRadius: "12px",
-                  padding: "8px",
-                }}
-                vertical
-                align="center"
-                justify="flex-start"
-              >
-                <span style={{ fontSize: "16px" }}>
-                  {Rs}
-                  {gymCard.minPrice}
-                </span>
-                <span style={{ fontSize: "12px" }}>per session </span>
-              </Flex>
-            </Flex>
-          </Flex>
-        </Flex>
-
-        {/* {!plusDetails?.isPlusMember ? (
-          <Flex
-            flex={1}
-            style={{
-              paddingLeft: "16px",
-              paddingRight: "16px",
-              marginBottom: "16px",
-            }}
-          >
-            <PlusOfferBanner />
-          </Flex>
-        ) : null} */}
-      </Flex>
+          {userDetails && userDetails.noOfBookings as number <1 && <div className="discount">
+            <div>
+              {discountIcon()}
+              <span className="dTxt">{discountTxt}</span>
+            </div>
+          </div>}
+        </div>
+      </div>
     );
-  });
+  }
 
   return (
     <Flex flex={1} vertical justify="space-evenly" style={{ width: "100%" }}>
-      {generateCards}
+      {/* {generateCards} */}
+      {gymCardsData.map((gymCard)=>{
+        return cardWidget(gymCard)
+      })}
     </Flex>
   );
 }
@@ -172,6 +151,8 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
 }) => {
   const navigate = useNavigate();
   const [plusDetails] = useAtom(plusDetailsAtom);
+  const [userDetails] = useAtom(userDetailsAtom);
+
 
   const activityTilesOnClick = async (activity: string) => {
     if (navigate) {
@@ -195,8 +176,9 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
       style={{ marginTop: "16px" }}
       justify="space-evenly"
     >
-      <Flex flex={2} style={{ fontWeight: "bold", paddingTop: "16px" }}>
-        Explore fitness centres
+      <Flex flex={2} align="left" className="sectionHeading">
+        <span style={{ marginRight: "12px" }}>Fitness centres around you</span>
+        <span className="separator"></span>
       </Flex>
 
       <Flex flex={1}>
@@ -208,7 +190,7 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
       </Flex>
 
       <Flex flex={4} style={{}}>
-        {getListOfCenters(gymCardsData, plusDetails)}
+        {getListOfCenters(gymCardsData, plusDetails, userDetails)}
       </Flex>
     </Flex>
   );

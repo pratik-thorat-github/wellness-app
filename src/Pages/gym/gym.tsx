@@ -44,7 +44,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   if (!gym) return <Loader />;
 
   return (
-    <Flex flex={1} vertical style={{ marginTop: "10px" }}>
+    <Flex flex={1} vertical>
       <Flex flex={1}>
         <GymPhotos gym={gym} />
       </Flex>

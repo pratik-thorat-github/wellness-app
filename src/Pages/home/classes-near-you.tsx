@@ -75,13 +75,10 @@ const ClassesNearYou: React.FC = () => {
       <Flex
         flex={1}
         align="left"
-        style={{
-          fontWeight: "bold",
-          paddingTop: "16px",
-          paddingBottom: "8px",
-        }}
+        className="sectionHeading"
       >
-        Popular activities{" "}
+        <span style={{marginRight:'12px'}}>Popular activities</span>
+        <span className="separator"></span>
       </Flex>
 
       <Flex flex={3}>
@@ -90,6 +87,8 @@ const ClassesNearYou: React.FC = () => {
             style={{
               width: "90vw",
               overflow: "auto",
+              scrollbarWidth: "none",
+        scrollBehavior:'smooth'
             }}
           >
             <Flex flex={1} wrap="nowrap">

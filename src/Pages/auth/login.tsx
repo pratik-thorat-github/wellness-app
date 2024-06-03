@@ -102,7 +102,7 @@ const Login: React.FC<ILoginProps> = () => {
   function submitButton() {
     submitClicked.current = true;
 
-    _createUser({ name: input.name, phone: input.phone });
+    _createUser({ name: input.name, phone: input.phone , noOfBookings:0 });
   }
 
   const buttonDisabled = () => {
