@@ -85,6 +85,21 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
     },
   });
 
+
+  // useEffect(()=>{
+  //   const { mutate: _getGymsByActivities } = useMutation({
+  //     mutationFn: getGymsByActivity,
+  //     onError: () => {
+  //       errorToast("Error in getting gyms by activity");
+  //     },
+  //     onSuccess: (result) => {
+  //       console.log("gyms gotten - ", result);
+  //       setGymCardsData(result.gyms);
+  //     },
+  //   });
+
+  // },[activitySelected])
+
   const { mutate: _getPlusDetailsOfUser } = useMutation({
     mutationFn: getPlusDetailsOfUser,
     onSuccess: (data) => {
@@ -105,7 +120,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
     _getAllActivities();
     _getGymsByActivities(activitySelected);
     // _getPlusDetailsOfUser(userDetails?.phone as string);
-  }, [activitySelected, navigate]);
+  }, [activitySelected]);
 
   useEffect(() => {
     if (!mixpanelSet.current) {
@@ -122,9 +137,9 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
         <div>
           <Space></Space>
 
-          <Flex style={{ marginLeft: "16px" }} flex={1}>
+          {/* {userDetails?.phone && <Flex flex={1}>
             <ProfileBanner />
-          </Flex>
+          </Flex>} */}
 
           <Flex flex={3}>
             <HomeBanner />

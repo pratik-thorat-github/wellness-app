@@ -78,14 +78,14 @@ const ClassesNearYou: React.FC = () => {
         className="sectionHeading"
       >
         <span style={{marginRight:'12px'}}>Popular activities</span>
-        <span className="separator"></span>
+        <span className="separator" style={{marginRight:'16px'}}></span>
       </Flex>
 
       <Flex flex={3}>
         <Flex flex={1} vertical>
           <div
             style={{
-              width: "90vw",
+              width: "100vw",
               overflow: "auto",
               scrollbarWidth: "none",
         scrollBehavior:'smooth'

@@ -18,16 +18,17 @@ text-transform: uppercase;
 padding:16px 0px;
 width: 100%;
 white-space: nowrap;
+margin-right:16px;
 }
 
 .homeWrapper{
-    background: rgba(19, 19, 17, 0.70);
     width: 100%;
     height:192px;
     display: flex;
     flex-direction: column;
     gap: 16px;
     align-items: center;
+    position: absolute;
 }
 
 .zenfit{
@@ -54,7 +55,6 @@ letter-spacing: 6.46px;
 .head2{
     color: #FFF0A4;
 text-align: center;
-font-family: "Montserrat";
 font-size: 12.299px;
 font-style: normal;
 font-weight: 400;
@@ -66,8 +66,7 @@ text-transform: uppercase;
 .head3{
     color: #FFF;
 text-align: center;
-max-width:243px;
-font-family: Montserrat;
+max-width:200px;
 font-size: 16px;
 font-style: normal;
 font-weight: 500;

@@ -8,6 +8,8 @@ import { Mixpanel } from "../../mixpanel/init";
 import { useAtom } from "jotai/react";
 import { plusDetailsAtom } from "../../atoms/atom";
 import PlusClassRemaining from "../profile/plus-classes-remaining";
+import { ReactComponent as Banner } from "../../images/home/banner.svg";
+
 
 const HomeBanner: React.FC = () => {
   const [plusDetails] = useAtom(plusDetailsAtom);
@@ -70,6 +72,8 @@ const HomeBanner: React.FC = () => {
     //     <HomeBannerLogo />
     //   </Flex> */}
     // </Flex>
+    <>
+    <div style={{'width':'100%'}}><Banner/></div>
     <div className="homeWrapper">
       <div style={{paddingTop:"15px"}}>
         <span className="zenfit">zenfit</span><span className="x">x</span>
@@ -84,6 +88,7 @@ in your area
 
       </div>
     </div>
+    </>
   );
 };
 

@@ -14,6 +14,7 @@ import Login from "./Pages/auth/login";
 import VerifyMagicLink from "./Pages/auth/verify";
 import Profile from "./Pages/profile/Profle";
 import LandingPage from "./Pages/landing/Landing";
+import Checkout from "./Pages/checkout/checkout";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ function App() {
 
         <Profile path="/profile" />
         <Gym path="/gym/:gymId" />
+        <Checkout path="/gym/:gymId/batch" />
         <BatchCheckout path="/checkout/batch/:batchId" />
         <PlusCheckout path="/checkout/plus" />
         <BatchPaymentSuccess path="/checkout/success" />

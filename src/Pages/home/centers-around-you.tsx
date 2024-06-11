@@ -176,7 +176,7 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
       style={{ marginTop: "16px" }}
       justify="space-evenly"
     >
-      <Flex flex={2} align="left" className="sectionHeading">
+      <Flex flex={2} align="left" className="sectionHeading" style={{paddingBottom:'unset'}}>
         <span style={{ marginRight: "12px" }}>Fitness centres around you</span>
         <span className="separator"></span>
       </Flex>

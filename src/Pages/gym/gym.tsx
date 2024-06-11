@@ -50,9 +50,9 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
       </Flex>
 
       <Flex flex={2} vertical justify="center">
-        <Flex flex={1}>
+      
           <GymInfo gymData={gym} />
-        </Flex>
+       
 
         <Flex flex={2}>
           <BookClassBanner />
