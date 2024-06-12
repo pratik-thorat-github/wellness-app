@@ -17,3 +17,8 @@ export async function getGymById(id: string) {
   const result = await networkAdapter.get(`/gyms/?id=${id}`);
   return result.data;
 }
+
+export async function getActivityById(id: string) {
+  const result = await networkAdapter.get(`gyms/batch/byBatchId?batchId=${id}`);
+  return result.data;
+}
