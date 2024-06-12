@@ -32,6 +32,8 @@ import { Rs } from "../../constants/symbols";
 import { toLetterCase } from "../../utils/string-operation";
 import { getGymById } from "../../apis/gym/activities";
 import Loader from "../../components/Loader";
+import { ReactComponent as Banner } from "../../images/home/banner.svg";
+import './style.css'
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -159,11 +161,10 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
               <Flex flex={1}>
                 <span>
                   {Rs}
-                  {batch.price}{" "}
+                  {batch.price}
                 </span>
-                <span style={{ marginLeft: "auto" }}>
-                  {" "}
-                  <RightOutlined />{" "}
+                <span style={{ marginLeft: "auto"}}>
+                  <RightOutlined />
                 </span>
               </Flex>
             </Flex>
@@ -191,26 +192,59 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
         style={{ marginTop: "48px", paddingBottom: "20px" }}
       >
         <NoBatchImage />
-        <span style={{ marginTop: "8px" }}>No slots for today!</span>
-        <span style={{ marginTop: "4px" }}>
-          Try searching for slots in other dates
+        <span style={{ margin: "8px 0px" ,fontSize:'14px'}}>Oops! No slots available</span>
+        <span style={{ 
+            display: 'flex',
+            padding: '8px 16px',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '8px',
+            background: '#000',
+            color:'#fff',
+            marginTop:'16px'
+         }}>
+          <span>View next available slot</span>
         </span>
       </Flex>
     );
   }
 
+  const backBtn=()=>{
+    return(
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+  <path d="M15.8337 9.99935H4.16699M4.16699 9.99935L10.0003 15.8327M4.16699 9.99935L10.0003 4.16602" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+    )
+  }
+
+  const locationIcon = ()=>{
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M6.99967 7.58268C7.96617 7.58268 8.74967 6.79918 8.74967 5.83268C8.74967 4.86618 7.96617 4.08268 6.99967 4.08268C6.03318 4.08268 5.24967 4.86618 5.24967 5.83268C5.24967 6.79918 6.03318 7.58268 6.99967 7.58268Z" stroke="white" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M6.99967 12.8327C9.33301 10.4993 11.6663 8.41001 11.6663 5.83268C11.6663 3.25535 9.577 1.16602 6.99967 1.16602C4.42235 1.16602 2.33301 3.25535 2.33301 5.83268C2.33301 8.41001 4.66634 10.4993 6.99967 12.8327Z" stroke="white" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    )
+  }
+
+  const goToGymPage=()=>{
+    console.log(window.location)
+    navigate(`/gym/${gymId}`)
+  }
+
   function generateDateTiles() {
     const style: React.CSSProperties = {
-      marginLeft: "11px",
       cursor: "pointer",
       fontSize: "14px",
+      width:'44px',
+      height:'44px'
     };
 
     let selectedStyle: React.CSSProperties = {
       ...style,
-      borderBottomWidth: "2px",
-      borderBottomStyle: "solid",
       fontWeight: "bold",
+      borderRadius: '8px',
+      background: 'rgba(255, 255, 255, 0.16)',     
     };
 
     const dateTile = (number: number, day: string, dateString: string) => (
@@ -256,11 +290,6 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
     return (
       <Flex
         flex={1}
-        style={{
-          borderBottomWidth: "1px",
-          borderBottomStyle: "solid",
-          borderBottomColor: colors.border,
-        }}
         justify="space-evenly"
       >
         {weekDateAndDays.map(({ number, day, dateString }) => (
@@ -271,34 +300,49 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
   }
 
   return (
-    <Flex flex={1} vertical>
-      <Flex flex={1} style={{ paddingLeft: "24px" }}>
-        <ActivityTiles
-          activities={gym.activities}
-          activitySelected={selectedActivity}
-          onClickFunction={(activity: string) => {
-            Mixpanel.track("clicked_activity_pill_gym", {
-              gymId: gym.gymId,
-              activity,
-            });
-            setSelectedActivity(activity);
-            _getGymBatchesForDate({
-              id: gym.gymId,
-              date: selectedDate,
-              activity: activity,
-            });
-          }}
-        />
-      </Flex>
+    <>
+      <Banner />
+     
+      <div className="dateTileWrap">
+      <div className="detailWrap">
+        <div className="backBtn" onClick={()=>goToGymPage()}>
+            {backBtn()}
+        </div>
+        <div className="gymNames">
+          {gym?.name}
+        </div>
+        <div className="locationName">
+        <span>{locationIcon()}</span><span>{gym?.area}</span>
+        </div>
+      </div>
+        {generateDateTiles()}</div>
+      <Flex flex={1} vertical>
+        <Flex flex={1} style={{ paddingLeft: "24px" }}>
+          <ActivityTiles
+            activities={gym.activities}
+            activitySelected={selectedActivity}
+            onClickFunction={(activity: string) => {
+              Mixpanel.track("clicked_activity_pill_gym", {
+                gymId: gym.gymId,
+                activity,
+              });
+              setSelectedActivity(activity);
+              _getGymBatchesForDate({
+                id: gym.gymId,
+                date: selectedDate,
+                activity: activity,
+              });
+            }}
+          />
+        </Flex>
 
-      <Flex flex={1}>{generateDateTiles()}</Flex>
-
-      <Flex flex={3} style={{ marginTop: "10px" }}>
-        {batches && batches.length
-          ? generateBatchTile(gym, batches)
-          : noBatchComponent()}
+        <Flex flex={3} style={{ marginTop: "10px" }}>
+          {batches && batches.length
+            ? generateBatchTile(gym, batches)
+            : noBatchComponent()}
+        </Flex>
       </Flex>
-    </Flex>
+    </>
   );
 };
 

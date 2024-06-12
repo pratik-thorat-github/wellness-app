@@ -83,7 +83,8 @@ function getListOfCenters(
 
   const cardWidget = (gymCard:any)=>{
     console.log(gymCard)
-    const {photos,name,activities,area,minPrice,isExclusive}=gymCard
+    const {medias,name,activities,area,minPrice,isExclusive}=gymCard
+    console.log(medias,'media')
     return (
       <div
         className="cardWrapper"
@@ -100,7 +101,7 @@ function getListOfCenters(
               {exclusiveIcon()}
             </span>
           )}
-          <img src={photos[0]} alt="activity pic" />
+          <img src={medias[1]?.url} alt="activity pic" />
         </div>
         <div className="activityDetailWrapper">
           <div className="activityDetail">

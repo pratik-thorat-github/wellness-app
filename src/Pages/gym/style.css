@@ -104,12 +104,16 @@ font-style: normal;
 font-weight: 700;
 line-height: 135%; /* 21.6px */
 letter-spacing: 0.24px;
+width:75%
 }
 
 .bookBtnWrap{
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.55) 19%, #FFF 100%);
-    position: sticky;
-    bottom:0px;
+    /* position: absolute; */
+    position: fixed;
+
+    bottom:12px;
     padding:8px 24px;
+    width:100%;
 }
 

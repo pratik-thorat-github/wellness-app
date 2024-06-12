@@ -54,13 +54,13 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
           <GymInfo gymData={gym} />
        
 
-        <Flex flex={2}>
+        {/* <Flex flex={2}>
           <BookClassBanner />
         </Flex>
 
         <Flex flex={4}>
           <BatchSchedule gymData={gym} />
-        </Flex>
+        </Flex> */}
       </Flex>
     </Flex>
   );

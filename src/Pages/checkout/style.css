@@ -1,0 +1,53 @@
+.dateTileWrap {
+    position: absolute;
+    color: #FFF;
+    font-family: "Plus Jakarta Sans";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 135%;
+    /* 16.2px */
+    letter-spacing: 0.18px;
+    top: 32px;
+    width:100%
+
+}
+
+.detailWrap{
+    display:flex;
+    flex-direction: column;
+    padding:0px 16px;
+    margin-bottom:24px;
+
+
+}
+
+.gymNames{
+    color: #FFF;
+font-family: "Plus Jakarta Sans";
+font-size: 20px;
+font-style: normal;
+font-weight: 700;
+line-height: 135%; /* 27px */
+letter-spacing: 0.3px;
+margin-left:8px;
+margin-bottom:8px;
+}
+
+.locationName{
+    color: #FFF;
+font-family: "Plus Jakarta Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 16.2px */
+text-transform: capitalize;
+margin-left:8px;
+display: flex;
+align-items: flex-start;
+gap:4px;
+
+}
+.backBtn{
+    color:'#fff';
+}

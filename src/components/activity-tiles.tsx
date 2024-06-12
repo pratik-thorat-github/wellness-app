@@ -15,18 +15,21 @@ const ActivityTiles: React.FC<IActivityTiles> = ({
 }) => {
   const style: React.CSSProperties = {
     marginRight: "12px",
-    borderRadius: "12px",
     cursor: "pointer",
-
-    padding: "10px",
-    borderStyle: "solid",
-    borderColor: colors.border,
+    padding: "8px 16px",
+    border: '1px solid #F1F1F1',
+    borderRadius: '8px',
+    color:'#05070B',
+    fontWeight:'400',
   };
 
   let selectedStyle: React.CSSProperties = {
     ...style,
     backgroundColor: "#05070B",
-    color: "white",
+    color: "#000",
+    fontWeight:'700',
+    border: '0.5px solid #05070B',
+    background: 'rgba(5, 7, 11, 0.05)'
   };
 
   const cardTile = (activity: string) => (
