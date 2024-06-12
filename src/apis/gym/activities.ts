@@ -13,6 +13,12 @@ export async function getGymsByActivity(activity?: string) {
   return result.data;
 }
 
+export async function getExclusiveGyms() {
+  let url = `/gyms/exclusive`;
+  const result = await networkAdapter.get(url);
+  return result.data;
+}
+
 export async function getGymById(id: string) {
   const result = await networkAdapter.get(`/gyms/?id=${id}`);
   return result.data;
