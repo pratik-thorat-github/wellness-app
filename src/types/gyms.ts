@@ -17,6 +17,12 @@ export interface IBatch {
   activityName: string;
   trainer?: string;
   isDayPass: boolean;
+  DurationMin:number;
+  aboutTheActivity?:string;
+  whatToBring?:string;
+  whatToExpect?:string;
+  moreInfo?:string
+
 }
 
 export interface IGymDetails extends IGymCard {
