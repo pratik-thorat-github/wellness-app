@@ -23,7 +23,7 @@ import { RightOutlined } from "@ant-design/icons";
 import { IBatch, IGymDetails } from "../../types/gyms";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { getGymBatchesForDate } from "../../apis/gym/batches";
+import { getGymBatchesForDate, getGymBatchesForSchedulePage } from "../../apis/gym/batches";
 import { errorToast } from "../../components/Toast";
 
 import { ReactComponent as NoBatchImage } from "../../images/gym/no-batch.svg";
@@ -55,6 +55,10 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
 
+  const [batchesData , setBatchesData]=useState({})
+  const [weekDateAndDays,setWeekDateAndDays]= useState<Array<{ number: number; day: string; dateString: string }>>([])
+  const [dateLoading,setDateLoading]= useState<Boolean>(true)
+
   const { mutate: _getGymById } = useMutation({
     mutationFn: getGymById,
     onSuccess: (result) => {
@@ -66,6 +70,56 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
     },
   });
 
+  useEffect(() => {
+    _getGymById(gymId as string);
+  }, [gymId]);
+
+
+//   useEffect(()=>{
+//     setBatches(gym?.batches as IBatch[])
+//   },[gym])
+
+   const formatDatesObject = () => {
+        const listOfDates = Object.keys(batchesData);
+        const result: Array<{ number: number; day: string; dateString: string }> = [];
+
+        listOfDates.forEach((e) => {
+          let date = new Date(e);
+          let dateNumber = date.getDate();
+          let day = toLetterCase(getDayOfWeek(date));
+          let dateString = formatDate(date).isoDate;
+          result.push({
+            number: dateNumber,
+            day,
+            dateString,
+          });
+        });
+        setWeekDateAndDays(result)
+    }
+
+  const { mutate: _getGymBatchesForSchedulePage } = useMutation({
+    mutationFn: getGymBatchesForSchedulePage,
+    // onMutate:()=>{
+
+    // },
+    onSuccess: (result) => {
+     console.log(result)
+
+     setBatchesData(result.data)
+     formatDatesObject()
+     setDateLoading(false)
+      if (!result.data.length) errorToast("No batches found");
+    },
+    onError: (error) => {
+      setBatches([]);
+      errorToast("Error in getting batches");
+      setDateLoading(false)
+    },
+  });
+
+  useEffect(()=>{
+    _getGymBatchesForSchedulePage({id:1,isWeekendOnly:false})
+  },[])
 
   const { mutate: _getGymBatchesForDate } = useMutation({
     mutationFn: getGymBatchesForDate,
@@ -89,6 +143,7 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
   useEffect(()=>{
     setBatches(gym?.batches as IBatch[])
   },[gym])
+
 
   if (!gym?.batches) return <Loader />;
 
@@ -261,11 +316,10 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
             day: `${number}-${day}`,
           });
           setSelectedDate(dateString);
-          _getGymBatchesForDate({
-            id: gym?.gymId ?? 0,
-            date: dateString,
-            activity: selectedActivity,
-          });
+        //   _getGymBatchesForDate({
+        //     id: gym?.gymId ?? 0,
+        //     date: dateString,
+          setBatches(batchesData[dateString as keyof typeof batchesData])
         }}
       >
         <span style={{ marginBottom: "4px" }}> {number} </span>
@@ -273,19 +327,7 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
       </Flex>
     );
 
-    const weekDateAndDays = [];
-    for (let days = 0; days < 7; days++) {
-      let date = addDays(new Date(), days);
-      let dateNumber = date.getDate();
-      let day = toLetterCase(getDayOfWeek(date));
-      let dateString = formatDate(date).isoDate;
-
-      weekDateAndDays.push({
-        number: dateNumber,
-        day,
-        dateString,
-      });
-    }
+    console.log(weekDateAndDays,'weekDateAndDay')
 
     return (
       <Flex

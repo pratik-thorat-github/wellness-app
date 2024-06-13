@@ -8,9 +8,9 @@ import {
 } from "../../utils/date";
 import { RightOutlined } from "@ant-design/icons";
 import { IBatch, IGymDetails } from "../../types/gyms";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { getGymBatchesForDate } from "../../apis/gym/batches";
+import { getGymBatchesForDate, getGymBatchesForSchedulePage } from "../../apis/gym/batches";
 import { errorToast } from "../../components/Toast";
 
 import { ReactComponent as NoBatchImage } from "../../images/gym/no-batch.svg";
