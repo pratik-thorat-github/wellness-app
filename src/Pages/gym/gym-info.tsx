@@ -10,6 +10,8 @@ import { checkIpad, checkIphone } from "../../utils/navigator";
 import parser from "html-react-parser";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import { navigate } from "@reach/router";
+import { applicationIcons } from "../../utils/helper";
+import { toLetterCase } from "../../utils/string-operation";
 
 const maxChar = 75;
 
@@ -91,83 +93,119 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     )
   }
 
+
+  // const amenitiesIconMap={
+  //   'GROUP_CLASSES':
+  // }
+
+  const amenities = (amenety:string)=>{
+    return (<span>
+      <span style={{marginRight:'8px'}}>{applicationIcons(amenety)}</span>
+      <span className="amenety">{toLetterCase(amenety)}</span>
+
+    </span>
+    )
+
+  }
+
   return (
     <>
-    <div
-      style={{
-        padding: "16px 24px",
-      }}
-    >
-      <div>
-        <div style={{ marginBottom: "10px" }}>{exclusiveIcon()}</div>
-        <div className="gymName">{gymData.name}</div>
-        <div style={{ marginBottom: "16px" }}>
-          <span className="price">₹{gymData.minPrice} onwards</span>
-          {/* <span>&bull;</span> */}
-          <span className="gRating"></span>
+      <div
+        style={{
+          padding: "16px 24px",
+        }}
+      >
+        <div>
+          <div style={{ marginBottom: "10px" }}>{exclusiveIcon()}</div>
+          <div className="gymName">{gymData.name}</div>
+          <div style={{ marginBottom: "16px" }}>
+            <span className="price">₹{gymData.minPrice} onwards</span>
+            {/* <span>&bull;</span> */}
+            <span className="gRating"></span>
+          </div>
+          <div className="line"></div>
+          <div className="locWrp">
+            <span className="baseTxt">
+              <LocationLogo style={{ marginRight: "8px" }} /> {gymData.area}
+            </span>
+            <span
+              onClick={() => {
+                window.open(mapsLink);
+              }}
+              className="baseTxt"
+              style={{ textDecoration: "underline" }}
+            >
+              View on map
+            </span>
+          </div>
+          <div className="line"></div>
+        </div>
+        <div className="gymPageheading">
+          <div>Choose Activities</div>
+        </div>
+        <div className="activities">
+          {gymData.activities.map((activity: string) => {
+            return (
+              <span style={{ marginRight: "16px" }}>
+                {activityToSvgMap(activity)}
+              </span>
+            );
+          })}
+        </div>
+        <div className="gymPageheading">About Studio</div>
+        <div
+          className="gPageDesc"
+          onClick={() => {
+            setIsTruncated(!isTruncated);
+          }}
+        >
+          {isTruncated ? (
+            <div>
+              {shortDescription.current}
+              <span>{seeMore}</span>
+            </div>
+          ) : description.length > maxChar ? (
+            <div>
+              {parser(description)}
+              <span>{seeLess}</span>
+            </div>
+          ) : (
+            <div>{parser(description)}</div>
+          )}
+        </div>
+        <div className="gymPageheading">Amenities</div>
+        <div className="amenities">
+          {gymData.amenities.map((a) => {
+            return <span className="amenitiesItem">{amenities(a)}</span>;
+          })}
         </div>
         <div className="line"></div>
         <div className="locWrp">
           <span className="baseTxt">
-            <LocationLogo style={{ marginRight: "8px" }} /> {gymData.area}
+            {igLogo()} <span style={{ marginLeft: "8px" }}> INSTAGRAM</span>
           </span>
-          <span
-            onClick={() => {
-              window.open(mapsLink);
-            }}
-            className="baseTxt"
-            style={{ textDecoration: "underline" }}
-          >
-            View on map
+          <span className="baseTxt" style={{ textDecoration: "underline" }}>
+            View Profile
           </span>
         </div>
         <div className="line"></div>
-      </div>
-      <div className="gymPageheading">
-        <div>Choose Activities</div>
-      </div>
-      <div className="activities">
-        {gymData.activities.map((activity: string) =>
-          activityToSvgMap(activity)
-        )}
-      </div>
-      <div className="gymPageheading">About Studio</div>
-      <div
-        className="gPageDesc"
-        onClick={() => {
-          setIsTruncated(!isTruncated);
-        }}
-      >
-        {isTruncated ? (
+        <div className="locWrp">
           <div>
-            {shortDescription.current}
-            <span>{seeMore}</span>
+          <div className="baseTxt">
+            <LocationLogo style={{ marginRight: "8px",marginBottom:'4px' }} /> Address
           </div>
-        ) : description.length > maxChar ? (
-          <div>
-            {parser(description)}
-            <span>{seeLess}</span>
+          <div className="baseTxt" style={{color:'#828081',marginLeft:'16px'}}>
+            {gymData.addressLine1},{gymData.addressLine2}
           </div>
-        ) : (
-          <div>{parser(description)}</div>
-        )}
+          </div>
+        </div>
       </div>
-      <div className="gymPageheading">Amenities</div>
-      <div className="line"></div>
-      <div className="locWrp">
-        <span className="baseTxt">
-          {igLogo()} <span style={{ marginLeft: "8px" }}> INSTAGRAM</span>
-        </span>
-        <span className="baseTxt" style={{ textDecoration: "underline" }}>
-          View Profile
+      <div className="bookBtnWrap">
+        <span className="bookBtn" onClick={() => navigateToBatches()}>
+          View Classes
         </span>
       </div>
-      
-    </div>
-    <div className='bookBtnWrap'>
-    <span className="bookBtn" onClick={()=>navigateToBatches()} >View Classes</span>
-  </div>
-  </>
+    </>
   );
 };
 

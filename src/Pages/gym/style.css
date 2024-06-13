@@ -117,3 +117,55 @@ width:75%
     width:100%;
 }
 
+.activities{
+    overflow: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+
+.amenities{
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.amenitiesItem{
+     width:50%;
+}
+
+.amenety{
+    color: var(--Text-Primary, #05070B);
+font-family: "Plus Jakarta Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.carouselWrap{
+    max-height: 180px;
+}
+
+.gymWrap{
+    overflow: auto;
+    height: 100%;
+    padding-bottom: 60px;
+}
+
+.shareAndBack{
+    background: transparent;
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 100;
+}
+
+.Btn{
+    padding:8px;
+    border-radius: 100px;
+background: rgba(0, 0, 0, 0.75);
+backdrop-filter: blur(1.5px);
+margin:8px;
+}

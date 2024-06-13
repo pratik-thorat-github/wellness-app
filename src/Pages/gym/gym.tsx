@@ -44,7 +44,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   if (!gym) return <Loader />;
 
   return (
-    <Flex flex={1} vertical>
+    <div className="gymWrap">
       <Flex flex={1}>
         <GymPhotos gym={gym} />
       </Flex>
@@ -62,7 +62,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
           <BatchSchedule gymData={gym} />
         </Flex> */}
       </Flex>
-    </Flex>
+    </div>
   );
 };
 

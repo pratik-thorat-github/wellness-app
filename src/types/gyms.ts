@@ -5,6 +5,7 @@ export interface IGymCard {
   photos: string[];
   activities: string[];
   minPrice?: number;
+  medias:[]
 }
 
 export interface IBatch {
@@ -21,7 +22,8 @@ export interface IBatch {
   aboutTheActivity?:string;
   whatToBring?:string;
   whatToExpect?:string;
-  moreInfo?:string
+  moreInfo?:string;
+  gymId:number
 
 }
 
@@ -32,4 +34,5 @@ export interface IGymDetails extends IGymCard {
   long: number;
   addressLine1: string;
   addressLine2: string;
+  amenities:[];
 }

@@ -132,7 +132,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   if (!activities.length || !gymCardsData.length) return <Loader />;
 
   return (
-    <Flex flex={1} vertical style={{}}>
+    <Flex flex={1} vertical style={{overflowX: 'hidden'}}>
       {!activitySelected || activitySelected == "all" ? (
         <div>
           <Space></Space>

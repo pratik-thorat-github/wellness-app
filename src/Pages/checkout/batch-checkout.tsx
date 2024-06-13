@@ -41,6 +41,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
   gymData = gymData || gymDataSentFromBatchSchedule;
   // batchDetails = batchDetails || batchDetailsFromBatchSchedule;
 
+  const batchId= window.location.pathname.split('/')[3]
   const [selectedPlan, setSelectedPlan] = useState<ESelectedPlan>(
     ESelectedPlan.BATCH
   );
@@ -49,6 +50,32 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
 
   const [plusDetails] = useAtom(plusDetailsAtom);
   const mixpanelSet = useRef(false);
+
+  const [isClicked,setIsClicked]=useState<Boolean>(false)
+
+  const gymId=batchDetails?.gymId
+
+
+  useEffect(()=>{
+    const shareButton = document.getElementById("share-button"); 
+      shareButton?.addEventListener("click", () => { 
+        if (navigator.share) {
+          navigator.share({
+              title: 'Web Share API Draft',
+              text: 'Take a look at this spec!',
+              url: 'https://wicg.github.io/web-share/#share-method',
+            })
+            .then(() => console.log('Successful share'))
+            .catch((error) => console.log('Error sharing', error));
+        } else {
+          console.log('Share not supported on this browser, do it the old way.');
+        }
+      });
+    shareButton?.removeEventListener('click',()=>{
+      setIsClicked(false)
+    })    
+
+  },[isClicked])
 
   useEffect(() => {
     if (gymData && batchDetails) {
@@ -69,7 +96,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
   });
 
   useEffect(() => {
-    _getActivityById('1');
+    _getActivityById(batchId);
   }, []);
 
   const logoTsx = (
@@ -79,6 +106,11 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
         null}
     </Flex>
   );
+
+  const navigateToHome=()=>{
+    navigate(`/gym/${gymId}/batch`)
+  }
+
 
   const leftDivider=()=>{
     return(
@@ -107,6 +139,52 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
     )
   }
 
+  const shareAndBack=()=>{
+    return (
+      <div className="shareAndBack">
+        <span className="Btn" onClick={() => navigateToHome()}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              d="M15.8327 10.0003H4.16602M4.16602 10.0003L9.99935 15.8337M4.16602 10.0003L9.99935 4.16699"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+        <span
+          className="Btn"
+          id="share-button"
+          onClick={() => setIsClicked(true)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              d="M7.15833 11.2587L12.85 14.5753M12.8417 5.42533L7.15833 8.74199M17.5 4.16699C17.5 5.5477 16.3807 6.66699 15 6.66699C13.6193 6.66699 12.5 5.5477 12.5 4.16699C12.5 2.78628 13.6193 1.66699 15 1.66699C16.3807 1.66699 17.5 2.78628 17.5 4.16699ZM7.5 10.0003C7.5 11.381 6.38071 12.5003 5 12.5003C3.61929 12.5003 2.5 11.381 2.5 10.0003C2.5 8.61961 3.61929 7.50033 5 7.50033C6.38071 7.50033 7.5 8.61961 7.5 10.0003ZM17.5 15.8337C17.5 17.2144 16.3807 18.3337 15 18.3337C13.6193 18.3337 12.5 17.2144 12.5 15.8337C12.5 14.4529 13.6193 13.3337 15 13.3337C16.3807 13.3337 17.5 14.4529 17.5 15.8337Z"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+      </div>
+    );
+
+  }
+
   return (
     <Flex
       flex={1}
@@ -116,6 +194,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
         minHeight: "100vh",
       }}
     >
+      {shareAndBack()}
       <div style={{ clipPath: "ellipse(90% 100% at 50% 4%)" }}>
         <img
           width="360px"
