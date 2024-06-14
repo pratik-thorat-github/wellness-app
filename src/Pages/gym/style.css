@@ -199,3 +199,41 @@ letter-spacing: 0.18px;
     height: 20px;
     transform: translate(-2px, 2px);
 }
+
+.timeWrap{
+    display: flex;
+    align-items: flex-start;
+    width:78vw;
+}
+.timeDay{
+    color: var(--Text-Primary, #05070B);
+font-family: "Plus Jakarta Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 16.2px */
+letter-spacing: 0.18px;
+text-transform: capitalize;
+width: 38px;
+display: inline-block;
+
+}
+.timeHours{
+color: var(--Text-Primary, #05070B);
+text-overflow: ellipsis;
+font-family: "Plus Jakarta Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 16.2px */
+letter-spacing: 0.18px;
+
+}
+
+.timeWrapper{
+    display: flex;
+    gap: 8px;
+}
+.info{
+    margin-left:auto
+}

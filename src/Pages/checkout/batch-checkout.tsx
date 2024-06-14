@@ -61,9 +61,11 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
       shareButton?.addEventListener("click", () => { 
         if (navigator.share) {
           navigator.share({
-              title: 'Web Share API Draft',
-              text: 'Take a look at this spec!',
-              url: 'https://wicg.github.io/web-share/#share-method',
+              title: 'ZenfitX',
+              text: `Hey, I'm signing up for ${batchDetails?.activity.toLowerCase()} at ${gymData?.name.toLowerCase()} on ZenfitX. 
+              Wanna join me?
+              Check it out and let's grab those first-booking discounts!💪`,
+              url: window.location.href,
             })
             .then(() => console.log('Successful share'))
             .catch((error) => console.log('Error sharing', error));

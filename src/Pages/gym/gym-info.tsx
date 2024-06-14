@@ -12,6 +12,7 @@ import activityToSvgMap from "../../images/class-images/activity-map";
 import { navigate } from "@reach/router";
 import { applicationIcons } from "../../utils/helper";
 import { toLetterCase, toLetterCaseNoUnderscore } from "../../utils/string-operation";
+import { formatTimeIntToAmPm } from "../../utils/date";
 
 const maxChar = 150;
 
@@ -27,6 +28,8 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   shortDescription.current.replace(/<br>/, "");
 
   const params= new URLSearchParams(window.location.search)
+
+  const [showTimeOptions,setShowTimeOptions]=useState<Boolean>(false)
 
   // const mapsLink = checkIphone() || checkIpad() ? "maps://0,0?q" : "geo:0,0?q";
   const mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${gymData.addressLine1},${gymData.addressLine2}`;
@@ -151,6 +154,19 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     )
   }
 
+
+  const infoIcon=()=>(
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+  <g clip-path="url(#clip0_1842_406)">
+    <path d="M7.99967 10.6673V8.00065M7.99967 5.33398H8.00634M14.6663 8.00065C14.6663 11.6826 11.6816 14.6673 7.99967 14.6673C4.31778 14.6673 1.33301 11.6826 1.33301 8.00065C1.33301 4.31875 4.31778 1.33398 7.99967 1.33398C11.6816 1.33398 14.6663 4.31875 14.6663 8.00065Z" stroke="#4F4F4F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <defs>
+    <clipPath id="clip0_1842_406">
+      <rect width="16" height="16" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>
+  )
   
 
   return (
@@ -165,15 +181,18 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           <div className="gymName">{gymData.name}</div>
           <div style={{ marginBottom: "16px" }}>
             <span className="price">₹{gymData.minPrice} onwards</span>
-            <span style={{margin:'0px 4px'}}>&bull;</span>
-            {gymData.googleRating && <span className="gRating">
-              <span className="gIcon">{Gicon()}</span>
-              <span style={{marginLeft:'16px',marginRight:'4px'}}>|</span>
-              <span>{gymData.googleRating}</span>
-              <span>{starIcon()}&nbsp;</span>
-              <span>({gymData.googleReviews})</span>
-
-            </span>}
+            <span style={{ margin: "0px 4px" }}>&bull;</span>
+            {gymData.googleRating && (
+              <span className="gRating">
+                <span className="gIcon">{Gicon()}</span>
+                <span style={{ marginLeft: "16px", marginRight: "4px" }}>
+                  |
+                </span>
+                <span>{gymData.googleRating}</span>
+                <span>{starIcon()}&nbsp;</span>
+                <span>({gymData.googleReviews})</span>
+              </span>
+            )}
           </div>
           <div className="line"></div>
           <div className="locWrp">
@@ -192,11 +211,37 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           </div>
           <div className="line"></div>
           <div className="locWrp">
-            <span>{clockIcon()}</span>
-
+            <div className="timeWrapper">
+              <span>{clockIcon()}</span>
+              <span>
+              {gymData.operatingHours.map((time: any, idx1) => {
+                if(idx1>0 && !showTimeOptions){
+                  return
+                }
+                return (
+                  <div className="timeWrap" key={idx1}>
+                    <span className="timeDay">{toLetterCase(time.day)} : </span>
+                    <span className="timeHours">
+                      {time.times.map((t: any, idx2: any) => {
+                        return (
+                          <>
+                          <span key={`${t.startTime}-${t.endTime}`}>
+                            {formatTimeIntToAmPm(t.startTime)} -{" "}
+                            {formatTimeIntToAmPm(t.endTime)}
+                          </span>
+                          <span style={{margin:'0px 4px'}}>{idx2===0 && time.times.length>1 && '|'}</span>
+                          </>
+                        );
+                      })}
+                    </span>
+                    <span className="info" onClick={()=>setShowTimeOptions(!showTimeOptions)}>{idx1==0 && infoIcon()}</span>
+                  </div>
+                );
+              })}
+              </span>
+            </div>
           </div>
           <div className="line"></div>
-
         </div>
         <div className="gymPageheading">
           <div>Book Activities</div>
@@ -206,7 +251,6 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             return (
               <span style={{ marginRight: "16px" }}>
                 {activityToSvgMap(activity)}
-
               </span>
             );
           })}
@@ -250,12 +294,18 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         <div className="line"></div>
         <div className="locWrp">
           <div>
-          <div className="baseTxt">
-            <LocationLogo style={{ marginRight: "8px",marginBottom:'4px' }} /> Address
-          </div>
-          <div className="baseTxt" style={{color:'#828081',marginLeft:'16px'}}>
-            {gymData.addressLine1},{gymData.addressLine2}
-          </div>
+            <div className="baseTxt">
+              <LocationLogo
+                style={{ marginRight: "8px", marginBottom: "4px" }}
+              />{" "}
+              Address
+            </div>
+            <div
+              className="baseTxt"
+              style={{ color: "#828081", marginLeft: "16px" }}
+            >
+              {gymData.addressLine1},{gymData.addressLine2}
+            </div>
           </div>
         </div>
       </div>
