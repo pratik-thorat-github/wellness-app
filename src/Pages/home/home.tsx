@@ -6,7 +6,11 @@ import CentersAroundYou from "./centers-around-you";
 import ProfileBanner from "./profile-banner";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
-import { getAllActivities, getExclusiveGyms, getGymsByActivity } from "../../apis/gym/activities";
+import {
+  getAllActivities,
+  getExclusiveGyms,
+  getGymsByActivity,
+} from "../../apis/gym/activities";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../../components/Loader";
 import { IGymCard } from "../../types/gyms";
@@ -33,7 +37,7 @@ function MixpanelHomeInit(user: IUser | null) {
   Mixpanel.track("open_home_page");
 }
 
-const Home: React.FC<IHome> = ({ activitySelected}) => {
+const Home: React.FC<IHome> = ({ activitySelected }) => {
   // useAuthRedirect();
 
   const navigate = useNavigate();
@@ -41,15 +45,14 @@ const Home: React.FC<IHome> = ({ activitySelected}) => {
   let locationStates = useLocation().state;
   let activitySelectedFromFilters = locationStates
     ? (locationStates as any).activitySelectedFromFilters
-    : null;  
+    : null;
 
   activitySelected = activitySelectedFromFilters || activitySelected;
   const [activities, setActivities] = useState<string[]>([]);
   const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
 
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
-  const [userDetails,setUserDetailsAtom] = useAtom(userDetailsAtom);
-
+  const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
 
   const mixpanelSet = useRef(false);
 
@@ -97,7 +100,6 @@ const Home: React.FC<IHome> = ({ activitySelected}) => {
     },
   });
 
-
   // useEffect(()=>{
   //   const { mutate: _getGymsByActivities } = useMutation({
   //     mutationFn: getGymsByActivity,
@@ -124,15 +126,17 @@ const Home: React.FC<IHome> = ({ activitySelected}) => {
   });
 
   useEffect(() => {
-    const userDetails = window.localStorage['zenfitx-user-details'] && JSON.parse(window.localStorage['zenfitx-user-details'])
-   
-    if(userDetails && userDetails.noOfBookings <1 ){
-      _getUserDeatils()
+    const userDetails =
+      window.localStorage["zenfitx-user-details"] &&
+      JSON.parse(window.localStorage["zenfitx-user-details"]);
+
+    if (userDetails && userDetails.noOfBookings < 1) {
+      _getUserDeatils();
     }
     _getAllActivities();
-   
+
     _getGymsByActivities(activitySelected);
-    
+
     // _getPlusDetailsOfUser(userDetails?.phone as string);
   }, [activitySelected]);
 
@@ -146,24 +150,22 @@ const Home: React.FC<IHome> = ({ activitySelected}) => {
   if (!activities.length || !gymCardsData.length) return <Loader />;
 
   return (
-    <Flex flex={1} vertical style={{overflowX: 'hidden'}}>
-      {!activitySelected || activitySelected == "all" ? (
-        <div>
-          <Space></Space>
+    <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
+      <div>
+        <Space></Space>
 
-          {/* {userDetails?.phone && <Flex flex={1}>
+        {/* {userDetails?.phone && <Flex flex={1}>
             <ProfileBanner />
           </Flex>} */}
 
-          <Flex flex={3}>
-            <HomeBanner />
-          </Flex>
+        <Flex flex={3}>
+          <HomeBanner />
+        </Flex>
 
-          <Flex style={{ marginLeft: "16px" }} flex={3}>
-            <ClassesNearYou />
-          </Flex>
-        </div>
-      ) : null}
+        <Flex style={{ marginLeft: "16px" }} flex={3}>
+          <ClassesNearYou />
+        </Flex>
+      </div>
 
       <Flex flex={3} style={{ margin: "0 5%" }}>
         <CentersAroundYou
