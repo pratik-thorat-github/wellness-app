@@ -1,4 +1,30 @@
 import { ReactComponent as Training1o1 } from "../images/ameneties/training1o1.svg";
+import { ReactComponent as AC } from "../images/ameneties/AC.svg";
+import { ReactComponent as Cafe } from "../images/ameneties/Cafe.svg";
+import { ReactComponent as CardioMachines } from "../images/ameneties/CardioMachines.svg";
+import { ReactComponent as Changingroom } from "../images/ameneties/ChangingRoom.svg";
+import { ReactComponent as ChildCareService } from "../images/ameneties/ChildCareService.svg";
+import { ReactComponent as Deadlift } from "../images/ameneties/Deadlift.svg";
+import { ReactComponent as DrinkingWater } from "../images/ameneties/DrinkingWater.svg";
+import { ReactComponent as FIrstAid } from "../images/ameneties/FirstAid.svg";
+import { ReactComponent as FreeWeights } from "../images/ameneties/FreeWeights.svg";
+import { ReactComponent as FreeWifi } from "../images/ameneties/Free Wifi.svg";
+import { ReactComponent as GroupClasses } from "../images/ameneties/GroupClasses.svg";
+import { ReactComponent as InbodyScans } from "../images/ameneties/InbodyScans.svg";
+import { ReactComponent as Locker } from "../images/ameneties/Locker.svg";
+import { ReactComponent as Lounge } from "../images/ameneties/Lounge.svg";
+import { ReactComponent as MassageInHouse } from "../images/ameneties/MassageInHouse.svg";
+import { ReactComponent as NutritionistInHouse } from "../images/ameneties/NutritionistInHouse.svg";
+import { ReactComponent as OpenFloorSpace } from "../images/ameneties/OpenFloorSpace.svg";
+import { ReactComponent as Parking } from "../images/ameneties/Parking.svg";
+import { ReactComponent as PhysioInHouse } from "../images/ameneties/PhysioInHouse.svg";
+import { ReactComponent as Sauna } from "../images/ameneties/Sauna.svg";
+import { ReactComponent as Shower } from "../images/ameneties/Shower.svg";
+import { ReactComponent as SquatRack } from "../images/ameneties/SquatRack.svg";
+import { ReactComponent as Pool } from "../images/ameneties/Pool.svg";
+
+
+
 
 
         
@@ -7,53 +33,51 @@ export const applicationIcons = (iconType: string) => {
     case "TRAINING_1_ON_1":
       return <Training1o1 />;
     case "GROUP_CLASSES":
-      return <Training1o1 />;
+      return <GroupClasses />;
     case "SQUATRACK":
-      return <Training1o1 />;
+      return <SquatRack />;
     case "DEADLIFT":
-      return <Training1o1 />;
+      return <Deadlift />;
     case "CARDIO_MACHINES":
-      return <Training1o1 />;
+      return <CardioMachines />;
     case "FREE_WEIGHTS":
-      return <Training1o1 />;
+      return <FreeWeights />;
     case "OPEN_FLOOR_SPACE":
-      return <Training1o1 />;
+      return <OpenFloorSpace />;
     case "SHOWER":
-      return <Training1o1 />;
+      return <Shower />;
     case "AC":
-      return <Training1o1 />;
+      return <AC />;
     case "DRINKING_WATER":
-      return <Training1o1 />;
+      return <DrinkingWater />;
     case "CHANGING_ROOM":
-      return <Training1o1 />;
+      return <Changingroom />;
     case "FIRST_AID":
-      return <Training1o1 />;
+      return <FIrstAid />;
     case "LOUNGE":
-      return <Training1o1 />;
-    case "LOUNGE":
-      return <Training1o1 />;
-    case "FREE_WIFI":
-      return <Training1o1 />;
-    case "PARKING":
-      return <Training1o1 />;
+      return <Lounge />;
     case "LOCKER":
-      return <Training1o1 />;
+      return <Locker />;
+    case "FREE_WIFI":
+      return <FreeWifi />;
+    case "PARKING":
+      return <Parking />;
     case "CAFE":
-      return <Training1o1 />;
+      return <Cafe />;
     case "SAUNA":
-      return <Training1o1 />;
+      return <Sauna />;
     case "PHYSIO_IN_HOUSE":
-      return <Training1o1 />;
+      return <PhysioInHouse />;
     case "NUTRITIONIST_IN_HOUSE":
-      return <Training1o1 />;
+      return <NutritionistInHouse />;
     case "MASSAGE_IN_HOUSE":
-      return <Training1o1 />;
+      return <MassageInHouse />;
     case "CHILD_CARE_SERVICE":
-      return <Training1o1 />;
+      return <ChildCareService />;
     case "INBODY_SCANS":
-      return <Training1o1 />;
+      return <InbodyScans />;
     case "POOL":
-      return <Training1o1 />;
+      return <Pool />;
     default:
       return <Training1o1 />;
   }

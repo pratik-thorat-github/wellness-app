@@ -103,7 +103,10 @@ function getListOfCenters(
           )}
           <img src={medias[1]?.url} alt="activity pic" />
         </div>
-        <div className="activityDetailWrapper">
+        <div 
+        // className="activityDetailWrapper"
+        className={(userDetails && userDetails?.noOfBookings as number <1) ?"activityDetailWrapper2":'activityDetailWrapper'}
+        >
           <div className="activityDetail">
             <div className="name">
               {name} {discountCard(minPrice)}

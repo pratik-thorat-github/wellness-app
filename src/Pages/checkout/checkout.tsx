@@ -243,8 +243,9 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
     let selectedStyle: React.CSSProperties = {
       ...style,
       fontWeight: "bold",
+      border: '1px solid rgba(255, 255, 255, 0.08)',    
       borderRadius: '8px',
-      background: 'rgba(255, 255, 255, 0.16)',     
+      background: 'rgba(255, 255, 255, 0.16)', 
     };
 
     const dateTile = (number: number, day: string, dateString: string) => (
@@ -291,6 +292,12 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
       <Flex
         flex={1}
         justify="space-evenly"
+        style={{
+            width:'100%',
+            overflowX:'auto',
+            scrollBehavior:'smooth',
+            scrollbarWidth:'none'
+        }}
       >
         {weekDateAndDays.map(({ number, day, dateString }) => (
           <span key={dateString}> {dateTile(number, day, dateString)} </span>
@@ -314,8 +321,8 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
         <div className="locationName">
         <span>{locationIcon()}</span><span>{gym?.area}</span>
         </div>
-      </div>
-        {generateDateTiles()}</div>
+      </div >
+        <div style={{margin:'0px 8px 0px 24px'}}>{generateDateTiles()}</div></div>
       <Flex flex={1} vertical>
         <Flex flex={1} style={{ paddingLeft: "24px" }}>
           <ActivityTiles

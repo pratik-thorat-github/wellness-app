@@ -35,4 +35,6 @@ export interface IGymDetails extends IGymCard {
   addressLine1: string;
   addressLine2: string;
   amenities:[];
+  googleRating?:number;
+  googleReviews?:number
 }

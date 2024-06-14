@@ -28,7 +28,7 @@ const classTile = (activity: string) => (
     vertical
   >
     <Flex>{activityToSvgMap(activity)}</Flex>
-    <span style={{ marginTop: "4px" }}> {toLetterCase(activity)} </span>
+    {/* <span style={{ marginTop: "4px" }}> {toLetterCase(activity)} </span> */}
   </Flex>
 );
 

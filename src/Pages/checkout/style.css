@@ -30,8 +30,8 @@ font-style: normal;
 font-weight: 700;
 line-height: 135%; /* 27px */
 letter-spacing: 0.3px;
+margin:8px 0px;
 margin-left:8px;
-margin-bottom:8px;
 }
 
 .locationName{
@@ -94,7 +94,8 @@ font-weight: 400;
 line-height: 135%; /* 16.2px */
 letter-spacing: 0.18px;
 text-transform: capitalize;
-margin:8px 0px;
+margin-top:8px;
+margin-bottom:32px;
 
 }
 

@@ -195,7 +195,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
       }}
     >
       {shareAndBack()}
-      <div style={{ clipPath: "ellipse(90% 100% at 50% 4%)" }}>
+      <div style={{ clipPath: "ellipse(100% 93% at 50% 5%)" }}>
         <img
           width="360px"
           height="250px"
