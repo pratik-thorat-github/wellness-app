@@ -4,6 +4,7 @@ import "./style.css";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { navigate } from "@reach/router";
+import ReactPlayer from 'react-player'
 
 interface IGymPhotos {
   gym?: IGymCard;
@@ -97,12 +98,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
   if (gym?.medias?.length) {
     const medias = gym?.medias.map((p:{type:string,url:string}, ind) => {
       if(p.type==="VIDEO"){
-        return <video id="gym-video" key="gym-video" autoPlay={true} width="100%" height={'180px'} muted webkit-playsinline playsInline>
-        <source
-          src={p.url}
-          type="video/mp4"
-        />
-      </video>
+      return <ReactPlayer url={p.url} playing muted controls volume={1} width="100%" height={'180px'}/>
       }
       else return <img key={`${gym.gymId}-${ind}`} src={p.url} width="100%" height={'180px'} />;
     });

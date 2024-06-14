@@ -124,16 +124,14 @@ text-align: center;
     scrollbar-width: none;
     max-height: 90px;
     margin-bottom:8px;
-    overflow-y: auto;
+    overflow-y: hidden;
 
 }
 
 .amenities{
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 16px;
-    padding-right:24px;
-    
+    margin-bottom: 16px;    
 }
 
 /* .amenities:nth-of-type(odd){
@@ -238,4 +236,8 @@ letter-spacing: 0.18px;
 }
 .info{
     margin-left:auto
+}
+
+.ant-card-body {
+    padding:12px 24px !important
 }

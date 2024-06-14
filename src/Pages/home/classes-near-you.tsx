@@ -22,7 +22,7 @@ async function navigateToHome(activity: string) {
 const classTile = (activity: string) => (
   <Flex
     onClick={async () => {
-      await navigateToHome(activity);
+      await navigate(`/${activity}`);
     }}
     justify="center"
     align="center"

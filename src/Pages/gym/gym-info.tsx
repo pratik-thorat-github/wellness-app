@@ -260,7 +260,11 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         <div className="activities">
           {gymData?.activities.map((activity: string) => {
             return (
-              <span style={{ marginRight: "16px" }}>
+              <span style={{ marginRight: "16px",height: '90px',
+              width: '90px',
+              display: 'inline-block'}} onClick={()=>{
+                navigate(`/${activity.toLowerCase()}`)
+                }}>
                 {activityToSvgMap(activity)}
               </span>
             );

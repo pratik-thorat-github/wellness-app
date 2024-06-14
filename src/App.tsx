@@ -15,6 +15,7 @@ import VerifyMagicLink from "./Pages/auth/verify";
 import Profile from "./Pages/profile/Profle";
 import LandingPage from "./Pages/landing/Landing";
 import Checkout from "./Pages/checkout/checkout";
+import Activity from "./Pages/activity/Activity";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ function App() {
       <Router>
         {/* <LandingPage path="/" /> */}
         <Home path="/" />
+        <Activity path="/:activity"/>
         <Login path="/login" />
         <VerifyMagicLink path="/verify" />
 

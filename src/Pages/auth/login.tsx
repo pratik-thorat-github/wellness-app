@@ -115,7 +115,7 @@ const Login: React.FC<ILoginProps> = () => {
   const shareAndBack = () => {
     return (
       <div className="shareAndBack">
-        <span className="Btn" onClick={() => navigate('/')}>
+        <span className="Btn" onClick={() => navigate(-1)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
