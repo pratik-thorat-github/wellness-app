@@ -93,7 +93,7 @@ const HomeBanner: React.FC = () => {
     </div>}
     {userDetails && <div className="loginWrapper">
       <div className="loginHead1">
-        <span className="loginName">Hi {userDetails?.name}</span><span className="bookings" onClick={()=>navigate('/profile')}>Bookings</span>
+        <span className="loginName">Hi {userDetails?.name.split(' ')[0]}</span><span className="bookings" onClick={()=>navigate('/profile')}>Bookings</span>
 
       </div>
       <div className="loginHead2">
