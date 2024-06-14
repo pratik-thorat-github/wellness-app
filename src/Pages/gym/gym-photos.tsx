@@ -98,7 +98,13 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
   if (gym?.medias?.length) {
     const medias = gym?.medias.map((p:{type:string,url:string}, ind) => {
       if(p.type==="VIDEO"){
-      return <ReactPlayer url={p.url} playing muted controls volume={1} width="100%" height={'180px'}/>
+      return <ReactPlayer url={p.url} playing muted controls volume={1} width="100%" height={'180px'}  config={{
+        file: {
+          attributes: {
+            controlsList: "nofullscreen",
+          },
+        },
+      }}/>
       }
       else return <img key={`${gym.gymId}-${ind}`} src={p.url} width="100%" height={'180px'} />;
     });
