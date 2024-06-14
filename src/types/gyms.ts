@@ -37,5 +37,6 @@ export interface IGymDetails extends IGymCard {
   amenities:[];
   googleRating?:number;
   googleReviews?:number;
-  operatingHours:[]
+  operatingHours:[],
+  isExclusive:boolean
 }

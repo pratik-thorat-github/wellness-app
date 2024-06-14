@@ -119,11 +119,13 @@ text-align: center;
 }
 
 .activities{
-    overflow: auto;
+    overflow-x: auto;
     white-space: nowrap;
     scrollbar-width: none;
     max-height: 90px;
-    margin-bottom:8px
+    margin-bottom:8px;
+    overflow-y: auto;
+
 }
 
 .amenities{

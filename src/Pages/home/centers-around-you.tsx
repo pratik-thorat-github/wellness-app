@@ -123,7 +123,7 @@ function getListOfCenters(
         key={gymCard.gymId}
       >
         <div className="activityImg1">
-          {(isExclusive || true) && (
+          {(isExclusive) && (
             <span className="sWrap">{exclusiveIcon()}</span>
           )}
           <img src={medias[0]} className="activityImg1Img" alt="activity pic" />

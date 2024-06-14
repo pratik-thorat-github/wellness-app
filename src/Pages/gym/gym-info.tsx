@@ -177,7 +177,9 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         }}
       >
         <div>
-          <div style={{ marginBottom: "10px" }}>{exclusiveIcon()}</div>
+          <div style={{ marginBottom: "10px" }}>
+            {gymData.isExclusive && exclusiveIcon()}
+          </div>
           <div className="gymName">{gymData.name}</div>
           <div style={{ marginBottom: "16px" }}>
             <span className="price">₹{gymData.minPrice} onwards</span>
@@ -214,30 +216,39 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             <div className="timeWrapper">
               <span>{clockIcon()}</span>
               <span>
-              {gymData.operatingHours.map((time: any, idx1) => {
-                if(idx1>0 && !showTimeOptions){
-                  return
-                }
-                return (
-                  <div className="timeWrap" key={idx1}>
-                    <span className="timeDay">{toLetterCase(time.day)} : </span>
-                    <span className="timeHours">
-                      {time.times.map((t: any, idx2: any) => {
-                        return (
-                          <>
-                          <span key={`${t.startTime}-${t.endTime}`}>
-                            {formatTimeIntToAmPm(t.startTime)} -{" "}
-                            {formatTimeIntToAmPm(t.endTime)}
-                          </span>
-                          <span style={{margin:'0px 4px'}}>{idx2===0 && time.times.length>1 && '|'}</span>
-                          </>
-                        );
-                      })}
-                    </span>
-                    <span className="info" onClick={()=>setShowTimeOptions(!showTimeOptions)}>{idx1==0 && infoIcon()}</span>
-                  </div>
-                );
-              })}
+                {gymData.operatingHours.map((time: any, idx1) => {
+                  if (idx1 > 0 && !showTimeOptions) {
+                    return;
+                  }
+                  return (
+                    <div className="timeWrap" key={idx1}>
+                      <span className="timeDay">
+                        {toLetterCase(time.day)} :{" "}
+                      </span>
+                      <span className="timeHours">
+                        {time.times.map((t: any, idx2: any) => {
+                          return (
+                            <>
+                              <span key={`${t.startTime}-${t.endTime}`}>
+                                {formatTimeIntToAmPm(t.startTime)} -{" "}
+                                {formatTimeIntToAmPm(t.endTime)}
+                              </span>
+                              <span style={{ margin: "0px 4px" }}>
+                                {idx2 === 0 && time.times.length > 1 && "|"}
+                              </span>
+                            </>
+                          );
+                        })}
+                      </span>
+                      <span
+                        className="info"
+                        onClick={() => setShowTimeOptions(!showTimeOptions)}
+                      >
+                        {idx1 == 0 && infoIcon()}
+                      </span>
+                    </div>
+                  );
+                })}
               </span>
             </div>
           </div>
@@ -276,12 +287,17 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             <div>{parser(description)}</div>
           )}
         </div>
-        <div className="gymPageheading">Amenities</div>
-        <div className="amenities">
-          {gymData.amenities.map((a) => {
-            return <span className="amenitiesItem">{amenities(a)}</span>;
-          })}
-        </div>
+        {gymData.amenities.length && (
+          <>
+            {" "}
+            <div className="gymPageheading">Amenities</div>
+            <div className="amenities">
+              {gymData.amenities.map((a) => {
+                return <span className="amenitiesItem">{amenities(a)}</span>;
+              })}
+            </div>
+          </>
+        )}
         <div className="line"></div>
         <div className="locWrp">
           <span className="baseTxt">

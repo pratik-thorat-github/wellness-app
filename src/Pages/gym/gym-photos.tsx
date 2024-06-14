@@ -21,10 +21,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
         if (navigator.share) {
           navigator.share({
             title: 'ZenfitX',
-            text: `Hey, 
-            I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. 
-            Check it out and let's plan this together! 
-            Plus, you can score sweet discounts on your first booking.😉 `,
+            text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉 `,
             url: window.location.href,
           })
             .then(() => console.log('Successful share'))

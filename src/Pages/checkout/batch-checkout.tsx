@@ -63,10 +63,8 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData }) => {
         navigator
           .share({
             title: "ZenfitX",
-            text: `Hey, I'm signing up for ${batchDetails?.activity.toLowerCase()} at ${gymData?.name.toLowerCase()} on ZenfitX. 
-              Wanna join me?
-              Check it out and let's grab those first-booking discounts!💪`,
-            url: window.location.href,
+            text: `Hey, I'm signing up for ${batchDetails?.activity.toLowerCase()} at ${gymData?.name.toLowerCase()} on ZenfitX.Wanna join me?Check it out and let's grab those first-booking discounts!💪`,
+            url: window.location.href, 
           })
           .then(() => console.log("Successful share"))
           .catch((error) => console.log("Error sharing", error));
