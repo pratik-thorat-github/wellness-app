@@ -6,9 +6,8 @@
 }
 
 .sectionHeading{
-    color: #212121;
+color: #212121;
 text-align: right;
-font-family: "Open Sans";
 font-size: 12px;
 font-style: normal;
 font-weight: 400;
@@ -86,13 +85,16 @@ line-height: normal;
 box-shadow: 0px 4px 16px 0px rgba(5, 7, 11, 0.08);
 }
 
-.activityImg{
+.activityImg1{
     width: 100%;
-    >img{width: 100%;
+}
+
+.activityImg1Img{
+    width: 100%;
     height: 150px;
+    aspect-ratio: 25/36;
     border-radius: 12px 12px 0px 0px;
     object-fit: cover;
-}
 }
 
 .activityDetailWrapper{
@@ -257,4 +259,36 @@ padding-left:2px;
 }
 .specialIcon{
 
+}
+
+.trendingBox{
+    border-radius: 12px;
+background: linear-gradient(90deg, #000 -2.08%, #253B3B 103.61%);
+width: 157px;
+height: 90px;
+}
+
+.trending{
+    background: linear-gradient(90deg, #FFF0A4 0%, #FFF8D4 66.5%, #F5D37C 98%);
+background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+font-size: 24px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.zBox{
+    color: #FFF;
+font-size: 12px;
+font-style: normal;
+font-weight: 800;
+line-height: normal;
+padding-left:22px;
+}
+
+.trendingWrapper{
+    padding:16px 16px 4px 16px;
+    display: flex;
 }

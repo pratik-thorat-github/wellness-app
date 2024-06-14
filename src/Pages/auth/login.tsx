@@ -183,6 +183,7 @@ const Login: React.FC<ILoginProps> = () => {
                   height: "30px",
                 }}
                 type="text"
+                disabled
               />{" "}
             </span>
           </Flex>
@@ -204,11 +205,13 @@ const Login: React.FC<ILoginProps> = () => {
                   height: "30px",
                   borderRadius: "5px",
                   padding: "10px",
+                  
                 }}
                 type="number"
                 onChange={setValue}
                 name="phone"
                 value={input.phone}
+                disabled
               />{" "}
             </span>
           </Flex>

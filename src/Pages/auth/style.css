@@ -1,4 +1,5 @@
 .login-banner {
-    background: linear-gradient(to right, #982763, #7CC6F4);
+    border-radius: 0px 0px 24px 24px;
+    background: linear-gradient(90deg, #070A0A 0%, #355555 100%);
     color: white;
 }

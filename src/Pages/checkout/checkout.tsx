@@ -192,8 +192,8 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
         style={{ marginTop: "48px", paddingBottom: "20px" }}
       >
         <NoBatchImage />
-        <span style={{ margin: "8px 0px" ,fontSize:'14px'}}>Oops! No slots available</span>
-        <span style={{ 
+        <span style={{ margin: "8px 0px" ,fontSize:'14px'}}>Please select the next available date.</span>
+        {/* <span style={{ 
             display: 'flex',
             padding: '8px 16px',
             flexDirection: 'column',
@@ -205,7 +205,7 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
             marginTop:'16px'
          }}>
           <span>View next available slot</span>
-        </span>
+        </span> */}
       </Flex>
     );
   }

@@ -22,7 +22,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
           navigator.share({
               title: 'Web Share API Draft',
               text: 'Take a look at this spec!',
-              url: 'https://wicg.github.io/web-share/#share-method',
+              url:  window.location.href,
             })
             .then(() => console.log('Successful share'))
             .catch((error) => console.log('Error sharing', error));
@@ -97,7 +97,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
   if (gym?.medias?.length) {
     const medias = gym?.medias.map((p:{type:string,url:string}, ind) => {
       if(p.type==="VIDEO"){
-        return <video id="gym-video" key="gym-video" autoPlay={true} controls width="100%" height={'180px'} muted>
+        return <video id="gym-video" key="gym-video" autoPlay={true} controls width="100%" height={'180px'} muted webkit-playsinline playsInline>
         <source
           src={p.url}
           type="video/mp4"

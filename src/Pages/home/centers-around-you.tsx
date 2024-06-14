@@ -46,7 +46,7 @@ function getListOfCenters(
   const exclusiveIcon = () => {
     return (
       <div className="specialWrap">
-        <span className="specialTxt">Specials</span>
+        <span className="specialTxt">Trending</span>
 
         <span className="specialIcon">
           <svg
@@ -74,9 +74,9 @@ function getListOfCenters(
   const discountCard=(price:number)=>{
     return(
     <div className="dCard">
-      <div className="dPrice">₹{price}</div>
-      <div className="sPrice slash">₹{price*2}</div>
-      <div className="sPrice">avg/class</div>
+      <div className="dPrice">₹{price/2}</div>
+      <div className="sPrice slash">₹{price}</div>
+      <div className="sPrice">onwards</div>
     </div>
     )
   }
@@ -95,13 +95,13 @@ function getListOfCenters(
         }}
         key={gymCard.gymId}
       >
-        <div className="activityImg">
+        <div className="activityImg1">
           {(isExclusive || true) && (
             <span className="sWrap">
               {exclusiveIcon()}
             </span>
           )}
-          <img src={medias[1]?.url} alt="activity pic" />
+          <img src={medias[0]} className="activityImg1Img" alt="activity pic" />
         </div>
         <div 
         // className="activityDetailWrapper"
@@ -181,7 +181,7 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
       justify="space-evenly"
     >
       <Flex flex={2} align="left" className="sectionHeading" style={{paddingBottom:'unset'}}>
-        <span style={{ marginRight: "12px" }}>Fitness centres around you</span>
+        <span style={{ marginRight: "12px" }}>Fitness centers around you</span>
         <span className="separator"></span>
       </Flex>
 

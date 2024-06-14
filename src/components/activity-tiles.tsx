@@ -70,6 +70,8 @@ const ActivityTiles: React.FC<IActivityTiles> = ({
         }}
       >
         <span key={"ALL"}>{cardTile("all")}</span>
+        <span key={"TRENDING"}>{cardTile("trending")}</span>
+
         {activities.map((activity) => (
           <span key={activity}>{cardTile(activity.toLowerCase())}</span>
         ))}

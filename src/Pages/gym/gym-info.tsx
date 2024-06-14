@@ -11,7 +11,7 @@ import parser from "html-react-parser";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import { navigate } from "@reach/router";
 import { applicationIcons } from "../../utils/helper";
-import { toLetterCase } from "../../utils/string-operation";
+import { toLetterCase, toLetterCaseNoUnderscore } from "../../utils/string-operation";
 
 const maxChar = 150;
 
@@ -54,7 +54,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         className="specialWrap"
         style={{ width: "64px", borderRadius: "4px" }}
       >
-        <span className="specialTxt">Specials</span>
+        <span className="specialTxt">Trending</span>
 
         <span className="specialIcon">
           <svg
@@ -107,7 +107,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         }}
       >
         <span style={{ marginRight: "8px" }}>{applicationIcons(amenety)}</span>
-        <span className="amenety">{toLetterCase(amenety)}</span>
+        <span className="amenety">{toLetterCaseNoUnderscore(amenety)}</span>
       </span>
     );
   };
@@ -129,7 +129,26 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   }
 
   const starIcon=()=>{
+    return(
+    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none">
+<path d="M2.292 10.144L3.432 6.628L0.432 4.444H4.14L5.28 0.916L6.432 4.444H10.14L7.14 6.628L8.292 10.144L5.28 7.972L2.292 10.144Z" fill="#05070B"/>
+</svg>
+    )
+  }
 
+  const clockIcon=()=>{
+    return(
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+  <g clip-path="url(#clip0_1217_5785)">
+    <path d="M7.99967 4.00065V8.00065L10.6663 9.33398M14.6663 8.00065C14.6663 11.6826 11.6816 14.6673 7.99967 14.6673C4.31778 14.6673 1.33301 11.6826 1.33301 8.00065C1.33301 4.31875 4.31778 1.33398 7.99967 1.33398C11.6816 1.33398 14.6663 4.31875 14.6663 8.00065Z" stroke="#05070B" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <defs>
+    <clipPath id="clip0_1217_5785">
+      <rect width="16" height="16" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>
+    )
   }
 
   
@@ -148,10 +167,10 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             <span className="price">₹{gymData.minPrice} onwards</span>
             <span style={{margin:'0px 4px'}}>&bull;</span>
             {gymData.googleRating && <span className="gRating">
-              {Gicon()}
-              <span style={{margin:'0px 4px'}}>|</span>
+              <span className="gIcon">{Gicon()}</span>
+              <span style={{marginLeft:'16px',marginRight:'4px'}}>|</span>
               <span>{gymData.googleRating}</span>
-              <span></span>
+              <span>{starIcon()}&nbsp;</span>
               <span>({gymData.googleReviews})</span>
 
             </span>}
@@ -172,15 +191,22 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             </span>
           </div>
           <div className="line"></div>
+          <div className="locWrp">
+            <span>{clockIcon()}</span>
+
+          </div>
+          <div className="line"></div>
+
         </div>
         <div className="gymPageheading">
           <div>Book Activities</div>
         </div>
         <div className="activities">
-          {gymData.activities.map((activity: string) => {
+          {gymData?.activities.map((activity: string) => {
             return (
               <span style={{ marginRight: "16px" }}>
                 {activityToSvgMap(activity)}
+
               </span>
             );
           })}
@@ -235,7 +261,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
       </div>
       <div className="bookBtnWrap">
         <span className="bookBtn" onClick={() => navigateToBatches()}>
-          View Classes
+          View Schedule
         </span>
       </div>
     </>

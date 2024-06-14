@@ -6,7 +6,7 @@ import CentersAroundYou from "./centers-around-you";
 import ProfileBanner from "./profile-banner";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
-import { getAllActivities, getGymsByActivity } from "../../apis/gym/activities";
+import { getAllActivities, getExclusiveGyms, getGymsByActivity } from "../../apis/gym/activities";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../../components/Loader";
 import { IGymCard } from "../../types/gyms";
@@ -33,7 +33,7 @@ function MixpanelHomeInit(user: IUser | null) {
   Mixpanel.track("open_home_page");
 }
 
-const Home: React.FC<IHome> = ({ activitySelected }) => {
+const Home: React.FC<IHome> = ({ activitySelected}) => {
   // useAuthRedirect();
 
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   let locationStates = useLocation().state;
   let activitySelectedFromFilters = locationStates
     ? (locationStates as any).activitySelectedFromFilters
-    : null;
+    : null;  
 
   activitySelected = activitySelectedFromFilters || activitySelected;
   const [activities, setActivities] = useState<string[]>([]);
@@ -49,6 +49,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
 
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
   const [userDetails,setUserDetailsAtom] = useAtom(userDetailsAtom);
+
 
   const mixpanelSet = useRef(false);
 
@@ -76,6 +77,17 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
 
   const { mutate: _getGymsByActivities } = useMutation({
     mutationFn: getGymsByActivity,
+    onError: () => {
+      errorToast("Error in getting gyms by activity");
+    },
+    onSuccess: (result) => {
+      console.log("gyms gotten - ", result);
+      setGymCardsData(result.gyms);
+    },
+  });
+
+  const { mutate: _getGymsByExclusive } = useMutation({
+    mutationFn: getExclusiveGyms,
     onError: () => {
       errorToast("Error in getting gyms by activity");
     },
@@ -118,7 +130,9 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
       _getUserDeatils()
     }
     _getAllActivities();
+   
     _getGymsByActivities(activitySelected);
+    
     // _getPlusDetailsOfUser(userDetails?.phone as string);
   }, [activitySelected]);
 
