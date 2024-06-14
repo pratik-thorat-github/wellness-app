@@ -28,7 +28,7 @@ function MixpanelBatchCheckoutInit(batchDetails: IBatch, gymData: IGymDetails) {
   });
 }
 
-const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
+const BatchCheckout: React.FC<IClassCheckout> = ({ gymData }) => {
   const [userDetails] = useAtom(userDetailsAtom);
 
   let locationStates = useLocation().state;
@@ -41,60 +41,57 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
   gymData = gymData || gymDataSentFromBatchSchedule;
   // batchDetails = batchDetails || batchDetailsFromBatchSchedule;
 
-  const batchId= window.location.pathname.split('/')[3]
+  const batchId = window.location.pathname.split("/")[3];
   const [selectedPlan, setSelectedPlan] = useState<ESelectedPlan>(
     ESelectedPlan.BATCH
   );
-  const [batchDetails,setBatchDetails] = useState<IBatch>()
+  const [batchDetails, setBatchDetails] = useState<IBatch>();
   const [gym, setGym] = useState<IGymDetails | null>(null);
   const [totalAmount, setTotalAmount] = useState();
 
   const [plusDetails] = useAtom(plusDetailsAtom);
   const mixpanelSet = useRef(false);
 
-  const [isClicked,setIsClicked]=useState<Boolean>(false)
+  const [isClicked, setIsClicked] = useState<Boolean>(false);
 
-  const gymId=batchDetails?.gymId
-
-
-  useEffect(()=>{
-    const shareButton = document.getElementById("share-button"); 
-      shareButton?.addEventListener("click", () => { 
-        if (navigator.share) {
-          navigator.share({
-              title: 'ZenfitX',
-              text: `Hey, I'm signing up for ${batchDetails?.activity.toLowerCase()} at ${gymData?.name.toLowerCase()} on ZenfitX. 
-              Wanna join me?
-              Check it out and let's grab those first-booking discounts!💪`,
-              url: window.location.href,
-            })
-            .then(() => console.log('Successful share'))
-            .catch((error) => console.log('Error sharing', error));
-        } else {
-          console.log('Share not supported on this browser, do it the old way.');
-        }
-      });
-    shareButton?.removeEventListener('click',()=>{
-      setIsClicked(false)
-    })    
-
-  },[isClicked])
+  const gymId = batchDetails?.gymId;
 
   useEffect(() => {
-    console.log(gymData,'gymData')
+    const shareButton = document.getElementById("share-button");
+    shareButton?.addEventListener("click", () => {
+      if (navigator.share) {
+        navigator
+          .share({
+            title: "ZenfitX",
+            text: `Hey, I'm signing up for ${batchDetails?.activity.toLowerCase()} at ${gymData?.name.toLowerCase()} on ZenfitX. 
+              Wanna join me?
+              Check it out and let's grab those first-booking discounts!💪`,
+            url: window.location.href,
+          })
+          .then(() => console.log("Successful share"))
+          .catch((error) => console.log("Error sharing", error));
+      } else {
+        console.log("Share not supported on this browser, do it the old way.");
+      }
+    });
+    shareButton?.removeEventListener("click", () => {
+      setIsClicked(false);
+    });
+  }, [isClicked]);
+
+  useEffect(() => {
+    console.log(gymData, "gymData");
     if (gymData && batchDetails) {
       // MixpanelBatchCheckoutInit(batchDetails, gymData);
       mixpanelSet.current = true;
     }
   }, [gymData, batchDetails]);
 
-  
-
   const { mutate: _getActivityById } = useMutation({
     mutationFn: getActivityById,
     onSuccess: (result) => {
       console.log(result.batch);
-      setBatchDetails(result.batch)
+      setBatchDetails(result.batch);
     },
     onError: (error) => {
       errorToast("Error in getting gym data");
@@ -105,7 +102,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
     mutationFn: getGymById,
     onSuccess: (result) => {
       setGym(result.gym);
-    //   MixpanelGymInit(result.gym);
+      //   MixpanelGymInit(result.gym);
     },
     onError: (error) => {
       errorToast("Error in getting gym data");
@@ -129,39 +126,74 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
     </Flex>
   );
 
-  const navigateToHome=()=>{
-    navigate(`/gym/${gymId}/batch`)
-  }
+  const navigateToHome = () => {
+    navigate(`/gym/${gymId}/batch`);
+  };
 
+  const leftDivider = () => {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="111"
+        height="2"
+        viewBox="0 0 111 2"
+        fill="none"
+      >
+        <path
+          d="M0 1H110.5"
+          stroke="url(#paint0_linear_1369_5909)"
+          stroke-opacity="0.7"
+          stroke-width="0.8"
+        />
+        <defs>
+          <linearGradient
+            id="paint0_linear_1369_5909"
+            x1="0"
+            y1="1.5"
+            x2="110.5"
+            y2="1.5"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="white" />
+            <stop offset="1" stop-color="#9E9E9E" />
+          </linearGradient>
+        </defs>
+      </svg>
+    );
+  };
+  const rightDivider = () => {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="111"
+        height="2"
+        viewBox="0 0 111 2"
+        fill="none"
+      >
+        <path
+          d="M0.5 1H111"
+          stroke="url(#paint0_linear_1369_5911)"
+          stroke-opacity="0.7"
+          stroke-width="0.8"
+        />
+        <defs>
+          <linearGradient
+            id="paint0_linear_1369_5911"
+            x1="0.5"
+            y1="1.5"
+            x2="111"
+            y2="1.5"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#9E9E9E" />
+            <stop offset="1" stop-color="white" />
+          </linearGradient>
+        </defs>
+      </svg>
+    );
+  };
 
-  const leftDivider=()=>{
-    return(
-      <svg xmlns="http://www.w3.org/2000/svg" width="111" height="2" viewBox="0 0 111 2" fill="none">
-      <path d="M0 1H110.5" stroke="url(#paint0_linear_1369_5909)" stroke-opacity="0.7" stroke-width="0.8"/>
-      <defs>
-        <linearGradient id="paint0_linear_1369_5909" x1="0" y1="1.5" x2="110.5" y2="1.5" gradientUnits="userSpaceOnUse">
-          <stop stop-color="white"/>
-          <stop offset="1" stop-color="#9E9E9E"/>
-        </linearGradient>
-      </defs>
-    </svg>
-    )
-  }
-  const rightDivider=()=>{
-    return(
-      <svg xmlns="http://www.w3.org/2000/svg" width="111" height="2" viewBox="0 0 111 2" fill="none">
-      <path d="M0.5 1H111" stroke="url(#paint0_linear_1369_5911)" stroke-opacity="0.7" stroke-width="0.8"/>
-      <defs>
-        <linearGradient id="paint0_linear_1369_5911" x1="0.5" y1="1.5" x2="111" y2="1.5" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#9E9E9E"/>
-          <stop offset="1" stop-color="white"/>
-        </linearGradient>
-      </defs>
-    </svg>
-    )
-  }
-
-  const shareAndBack=()=>{
+  const shareAndBack = () => {
     return (
       <div className="shareAndBack">
         <span className="Btn" onClick={() => navigateToHome()}>
@@ -204,17 +236,32 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
         </span>
       </div>
     );
+  };
 
-  }
-
-  const locationIcon = ()=>{
+  const locationIcon = () => {
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
-  <path d="M8.49935 8.66732C9.60392 8.66732 10.4993 7.77189 10.4993 6.66732C10.4993 5.56275 9.60392 4.66732 8.49935 4.66732C7.39478 4.66732 6.49935 5.56275 6.49935 6.66732C6.49935 7.77189 7.39478 8.66732 8.49935 8.66732Z" stroke="#05070B" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M8.49935 14.6673C11.166 12.0007 13.8327 9.61284 13.8327 6.66732C13.8327 3.7218 11.4449 1.33398 8.49935 1.33398C5.55383 1.33398 3.16602 3.7218 3.16602 6.66732C3.16602 9.61284 5.83268 12.0007 8.49935 14.6673Z" stroke="#05070B" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-    )
-  }
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="17"
+        height="16"
+        viewBox="0 0 17 16"
+        fill="none"
+      >
+        <path
+          d="M8.49935 8.66732C9.60392 8.66732 10.4993 7.77189 10.4993 6.66732C10.4993 5.56275 9.60392 4.66732 8.49935 4.66732C7.39478 4.66732 6.49935 5.56275 6.49935 6.66732C6.49935 7.77189 7.39478 8.66732 8.49935 8.66732Z"
+          stroke="#05070B"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M8.49935 14.6673C11.166 12.0007 13.8327 9.61284 13.8327 6.66732C13.8327 3.7218 11.4449 1.33398 8.49935 1.33398C5.55383 1.33398 3.16602 3.7218 3.16602 6.66732C3.16602 9.61284 5.83268 12.0007 8.49935 14.6673Z"
+          stroke="#05070B"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    );
+  };
 
   return (
     <Flex
@@ -235,7 +282,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
           alt="img"
         ></img>
       </div>
-      <div className='activityContainer'>
+      <div className="activityContainer">
         <div className="activityHeading">
           <span style={{ maxWidth: "220px" }}>
             {batchDetails?.activityName}
@@ -248,78 +295,88 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
           <span className="dot"></span> {batchDetails?.DurationMin} min
         </div>
         <div className="activityLoc">
-          <span className='locIcon'>{locationIcon()}</span>{gym?.name},{gym?.area}
-          </div>
+          <span className="locIcon">{locationIcon()}</span>
+          {gym?.name},{gym?.area}
+        </div>
         <div className="desc">
-        {batchDetails?.aboutTheActivity && <div className="sectionAct">
-             <div className="sectionActHeading">
-              {leftDivider()}
-              <span style={{ margin: "0px 12px" }}>ABOUT THE ACTIVITY</span>
-              {rightDivider()}
+          {batchDetails?.aboutTheActivity && (
+            <div className="sectionAct">
+              <div className="sectionActHeading">
+                {leftDivider()}
+                <span style={{ margin: "0px 12px" }}>ABOUT THE ACTIVITY</span>
+                {rightDivider()}
+              </div>
+              <div className="sectionActItems">
+                <ol type="1">
+                  {batchDetails?.aboutTheActivity?.split("\n").map((e) => {
+                    return <li>{e}</li>;
+                  })}
+                </ol>
+              </div>
             </div>
-            <div className="sectionActItems">
-              <ol type="1">
-                {batchDetails?.aboutTheActivity?.split("\n").map((e) => {
-                  return <li>{e}</li>;
-                })}
-              </ol>
+          )}
+          {batchDetails?.whatToExpect && (
+            <div className="sectionAct">
+              <div className="sectionActHeading">
+                {leftDivider()}
+                <span style={{ margin: "0px 12px" }}>What TO Expect?</span>
+                {rightDivider()}
+              </div>
+              <div className="sectionActItems">
+                <ol type="1">
+                  {batchDetails?.whatToExpect?.split("\n").map((e) => {
+                    return <li>{e}</li>;
+                  })}
+                </ol>
+              </div>{" "}
             </div>
-          </div>}
-          {batchDetails?.whatToExpect &&<div className="sectionAct">
-            <div className="sectionActHeading">
-              {leftDivider()}
-              <span style={{ margin: "0px 12px" }}>What TO Expect?</span>
-              {rightDivider()}
+          )}
+          {batchDetails?.whatToBring && (
+            <div className="sectionAct">
+              <div className="sectionActHeading">
+                {leftDivider()}
+                <span style={{ margin: "0px 12px" }}>What TO Bring?</span>
+                {rightDivider()}
+              </div>
+              <div className="sectionActItems">
+                <ol type="1">
+                  {batchDetails?.whatToBring?.split("\n").map((e) => {
+                    return <li>{e}</li>;
+                  })}
+                </ol>
+              </div>
             </div>
-            <div className="sectionActItems">
-              <ol type="1">
-                {batchDetails?.whatToExpect?.split("\n").map((e) => {
-                  return <li>{e}</li>;
-                })}
-              </ol>
-            </div>          </div>}
-            {batchDetails?.whatToBring &&<div className="sectionAct">
-            <div className="sectionActHeading">
-              {leftDivider()}
-              <span style={{ margin: "0px 12px" }}>What TO Bring?</span>
-              {rightDivider()}
+          )}
+          {batchDetails?.moreInfo && (
+            <div className="sectionAct">
+              <div className="sectionActHeading">
+                {leftDivider()}
+                <span style={{ margin: "0px 12px" }}>More info</span>
+                {rightDivider()}
+              </div>
+              <div className="sectionActItems">
+                <ol type="1">
+                  {batchDetails?.moreInfo?.split("\n").map((e) => {
+                    return <li>{e}</li>;
+                  })}
+                </ol>
+              </div>
             </div>
-            <div className="sectionActItems">
-              <ol type="1">
-                {batchDetails?.whatToBring?.split("\n").map((e) => {
-                  return <li>{e}</li>;
-                })}
-              </ol>
-            </div>
-          </div>}
-          {batchDetails?.moreInfo &&<div className="sectionAct">
-            <div className="sectionActHeading">
-              {leftDivider()}
-              <span style={{ margin: "0px 12px" }}>More info</span>
-              {rightDivider()}
-            </div>
-            <div className="sectionActItems">
-              <ol type="1">
-                {batchDetails?.moreInfo?.split("\n").map((e) => {
-                  return <li>{e}</li>;
-                })}
-              </ol>
-            </div>
-          </div>}
+          )}
         </div>
       </div>
-        <BookNowFooter
-          checkoutType={ECheckoutType.BATCH}
-          batchDetails={batchDetails}
-          gymData={gymData}
-          totalAmount={batchDetails?.price as number}
-          userId={userDetails?.id as number}
-          batchId={batchDetails?.batchId as number}
-          plusMembershipDiscount={plusDetails?.plusDiscountPercent as number}
-          plusMembershipPrice={plusDetails?.plusMemberShipPrice as number}
-          plusMembershipOpted={selectedPlan === ESelectedPlan.BATCH_WITH_PLUS}
-          batchPrice={batchDetails?.price as number}
-        />
+      <BookNowFooter
+        checkoutType={ECheckoutType.BATCH}
+        batchDetails={batchDetails}
+        gymData={gymData}
+        totalAmount={batchDetails?.price as number}
+        userId={userDetails?.id as number}
+        batchId={parseInt(batchId)}
+        plusMembershipDiscount={plusDetails?.plusDiscountPercent as number}
+        plusMembershipPrice={plusDetails?.plusMemberShipPrice as number}
+        plusMembershipOpted={selectedPlan === ESelectedPlan.BATCH_WITH_PLUS}
+        batchPrice={batchDetails?.price as number}
+      />
     </Flex>
   );
 };
