@@ -11,7 +11,7 @@ import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import { useAtom } from "jotai/react";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import { Mixpanel } from "../../mixpanel/init";
-import { getActivityById } from "../../apis/gym/activities";
+import { getActivityById, getGymById } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
 import { formatTimeIntToAmPm } from "../../utils/date";
@@ -46,6 +46,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
     ESelectedPlan.BATCH
   );
   const [batchDetails,setBatchDetails] = useState<IBatch>()
+  const [gym, setGym] = useState<IGymDetails | null>(null);
   const [totalAmount, setTotalAmount] = useState();
 
   const [plusDetails] = useAtom(plusDetailsAtom);
@@ -80,11 +81,14 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
   },[isClicked])
 
   useEffect(() => {
+    console.log(gymData,'gymData')
     if (gymData && batchDetails) {
       // MixpanelBatchCheckoutInit(batchDetails, gymData);
       mixpanelSet.current = true;
     }
   }, [gymData, batchDetails]);
+
+  
 
   const { mutate: _getActivityById } = useMutation({
     mutationFn: getActivityById,
@@ -97,9 +101,25 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
     },
   });
 
+  const { mutate: _getGymById } = useMutation({
+    mutationFn: getGymById,
+    onSuccess: (result) => {
+      setGym(result.gym);
+    //   MixpanelGymInit(result.gym);
+    },
+    onError: (error) => {
+      errorToast("Error in getting gym data");
+    },
+  });
+
   useEffect(() => {
     _getActivityById(batchId);
   }, []);
+  useEffect(() => {
+    if (batchDetails?.gymId) {
+      _getGymById(String(batchDetails.gymId));
+    }
+  }, [batchDetails]);
 
   const logoTsx = (
     <Flex flex={1}>
@@ -187,6 +207,15 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
 
   }
 
+  const locationIcon = ()=>{
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+  <path d="M8.49935 8.66732C9.60392 8.66732 10.4993 7.77189 10.4993 6.66732C10.4993 5.56275 9.60392 4.66732 8.49935 4.66732C7.39478 4.66732 6.49935 5.56275 6.49935 6.66732C6.49935 7.77189 7.39478 8.66732 8.49935 8.66732Z" stroke="#05070B" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8.49935 14.6673C11.166 12.0007 13.8327 9.61284 13.8327 6.66732C13.8327 3.7218 11.4449 1.33398 8.49935 1.33398C5.55383 1.33398 3.16602 3.7218 3.16602 6.66732C3.16602 9.61284 5.83268 12.0007 8.49935 14.6673Z" stroke="#05070B" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+    )
+  }
+
   return (
     <Flex
       flex={1}
@@ -206,7 +235,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
           alt="img"
         ></img>
       </div>
-      <div style={{ padding: "0px 16px" }}>
+      <div className='activityContainer'>
         <div className="activityHeading">
           <span style={{ maxWidth: "220px" }}>
             {batchDetails?.activityName}
@@ -218,7 +247,9 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData}) => {
           {formatTimeIntToAmPm(batchDetails?.startTime || 0)}
           <span className="dot"></span> {batchDetails?.DurationMin} min
         </div>
-        <div className="activityLoc">Location</div>
+        <div className="activityLoc">
+          <span className='locIcon'>{locationIcon()}</span>{gym?.name},{gym?.area}
+          </div>
         <div className="desc">
         {batchDetails?.aboutTheActivity && <div className="sectionAct">
              <div className="sectionActHeading">

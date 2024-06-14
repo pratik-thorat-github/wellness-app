@@ -26,6 +26,8 @@ function getListOfCenters(
 
   const discountTxt="50% off on your first class booking"
 
+  
+
 
   const locationIcon = ()=>{
     return (
@@ -158,6 +160,7 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
   const [userDetails] = useAtom(userDetailsAtom);
 
 
+
   const activityTilesOnClick = async (activity: string) => {
     if (navigate) {
       Mixpanel.track("clicked_activity_pill_home", {
@@ -193,7 +196,7 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
         />
       </Flex>
 
-      <Flex flex={4} style={{}}>
+      <Flex flex={4} style={{}} id="scrollThis">
         {getListOfCenters(gymCardsData, plusDetails, userDetails)}
       </Flex>
     </Flex>

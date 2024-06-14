@@ -14,6 +14,7 @@ import { ReactComponent as Banner } from "../../images/home/banner.svg";
 const HomeBanner: React.FC = () => {
   const [plusDetails] = useAtom(plusDetailsAtom);
 
+  const userDetails =window.localStorage.getItem("zenfitx-user-details") && JSON.parse(window.localStorage["zenfitx-user-details"])
   return (
     // <Flex
     //   onClick={() => {
@@ -74,20 +75,34 @@ const HomeBanner: React.FC = () => {
     // </Flex>
     <>
     <div style={{'width':'100%'}}><Banner/></div>
-    <div className="homeWrapper">
-      <div style={{paddingTop:"15px"}}>
-        <span className="zenfit">zenfit</span><span className="x">x</span>
+    {!userDetails && <div className="homeWrapper">
+      <div style={{paddingTop:"40px"}}>
+        <span className="zenfit">Zenfit</span><span className="x">X</span>
+
+      </div>
+      <div className="lineYellow">
 
       </div>
       <div className="head2">
-      Explore & book 
+      Explore and book any fitness or wellness activity near you anytime! 
       </div>
       <div className="head3">
-      Different fitness activities 
-in your area
+      Just pay for activities not memberships.
 
       </div>
-    </div>
+    </div>}
+    {userDetails && <div className="loginWrapper">
+      <div className="loginHead1">
+        <span className="loginName">Hi {userDetails?.name}</span><span className="bookings" onClick={()=>navigate('/profile')}>Bookings</span>
+
+      </div>
+      <div className="loginHead2">
+      Welcome to ZenfitX!
+      </div>
+      <div className="loginHead3">
+      Explore & book any fitness or wellness activity near you!
+      </div>
+    </div>}
     </>
   );
 };
