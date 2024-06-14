@@ -13,6 +13,7 @@ async function navigateToHome(activity: string) {
     state: {
       activitySelected: activity,
       activitySelectedFromFilters: activity,
+      showClassesNearYouFilters: false,
     },
     replace: true,
   });
@@ -79,7 +80,6 @@ function createUpperFlexTiles() {
       <span>{classTile("swimming")}</span>
       <span> {classTile("pt")} </span>
       <span> {classTile("dance")} </span>
-
     </Flex>
   );
 }
@@ -108,13 +108,9 @@ function createLowerFlexTiles() {
 const ClassesNearYou: React.FC = () => {
   return (
     <Flex flex={1} vertical style={{}}>
-      <Flex
-        flex={1}
-        align="left"
-        className="sectionHeading"
-      >
-        <span style={{marginRight:'12px'}}>Popular activities</span>
-        <span className="separator" style={{marginRight:'16px'}}></span>
+      <Flex flex={1} align="left" className="sectionHeading">
+        <span style={{ marginRight: "12px" }}>Popular activities</span>
+        <span className="separator" style={{ marginRight: "16px" }}></span>
       </Flex>
 
       <Flex flex={3}>
@@ -124,7 +120,7 @@ const ClassesNearYou: React.FC = () => {
               width: "100vw",
               overflow: "auto",
               scrollbarWidth: "none",
-        scrollBehavior:'smooth'
+              scrollBehavior: "smooth",
             }}
           >
             <Flex flex={1} wrap="nowrap">

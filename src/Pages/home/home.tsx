@@ -25,6 +25,7 @@ import { getUserDeatils } from "../../apis/user/userDetails";
 
 interface IHome extends RouteComponentProps {
   activitySelected?: string;
+  showClassesNearYou?: boolean;
 }
 
 function MixpanelHomeInit(user: IUser | null) {
@@ -37,7 +38,7 @@ function MixpanelHomeInit(user: IUser | null) {
   Mixpanel.track("open_home_page");
 }
 
-const Home: React.FC<IHome> = ({ activitySelected }) => {
+const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   // useAuthRedirect();
 
   const navigate = useNavigate();
@@ -46,13 +47,19 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   let activitySelectedFromFilters = locationStates
     ? (locationStates as any).activitySelectedFromFilters
     : null;
+  let showClassesNearYouFilters = locationStates
+    ? (locationStates as any).showClassesNearYouFilters
+    : null;
 
   activitySelected = activitySelectedFromFilters || activitySelected;
+  showClassesNearYou = showClassesNearYouFilters == false ? false : true;
   const [activities, setActivities] = useState<string[]>([]);
   const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
 
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
   const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
+
+  const showClassesNearYouRef = useRef(true);
 
   const mixpanelSet = useRef(false);
 
@@ -162,9 +169,11 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
           <HomeBanner />
         </Flex>
 
-        <Flex style={{ marginLeft: "16px" }} flex={3}>
-          <ClassesNearYou />
-        </Flex>
+        {showClassesNearYou ? (
+          <Flex style={{ marginLeft: "16px" }} flex={3}>
+            <ClassesNearYou />
+          </Flex>
+        ) : null}
       </div>
 
       <Flex flex={3} style={{ margin: "0 5%" }}>
@@ -172,6 +181,7 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
           activities={activities}
           activitySelected={activitySelected}
           gymCardsData={gymCardsData}
+          showClassesNearYou={showClassesNearYou}
         />
       </Flex>
     </Flex>
