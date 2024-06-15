@@ -35,7 +35,12 @@ const classTile = (activity: string) => (
 
 const trendingTile = () => {
   return (
-    <div className="trendingBox">
+    <div
+      className="trendingBox"
+      onClick={async () => {
+        await navigate(`/trending`);
+      }}
+    >
       <div className="trendingWrapper">
         <span className="trending">Trending</span>
         <span>

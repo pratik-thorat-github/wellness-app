@@ -25,7 +25,7 @@ interface IGymInfo {
 }
 
 const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
-  const description = `${gymData.addressLine1},${gymData.addressLine2}<br>${gymData.description}`;
+  const description = `${gymData.description}`;
 
   let [isTruncated, setIsTruncated] = useState(description.length > maxChar);
   let shortDescription = useRef(description.substring(0, maxChar));
@@ -401,7 +401,9 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             {igLogo()} <span style={{ marginLeft: "8px" }}> INSTAGRAM</span>
           </span>
           <span className="baseTxt" style={{ textDecoration: "underline" }}>
-            <a className="baseTxt" href={gymData?.instaLink} target="_blank" >View Profile</a>
+            <a className="baseTxt" href={gymData?.instaLink} target="_blank">
+              View Profile
+            </a>
           </span>
         </div>
         <div className="line"></div>
