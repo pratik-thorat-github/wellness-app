@@ -44,25 +44,25 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   if (!gym) return <Loader />;
 
   return (
-    <Flex flex={1} vertical style={{ marginTop: "10px" }}>
+    <div className="gymWrap">
       <Flex flex={1}>
         <GymPhotos gym={gym} />
       </Flex>
 
       <Flex flex={2} vertical justify="center">
-        <Flex flex={1}>
+      
           <GymInfo gymData={gym} />
-        </Flex>
+       
 
-        <Flex flex={2}>
+        {/* <Flex flex={2}>
           <BookClassBanner />
         </Flex>
 
         <Flex flex={4}>
           <BatchSchedule gymData={gym} />
-        </Flex>
+        </Flex> */}
       </Flex>
-    </Flex>
+    </div>
   );
 };
 

@@ -1,10 +1,11 @@
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, navigate } from "@reach/router";
 import { Button, Flex } from "antd";
 import colors from "../../constants/colours";
 import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import {
   addUser,
+  checkUserPhoneAndSendOtp,
   checkUserPhoneAndSendOtplessMagicLink,
 } from "../../apis/auth/login";
 import useAuthRedirect from "./redirect-hook";
@@ -21,7 +22,7 @@ const Login: React.FC<ILoginProps> = () => {
     name: "",
   });
 
-  // useAuthRedirect();
+  useAuthRedirect();
 
   function setValue(e: React.ChangeEvent<HTMLInputElement>) {
     var toSet = { ...input };
@@ -30,6 +31,30 @@ const Login: React.FC<ILoginProps> = () => {
 
     setInput(toSet);
   }
+
+  const { mutate: _checkUserPhoneAndSendOtp } = useMutation({
+    mutationFn: checkUserPhoneAndSendOtp,
+    onError: (response) => {
+      setMagicLinkSent(false);
+      submitClicked.current = false;
+
+      Mixpanel.track("login_otp_send_error", {
+        phone: input.phone,
+      });
+    },
+    onSuccess: (response) => {
+      setMagicLinkSent(true);
+      Mixpanel.track("login_otp_send_success", {
+        phone: input.phone,
+      });
+      navigate("/verify", {
+        state: {
+          phoneNumber: input.phone,
+          otpLessOrderId: response.orderId,
+        },
+      });
+    },
+  });
 
   const { mutate: _checkUserPhoneAndSendOtplessMagicLink } = useMutation({
     mutationFn: checkUserPhoneAndSendOtplessMagicLink,
@@ -65,7 +90,8 @@ const Login: React.FC<ILoginProps> = () => {
       });
     },
     onSettled: () => {
-      _checkUserPhoneAndSendOtplessMagicLink(input.phone);
+      // _checkUserPhoneAndSendOtplessMagicLink(input.phone);
+      _checkUserPhoneAndSendOtp(input.phone);
     },
   });
 
@@ -76,7 +102,7 @@ const Login: React.FC<ILoginProps> = () => {
   function submitButton() {
     submitClicked.current = true;
 
-    _createUser({ name: input.name, phone: input.phone });
+    _createUser({ name: input.name, phone: input.phone , noOfBookings:0 });
   }
 
   const buttonDisabled = () => {
@@ -84,6 +110,33 @@ const Login: React.FC<ILoginProps> = () => {
 
     return Boolean(input.phone.length !== 10 || !input.name);
   };
+
+
+  const shareAndBack = () => {
+    return (
+      <div className="shareAndBack">
+        <span className="Btn" onClick={() => navigate(-1)}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              d="M15.8327 10.0003H4.16602M4.16602 10.0003L9.99935 15.8337M4.16602 10.0003L9.99935 4.16699"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+      </div>
+    );
+  };
+
+  
 
   return (
     <Flex flex={1} style={{ minHeight: "40vh" }} vertical justify="center">
@@ -93,14 +146,15 @@ const Login: React.FC<ILoginProps> = () => {
         style={{
           paddingTop: "24px",
           paddingBottom: "24px",
-          paddingLeft: "24px",
           borderBottomRightRadius: "24px",
           borderBottomLeftRadius: "24px",
           // padding: "0px",
         }}
         className="login-banner"
       >
-        <span style={{ fontSize: "24px", fontWeight: "bold" }}>
+              {shareAndBack()}
+
+        <span style={{ fontSize: "24px", fontWeight: "bold",textAlign:'center' }}>
           {" "}
           {/* Welcome To ZenfitX!{" "} */}
           One step to go!
@@ -157,6 +211,7 @@ const Login: React.FC<ILoginProps> = () => {
                   height: "30px",
                 }}
                 type="text"
+                required
               />{" "}
             </span>
           </Flex>
@@ -178,11 +233,14 @@ const Login: React.FC<ILoginProps> = () => {
                   height: "30px",
                   borderRadius: "5px",
                   padding: "10px",
+                  
                 }}
-                type="number"
+                type="tel"
                 onChange={setValue}
                 name="phone"
                 value={input.phone}
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required
+
               />{" "}
             </span>
           </Flex>

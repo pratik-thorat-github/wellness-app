@@ -14,3 +14,16 @@ export async function getGymBatchesForDate({
   );
   return result.data;
 }
+
+export async function getGymBatchesForSchedulePage({
+  id,
+  isWeekendOnly,
+}: {
+  id: number;
+  isWeekendOnly: boolean;
+}) {
+  const result = await networkAdapter.get(
+    `/gyms/batch/schedulePage?gymId=${id}&isWeekendOnly=${isWeekendOnly}`
+  );
+  return result.data;
+}

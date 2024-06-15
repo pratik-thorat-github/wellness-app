@@ -7,10 +7,18 @@ const useAuthRedirect = () => {
   const [accessToken] = useAtom(accessTokenAtom);
   const [userDetails] = useAtom(userDetailsAtom);
 
+  const isUserLoggedIn=  accessToken || userDetails
+
   useEffect(() => {
-    if (!accessToken || !userDetails) navigate("/login");
-    else navigate("/");
-  }, [accessToken, userDetails]);
+    if( !isUserLoggedIn){
+      if(window.location.pathname!=='/login'){
+        navigate("/login")
+      }
+    }
+    else{
+      navigate("/")
+    }
+  }, []);
 };
 
 export default useAuthRedirect;

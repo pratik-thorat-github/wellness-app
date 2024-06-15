@@ -1,12 +1,11 @@
 export interface IGymCard {
   area: string;
-  addressLine1: string;
-  addressLine2: string;
   gymId: number;
   name: string;
   photos: string[];
   activities: string[];
   minPrice?: number;
+  medias:[]
 }
 
 export interface IBatch {
@@ -19,6 +18,14 @@ export interface IBatch {
   activityName: string;
   trainer?: string;
   isDayPass: boolean;
+  DurationMin:number;
+  aboutTheActivity?:string;
+  whatToBring?:string;
+  whatToExpect?:string;
+  moreInfo?:string;
+  gymId:number
+  image?:string
+
 }
 
 export interface IGymDetails extends IGymCard {
@@ -26,4 +33,12 @@ export interface IGymDetails extends IGymCard {
   batches: IBatch[];
   lat: number;
   long: number;
+  addressLine1: string;
+  addressLine2: string;
+  amenities:[];
+  googleRating?:number;
+  googleReviews?:number;
+  operatingHours:[],
+  isExclusive:boolean,
+  instaLink?:string
 }

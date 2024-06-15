@@ -6,7 +6,11 @@ import CentersAroundYou from "./centers-around-you";
 import ProfileBanner from "./profile-banner";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
-import { getAllActivities, getGymsByActivity } from "../../apis/gym/activities";
+import {
+  getAllActivities,
+  getExclusiveGyms,
+  getGymsByActivity,
+} from "../../apis/gym/activities";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../../components/Loader";
 import { IGymCard } from "../../types/gyms";
@@ -17,9 +21,11 @@ import IUser, { IPlusDetails } from "../../types/user";
 import useAuthRedirect from "../auth/redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
+import { getUserDeatils } from "../../apis/user/userDetails";
 
 interface IHome extends RouteComponentProps {
   activitySelected?: string;
+  showClassesNearYou?: boolean;
 }
 
 function MixpanelHomeInit(user: IUser | null) {
@@ -32,7 +38,7 @@ function MixpanelHomeInit(user: IUser | null) {
   Mixpanel.track("open_home_page");
 }
 
-const Home: React.FC<IHome> = ({ activitySelected }) => {
+const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   // useAuthRedirect();
 
   const navigate = useNavigate();
@@ -41,13 +47,19 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   let activitySelectedFromFilters = locationStates
     ? (locationStates as any).activitySelectedFromFilters
     : null;
+  let showClassesNearYouFilters = locationStates
+    ? (locationStates as any).showClassesNearYouFilters
+    : null;
 
   activitySelected = activitySelectedFromFilters || activitySelected;
+  showClassesNearYou = showClassesNearYouFilters == false ? false : true;
   const [activities, setActivities] = useState<string[]>([]);
   const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
 
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
-  const [userDetails] = useAtom(userDetailsAtom);
+  const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
+
+  const showClassesNearYouRef = useRef(true);
 
   const mixpanelSet = useRef(false);
 
@@ -62,6 +74,17 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
     },
   });
 
+  const { mutate: _getUserDeatils } = useMutation({
+    mutationFn: getUserDeatils,
+    onError: () => {
+      errorToast("Error in getting user details");
+    },
+    onSuccess: (result) => {
+      console.log("deatils - ", result);
+      setUserDetailsAtom(result.user);
+    },
+  });
+
   const { mutate: _getGymsByActivities } = useMutation({
     mutationFn: getGymsByActivity,
     onError: () => {
@@ -72,6 +95,31 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
       setGymCardsData(result.gyms);
     },
   });
+
+  const { mutate: _getGymsByExclusive } = useMutation({
+    mutationFn: getExclusiveGyms,
+    onError: () => {
+      errorToast("Error in getting gyms by activity");
+    },
+    onSuccess: (result) => {
+      console.log("gyms gotten - ", result);
+      setGymCardsData(result.gyms);
+    },
+  });
+
+  // useEffect(()=>{
+  //   const { mutate: _getGymsByActivities } = useMutation({
+  //     mutationFn: getGymsByActivity,
+  //     onError: () => {
+  //       errorToast("Error in getting gyms by activity");
+  //     },
+  //     onSuccess: (result) => {
+  //       console.log("gyms gotten - ", result);
+  //       setGymCardsData(result.gyms);
+  //     },
+  //   });
+
+  // },[activitySelected])
 
   const { mutate: _getPlusDetailsOfUser } = useMutation({
     mutationFn: getPlusDetailsOfUser,
@@ -85,10 +133,19 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   });
 
   useEffect(() => {
+    const userDetails =
+      window.localStorage["zenfitx-user-details"] &&
+      JSON.parse(window.localStorage["zenfitx-user-details"]);
+
+    if (userDetails && userDetails.noOfBookings < 1) {
+      _getUserDeatils();
+    }
     _getAllActivities();
+
     _getGymsByActivities(activitySelected);
+
     // _getPlusDetailsOfUser(userDetails?.phone as string);
-  }, [activitySelected, navigate]);
+  }, [activitySelected]);
 
   useEffect(() => {
     if (!mixpanelSet.current) {
@@ -100,30 +157,31 @@ const Home: React.FC<IHome> = ({ activitySelected }) => {
   if (!activities.length || !gymCardsData.length) return <Loader />;
 
   return (
-    <Flex flex={1} vertical style={{}}>
-      {!activitySelected || activitySelected == "all" ? (
-        <div>
-          <Space></Space>
+    <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
+      <div>
+        <Space></Space>
 
-          <Flex style={{ marginLeft: "16px" }} flex={1}>
+        {/* {userDetails?.phone && <Flex flex={1}>
             <ProfileBanner />
-          </Flex>
+          </Flex>} */}
 
-          <Flex style={{ marginLeft: "16px" }} flex={3}>
-            <HomeBanner />
-          </Flex>
+        <Flex flex={3}>
+          <HomeBanner />
+        </Flex>
 
+        {showClassesNearYou ? (
           <Flex style={{ marginLeft: "16px" }} flex={3}>
             <ClassesNearYou />
           </Flex>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
 
-      <Flex flex={3} style={{ marginLeft: "5%" }}>
+      <Flex flex={3} style={{ margin: "0 5%" }}>
         <CentersAroundYou
           activities={activities}
           activitySelected={activitySelected}
           gymCardsData={gymCardsData}
+          showClassesNearYou={showClassesNearYou}
         />
       </Flex>
     </Flex>

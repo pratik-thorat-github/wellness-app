@@ -50,3 +50,28 @@ export async function verifyOtplessMagicLink({
   let response = await networkAdapter.post(url, { code });
   return response.data;
 }
+
+export async function checkUserPhoneAndSendOtp(phone: string) {
+  let url = `/auth/user/otp?phone=${phone}`;
+
+  let response = await networkAdapter.get(url);
+  return response.data;
+}
+
+export async function checkUserPhoneAndResendOtp(orderId: string) {
+  let url = `/auth/otpless/resend/otp?orderId=${orderId}`;
+
+  let response = await networkAdapter.get(url);
+  return response.data;
+}
+
+export async function verifyOtplessOtp(payload: {
+  phone: string;
+  otp: string;
+  orderId: string;
+}) {
+  let url = `/auth/user/otp/verify`;
+
+  let response = await networkAdapter.post(url, payload);
+  return response.data;
+}

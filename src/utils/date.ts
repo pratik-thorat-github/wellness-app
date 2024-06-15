@@ -33,5 +33,9 @@ export function formatTimeIntToAmPm(time: number) {
   let timeString = time.toString();
   if (timeString.length == 3) timeString = `0${timeString}`;
   const toReturn = moment(timeString, "HHmm");
-  return toReturn.format("hh:mm A");
+  if (toReturn.minutes() === 0) {
+    return toReturn.format("h A"); // Format without minutes if minutes are 0
+  } else {
+    return toReturn.format("h:mm A"); // Format with minutes otherwise
+  }
 }

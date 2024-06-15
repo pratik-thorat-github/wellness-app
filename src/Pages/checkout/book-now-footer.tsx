@@ -189,15 +189,18 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       flex={1}
       justify="stretch"
       style={{
-        maxHeight: "18vh",
+        // maxHeight: "18vh",
         backgroundColor: "white",
         borderTopStyle: "solid",
         borderTopColor: colors.border,
         borderTopWidth: "1px",
-        paddingTop: "16px",
-        paddingBottom: "16px",
+        paddingTop: "12px",
+        paddingBottom: "12px",
         paddingRight: "24px",
         paddingLeft: "24px",
+        position: "fixed",
+        bottom: 0,
+        width: "90%",
       }}
     >
       {!userDetails ? (
@@ -236,35 +239,38 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           </Flex>
         </Flex>
       ) : (
-        <Flex flex={1}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
           <Flex flex={2} vertical justify="center" align="left">
             <span style={{ fontWeight: "bold", fontSize: "20px" }}>
               {Rs}
               {props.totalAmount}
             </span>
-            <span style={{ color: colors.secondary, fontSize: "12px" }}>
-              Total Amount
-            </span>
           </Flex>
-          <Flex
-            flex={1}
-            vertical
-            justify="center"
-            align="center"
+          <div
             style={{
               color: "white",
-              fontWeight: "bold",
+              fontWeight: "700",
               fontSize: "16px",
               backgroundColor: "#05070B",
-              borderRadius: "10px",
+              borderRadius: "8px",
+              padding: "12px 24px",
+              display: "flex",
+              alignItems: "center",
             }}
             onClick={() => {
               checkIfLoggedIn();
             }}
           >
             <span>Book Now</span>
-          </Flex>
-        </Flex>
+          </div>
+        </div>
       )}
     </Flex>
   );

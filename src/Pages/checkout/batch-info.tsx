@@ -22,13 +22,13 @@ const BatchInfoOnCheckout: React.FC<IBatchInfoOnCheckout> = ({
         <span>{logoTsx}</span>
 
         <span style={{ fontSize: "24px", marginBottom: "20px" }}>
-          {batchDetails.activity} •{" "}
-          {batchDetails.isDayPass ? "All Day" : `${batchDetails.duration}min`}
+          {batchDetails?.activity} •{" "}
+          {batchDetails?.isDayPass ? "All Day" : `${batchDetails?.duration}min`}
         </span>
 
         <span style={{ marginBottom: "4px", color: colors.secondary }}>
-          {formatTimeIntToAmPm(batchDetails.startTime)},{" "}
-          {formatDate(batchDetails.date)["date suffix - Day"]}
+          {batchDetails?.startTime && formatTimeIntToAmPm(batchDetails?.startTime)},{" "}
+          {batchDetails?.date && formatDate(batchDetails?.date)["date suffix - Day"]}
         </span>
         <span style={{ color: colors.secondary }}>
           At {gymData?.name}, {gymData?.area}
