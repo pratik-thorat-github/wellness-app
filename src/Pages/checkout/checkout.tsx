@@ -2,6 +2,7 @@ import { RouteComponentProps, navigate, useLocation } from "@reach/router";
 import BatchInfoOnCheckout from "./batch-info";
 import BatchPrice from "./batch-price";
 import CheckoutPlusPrice from "./batch-checkout-plus-price";
+import BookNowFooter from "./book-now-footer";
 import { useEffect, useRef } from "react";
 import { ECheckoutType, ESelectedPlan } from "../../types/checkout";
 import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
