@@ -17,8 +17,8 @@ import { errorToast } from "../../components/Toast";
 import { formatTimeIntToAmPm } from "../../utils/date";
 
 interface IClassCheckout extends RouteComponentProps {
-  batchDetails?: IBatch;
-  gymData?: IGymDetails;
+  // batchDetails?: IBatch;
+  // gymData?: IGymDetails;
 }
 
 function MixpanelBatchCheckoutInit(batchDetails: IBatch, gymData: IGymDetails) {
@@ -28,19 +28,10 @@ function MixpanelBatchCheckoutInit(batchDetails: IBatch, gymData: IGymDetails) {
   });
 }
 
-const BatchCheckout: React.FC<IClassCheckout> = ({ gymData }) => {
+const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [userDetails] = useAtom(userDetailsAtom);
 
   let locationStates = useLocation().state;
-  let gymDataSentFromBatchSchedule = locationStates
-    ? (locationStates as any).gymData
-    : null;
-  // let batchDetailsFromBatchSchedule = locationStates
-  //   ? (locationStates as any).batchDetails
-  //   : null;
-  gymData = gymData || gymDataSentFromBatchSchedule;
-  // batchDetails = batchDetails || batchDetailsFromBatchSchedule;
-
   const batchId = window.location.pathname.split("/")[3];
   const [selectedPlan, setSelectedPlan] = useState<ESelectedPlan>(
     ESelectedPlan.BATCH
@@ -63,7 +54,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData }) => {
         navigator
           .share({
             title: "ZenfitX",
-            text: `Hey, I'm signing up for ${batchDetails?.activity.toLowerCase()} at ${gymData?.name.toLowerCase()} on ZenfitX.Wanna join me?Check it out and let's grab those first-booking discounts!💪`,
+            text: `Hey, I'm signing up for ${batchDetails?.activity.toLowerCase()} at ${gym?.name} on ZenfitX.Wanna join me?Check it out and let's grab those first-booking discounts!💪`,
             url: window.location.href, 
           })
           .then(() => console.log("Successful share"))
@@ -78,12 +69,10 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData }) => {
   }, [isClicked]);
 
   useEffect(() => {
-    console.log(gymData, "gymData");
-    if (gymData && batchDetails) {
-      // MixpanelBatchCheckoutInit(batchDetails, gymData);
+    if (gym && batchDetails) {
       mixpanelSet.current = true;
     }
-  }, [gymData, batchDetails]);
+  }, [gym, batchDetails]);
 
   const { mutate: _getActivityById } = useMutation({
     mutationFn: getActivityById,
@@ -366,7 +355,7 @@ const BatchCheckout: React.FC<IClassCheckout> = ({ gymData }) => {
       <BookNowFooter
         checkoutType={ECheckoutType.BATCH}
         batchDetails={batchDetails}
-        gymData={gymData}
+        gymData={gym || undefined}
         totalAmount={batchDetails?.price as number}
         userId={userDetails?.id as number}
         batchId={parseInt(batchId)}
