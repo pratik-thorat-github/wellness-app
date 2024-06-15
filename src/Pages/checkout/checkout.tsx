@@ -23,7 +23,7 @@ import { RightOutlined } from "@ant-design/icons";
 import { IBatch, IGymDetails } from "../../types/gyms";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { getGymBatchesForDate } from "../../apis/gym/batches";
+import { getGymBatchesForDate, getGymBatchesForSchedulePage } from "../../apis/gym/batches";
 import { errorToast } from "../../components/Toast";
 
 import { ReactComponent as NoBatchImage } from "../../images/gym/no-batch.svg";
@@ -88,14 +88,41 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
     },
   });
 
+  const { mutate: _getGymBatchesForSchedulePage } = useMutation({
+    mutationFn: getGymBatchesForSchedulePage,
+    onSuccess: (result) => {
+     console.log(result.data)
+
+      setBatches(Object.values(result.data).flat() as IBatch[]);
+      if (!Object.values(result.data).flat().length) errorToast("No batches found");
+    },
+    onError: (error) => {
+      setBatches([]);
+      errorToast("Error in getting batches");
+    },
+  });
+
   useEffect(() => {
     _getGymById(gymId as string);
   }, [gymId]);
 
 
-  useEffect(()=>{
-    setBatches(gym?.batches as IBatch[])
-  },[gym])
+  useEffect(() => {
+    if (gym?.gymId) {
+      if (gym?.isOnlyWeekend) {
+        _getGymBatchesForSchedulePage({
+          id: gym.gymId,
+          isWeekendOnly: true,
+        });
+      } else {
+        _getGymBatchesForDate({
+          id: gym?.gymId as number,
+          date: selectedDate,
+          activity: selectedActivity,
+        });
+      }
+    }
+  }, [gym]);
 
   if (!gym?.batches) return <Loader />;
 
@@ -332,9 +359,9 @@ Please select next available date.</span>
         <span>{locationIcon()}</span><span>{gym?.area}</span>
         </div>
       </div >
-        <div style={{margin:'0px 8px 0px 24px'}}>{generateDateTiles()}</div></div>
+        <div style={{margin:'0px 8px 0px 24px'}}>{!gym?.isOnlyWeekend && generateDateTiles()}</div></div>
       <Flex flex={1} vertical>
-        <Flex flex={1} style={{ paddingLeft: "24px" }}>
+        {!gym?.isOnlyWeekend && <Flex flex={1} style={{ paddingLeft: "24px" }}>
           <ActivityTiles
             activities={gym.activities}
             activitySelected={selectedActivity}
@@ -352,7 +379,7 @@ Please select next available date.</span>
             }}
             reposition
           />
-        </Flex>
+        </Flex>}
 
         <Flex flex={3} style={{ marginTop: "10px" }}>
           {batches && batches.length

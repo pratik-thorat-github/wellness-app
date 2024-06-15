@@ -41,4 +41,5 @@ export interface IGymDetails extends IGymCard {
   operatingHours:[],
   isExclusive:boolean,
   instaLink?:string
+  isOnlyWeekend:boolean
 }
