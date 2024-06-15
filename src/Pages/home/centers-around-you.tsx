@@ -137,8 +137,8 @@ function getListOfCenters(
           }
         >
           <div className="activityDetail">
-            <div className="name">
-              {name} {discountCard(minPrice)}
+            <div className={name.length>25 ?"nameInc":'name'}>
+              <span>{name}</span> {discountCard(minPrice)}
             </div>
             <div className="activity">
               {concatAndUpperCaseActivities(activities.slice(0, 8))}
