@@ -24,6 +24,7 @@ export interface IBatch {
   whatToExpect?:string;
   moreInfo?:string;
   gymId:number
+  image?:string
 
 }
 
@@ -38,5 +39,6 @@ export interface IGymDetails extends IGymCard {
   googleRating?:number;
   googleReviews?:number;
   operatingHours:[],
-  isExclusive:boolean
+  isExclusive:boolean,
+  instaLink?:string
 }

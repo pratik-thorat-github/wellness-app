@@ -14,7 +14,7 @@ import { Mixpanel } from "../../mixpanel/init";
 import { getActivityById, getGymById } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
-import { formatTimeIntToAmPm } from "../../utils/date";
+import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 
 interface IClassCheckout extends RouteComponentProps {
   // batchDetails?: IBatch;
@@ -49,6 +49,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
 
   useEffect(() => {
     const shareButton = document.getElementById("share-button");
+    _getActivityById(batchId);
     shareButton?.addEventListener("click", () => {
       if (navigator.share) {
         navigator
@@ -61,15 +62,12 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
           .catch((error) => console.log("Error sharing", error));
       } else {
         console.log("Share not supported on this browser, do it the old way.");
-        window.navigator.clipboard.writeText(`Hey, I'm signing up for ${batchDetails?.activity.toLowerCase()} at ${gym?.name} on ZenfitX. Wanna join me? Check it out and let's grab those first-booking discounts!💪`)
-          .then(() => console.log("Text copied to clipboard"))
-          .catch(err => console.error("Failed to copy text: ", err));
       }
     });
     shareButton?.removeEventListener("click", () => {
       setIsClicked(false);
     });
-  }, [isClicked]);
+  }, [isClicked,batchId]);
 
   useEffect(() => {
     if (gym && batchDetails) {
@@ -263,15 +261,15 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
       }}
     >
       {shareAndBack()}
-      <div style={{ clipPath: "ellipse(100% 93% at 50% 5%)" }}>
+      {batchDetails?.image && <div style={{ clipPath: "ellipse(100% 93% at 50% 5%)" }}>
         <img
           width="360px"
           height="250px"
           className="activityImg"
-          src="https://pbs.twimg.com/media/GPsDl8NXoAAWn6T?format=jpg&name=medium"
+          src={batchDetails?.image}
           alt="img"
         ></img>
-      </div>
+      </div>}
       <div className="activityContainer">
         <div className="activityHeading">
           <span style={{ maxWidth: "220px" }}>
@@ -280,9 +278,10 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
           </span>
         </div>
         <div className="activityDate">
+          <span>{batchDetails?.date ? formatDate(batchDetails.date)["date suffix - Day"] : 'Date not available'}</span>
           <span className="dot"></span>
           {formatTimeIntToAmPm(batchDetails?.startTime || 0)}
-          <span className="dot"></span> {batchDetails?.DurationMin} min
+          <span className="dot"></span> {batchDetails?.DurationMin || 'Duration not available'} min
         </div>
         <div className="activityLoc">
           <span className="locIcon">{locationIcon()}</span>

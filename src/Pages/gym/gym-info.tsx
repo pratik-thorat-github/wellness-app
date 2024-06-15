@@ -401,7 +401,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             {igLogo()} <span style={{ marginLeft: "8px" }}> INSTAGRAM</span>
           </span>
           <span className="baseTxt" style={{ textDecoration: "underline" }}>
-            View Profile
+            <a className="baseTxt" href={gymData?.instaLink} target="_blank" >View Profile</a>
           </span>
         </div>
         <div className="line"></div>

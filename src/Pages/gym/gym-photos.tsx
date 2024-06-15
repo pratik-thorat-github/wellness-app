@@ -28,9 +28,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
             .then(() => console.log('Successful share'))
             .catch((error) => console.log('Error sharing', error));
         } else {
-          window.navigator.clipboard.writeText(`Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉`)
-          .then(() => console.log("Text copied to clipboard"))
-          .catch(err => console.error("Failed to copy text: ", err));
+          console.log('error')
         }
       });
     shareButton?.removeEventListener('click',()=>{
