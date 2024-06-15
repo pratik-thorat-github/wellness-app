@@ -48,28 +48,6 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const gymId = batchDetails?.gymId;
 
   useEffect(() => {
-    const shareButton = document.getElementById("share-button");
-    _getActivityById(batchId);
-    shareButton?.addEventListener("click", () => {
-      if (navigator.share) {
-        navigator
-          .share({
-            title: "ZenfitX",
-            text: `Hey, I'm signing up for ${batchDetails?.activity.toLowerCase()} at ${gym?.name} on ZenfitX.Wanna join me?Check it out and let's grab those first-booking discounts!💪`,
-            url: window.location.href, 
-          })
-          .then(() => console.log("Successful share"))
-          .catch((error) => console.log("Error sharing", error));
-      } else {
-        console.log("Share not supported on this browser, do it the old way.");
-      }
-    });
-    shareButton?.removeEventListener("click", () => {
-      setIsClicked(false);
-    });
-  }, [isClicked,batchId]);
-
-  useEffect(() => {
     if (gym && batchDetails) {
       mixpanelSet.current = true;
     }
@@ -105,6 +83,27 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
       _getGymById(String(batchDetails.gymId));
     }
   }, [batchDetails]);
+
+  useEffect(() => {
+    const shareButton = document.getElementById("share-button");
+    shareButton?.addEventListener("click", () => {
+      if (navigator.share) {
+        navigator
+          .share({
+            title: "ZenfitX",
+            text: `Hey, I'm signing up for this awesome activity on ZenfitX. Wanna join me? Let's sweat it out together and grab those first-booking discounts! 💪`,
+            url: window.location.href, 
+          })
+          .then(() => console.log("Successful share"))
+          .catch((error) => console.log("Error sharing", error));
+      } else {
+        console.log("Share not supported on this browser, do it the old way.");
+      }
+    });
+    shareButton?.removeEventListener("click", () => {
+      setIsClicked(false);
+    });
+  }, [isClicked]);
 
   const logoTsx = (
     <Flex flex={1}>
