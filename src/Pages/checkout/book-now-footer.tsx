@@ -54,7 +54,7 @@ async function displayRazorpay(
     description += `, and plus membership for onePass`;
 
   const options = {
-    key: "rzp_test_1ImIaGjw5Cmceg",
+    key: process.env.REACT_APP_RZP_CLIENT_KEY,
     amount: props.totalAmount * 100,
     currency: "INR",
     name: "ZenFitX",
@@ -111,7 +111,7 @@ async function displayCashfree(
 
   //@ts-ignore
   const cashfree = Cashfree({
-    mode: "production",
+    mode: process.env.REACT_APP_CF_ENV,
   });
   cashfree.checkout(options).then((result: any) => {
     if (result.error) {
