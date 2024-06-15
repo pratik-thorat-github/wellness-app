@@ -47,6 +47,8 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
   );
   const [selectedActivity, setSelectedActivity] = useState("all");
   const [batches, setBatches] = useState<IBatch[]>([]);
+  const activityFromURl= new URLSearchParams(window.location.search).get('activity')
+  console.log(activityFromURl,'activityFromURl')
 
   const gymId = window.location.pathname.split('/')[2] || ''
 
@@ -54,6 +56,11 @@ const Checkout: React.FC<IClassCheckout> = ({ }) => {
 
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
+
+  useEffect(()=>{
+    setSelectedActivity(activityFromURl ?? 'all')
+  },[activityFromURl])
+
 
   const { mutate: _getGymById } = useMutation({
     mutationFn: getGymById,
@@ -343,6 +350,7 @@ Please select next available date.</span>
                 activity: activity,
               });
             }}
+            reposition
           />
         </Flex>
 

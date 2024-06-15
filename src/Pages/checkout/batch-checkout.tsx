@@ -61,6 +61,9 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
           .catch((error) => console.log("Error sharing", error));
       } else {
         console.log("Share not supported on this browser, do it the old way.");
+        window.navigator.clipboard.writeText(`Hey, I'm signing up for ${batchDetails?.activity.toLowerCase()} at ${gym?.name} on ZenfitX. Wanna join me? Check it out and let's grab those first-booking discounts!💪`)
+          .then(() => console.log("Text copied to clipboard"))
+          .catch(err => console.error("Failed to copy text: ", err));
       }
     });
     shareButton?.removeEventListener("click", () => {

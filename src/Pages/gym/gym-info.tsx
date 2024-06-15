@@ -46,9 +46,9 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     </span>
   );
 
-  const navigateToBatches=()=>{
+  const navigateToBatches=(activity:string)=>{
     const pathname = window.location.pathname
-    navigate(`${pathname}/batch`)
+    navigate(`${pathname}/batch?activity=${activity.toLowerCase()}`)
   }
 
   const exclusiveIcon = () => {
@@ -263,7 +263,10 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
               <span style={{ marginRight: "16px",height: '90px',
               width: '90px',
               display: 'inline-block'}} onClick={()=>{
-                navigate(`/${activity.toLowerCase()}`)
+                // navigate(`/batch?activity=${activity.toLowerCase()}`)
+                // navigate(`/batch`)
+                navigateToBatches(activity)
+
                 }}>
                 {activityToSvgMap(activity)}
               </span>
@@ -330,7 +333,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         </div>
       </div>
       <div className="bookBtnWrap">
-        <span className="bookBtn" onClick={() => navigateToBatches()}>
+        <span className="bookBtn" onClick={() => navigateToBatches('all')}>
           View Schedule
         </span>
       </div>
