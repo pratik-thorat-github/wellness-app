@@ -37,6 +37,7 @@ function App() {
         <Profile path="/profile" />
         <Gym path="/gym/:gymId" />
         <SchedulePage path="/gym/:gymId/batch" />
+        {/* <GuestCheckout path="/gym/:gymId/batch/checkout" /> */}
         <BatchCheckout path="/checkout/batch/:batchId" />
         <BatchCheckoutBooking path="/checkout/batch/:batchId/booking" />
         <PlusCheckout path="/checkout/plus" />

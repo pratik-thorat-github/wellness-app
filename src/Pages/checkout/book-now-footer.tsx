@@ -14,7 +14,8 @@ import { useAtom } from "jotai/react";
 import { checkoutSdkRedirectAtom, userDetailsAtom } from "../../atoms/atom";
 import IUser from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Loader from "../../components/Loader";
 
 export interface IBookNowFooter {
   batchDetails?: IBatch;
@@ -47,8 +48,10 @@ function loadScript(src: string) {
 
 async function displayRazorpay(
   props: IBookNowFooter,
-  userDetails: IUser | null
+  userDetails: IUser | null,
+  setLoading: (loading: boolean) => void
 ) {
+  setLoading(true);
   const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
 
   //@ts-ignore
@@ -96,6 +99,8 @@ async function displayRazorpay(
       color: "#61dafb",
     },
   };
+
+  setLoading(false);
 
   //@ts-ignore
   const paymentObject = new window.Razorpay(options);
@@ -172,6 +177,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   let locationStates = useLocation().state;
   console.log(locationStates);
 
+  const [loading, setLoading] = useState(false);
+
   function processBookNowCta() {
     if (!userDetails) {
       Mixpanel.track("open_batch_checkout_login_with_phone", {
@@ -194,13 +201,16 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         phone: userDetails.phone,
       });
       MixpanelBookNowFooterInit(props, props.checkoutType);
-      displayRazorpay(props, userDetails);
+      displayRazorpay(props, userDetails, setLoading);
+      // displayCashfree(props, userDetails);
     }
   }
 
   useEffect(() => {
     setCheckoutSdkRedirectAtom(null);
   }, []);
+
+  if (loading) return <Loader />;
 
   return (
     <Flex
