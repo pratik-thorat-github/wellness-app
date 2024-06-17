@@ -9,17 +9,20 @@ import {
 import { navigate, useLocation } from "@reach/router";
 import { IBatch, IGymDetails } from "../../types/gyms";
 import colors from "../../constants/colours";
-import { ECheckoutType } from "../../types/checkout";
+import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { useAtom } from "jotai/react";
 import { checkoutSdkRedirectAtom, userDetailsAtom } from "../../atoms/atom";
 import IUser from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import { useEffect } from "react";
 
-export interface IBookNowFooter extends ICreateRzpOrder {
+export interface IBookNowFooter {
   batchDetails?: IBatch;
+  totalAmount: number;
   gymData?: IGymDetails;
   checkoutType: ECheckoutType;
+  comingFrom: EBookNowComingFromPage;
+  batchId: number;
 }
 
 function loadScript(src: string) {
@@ -36,12 +39,19 @@ function loadScript(src: string) {
   });
 }
 
+// function createOrderPayload(props: IBookNowFooter) {
+//   let payload: ICreateRzpOrder;
+//   payload.batchId = (props.batchDetails?.id ||
+//     props.batchDetails?.batchId) as number;
+// }
+
 async function displayRazorpay(
   props: IBookNowFooter,
   userDetails: IUser | null
 ) {
   const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
 
+  //@ts-ignore
   const orderResult = await createRzpOrder(props);
 
   if (!res) {
@@ -50,8 +60,8 @@ async function displayRazorpay(
   }
 
   let description = `Checkout for batch - ${props.batchId}`;
-  if (props.plusMembershipOpted)
-    description += `, and plus membership for onePass`;
+  // if (props.plusMembershipOpted)
+  //   description += `, and plus membership for onePass`;
 
   const options = {
     key: process.env.REACT_APP_RZP_CLIENT_KEY,
@@ -102,6 +112,7 @@ async function displayCashfree(
     return;
   }
 
+  //@ts-ignore
   const orderResult = await createCfOrder(props);
 
   const options = {
@@ -161,7 +172,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   let locationStates = useLocation().state;
   console.log(locationStates);
 
-  function checkIfLoggedIn() {
+  function processBookNowCta() {
     if (!userDetails) {
       Mixpanel.track("open_batch_checkout_login_with_phone", {
         batchId: props.batchId,
@@ -169,6 +180,14 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       setCheckoutSdkRedirectAtom(props);
 
       navigate("/login");
+    } else if (
+      props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_PAGE &&
+      !props.batchDetails?.guestsAllowed
+    ) {
+      Mixpanel.track("open_batch_checkout_booking", {
+        batchId: props.batchId,
+      });
+      navigate(`/checkout/batch/${props.batchId}/booking`);
     } else {
       Mixpanel.track("open_batch_checkout_pay_now", {
         batchId: props.batchId,
@@ -176,7 +195,6 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       });
       MixpanelBookNowFooterInit(props, props.checkoutType);
       displayRazorpay(props, userDetails);
-      // displayCashfree(props, userDetails);
     }
   }
 
@@ -220,7 +238,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           </Flex>
           <Flex
             onClick={() => {
-              checkIfLoggedIn();
+              processBookNowCta();
             }}
             flex={1}
             justify="center"
@@ -265,7 +283,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               alignItems: "center",
             }}
             onClick={() => {
-              checkIfLoggedIn();
+              processBookNowCta();
             }}
           >
             <span>Book Now</span>

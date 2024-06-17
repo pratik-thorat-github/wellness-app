@@ -8,7 +8,13 @@ export interface IGymCard {
   medias: [];
 }
 
+export enum EOfferType {
+  NONE = "NONE",
+  BATCH_WITH_GUESTS = "BATCH_WITH_GUESTS",
+}
+
 export interface IBatch {
+  id?: number;
   batchId: number;
   date: Date;
   duration: number;
@@ -25,6 +31,11 @@ export interface IBatch {
   moreInfo?: string;
   gymId: number;
   image?: string;
+
+  guestsAllowed?: boolean;
+  offerType?: EOfferType;
+  offerPercentage?: number;
+  minGuestsForOffer?: number;
 }
 
 export interface IGymDetails extends IGymCard {

@@ -16,6 +16,7 @@ import Profile from "./Pages/profile/Profle";
 import LandingPage from "./Pages/landing/Landing";
 import SchedulePage from "./Pages/checkout/schedule-page";
 import Activity from "./Pages/activity/Activity";
+import BatchCheckoutBooking from "./Pages/checkout/checkout";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ function App() {
         <Gym path="/gym/:gymId" />
         <SchedulePage path="/gym/:gymId/batch" />
         <BatchCheckout path="/checkout/batch/:batchId" />
+        <BatchCheckoutBooking path="/checkout/batch/:batchId/booking" />
         <PlusCheckout path="/checkout/plus" />
         <BatchPaymentSuccess path="/checkout/success" />
         <PlusPaymentSuccess path="/plus/success" />
