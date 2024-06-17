@@ -91,7 +91,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
     let [finalAmount, discount] = deductPercentage(
       baseAmount,
-      batchDetails?.offerPercentage || 10
+      batchDetails?.offerPercentage || 0
     );
 
     setTotalAmount(finalAmount);
