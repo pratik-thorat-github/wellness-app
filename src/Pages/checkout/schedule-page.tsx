@@ -121,6 +121,37 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     }
   }, [gym]);
 
+  const showDiscount=()=>{
+    return true 
+  }
+
+  const discountedPrice=(price:number)=>(
+    <span style={{
+      display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end'
+    }}>
+      <span style={{
+        color: '#828081',
+        fontSize:'8px',
+        fontWeight:'400',
+        textDecorationLine:'line-through'
+      }} >{price}</span>
+      <span style={{
+        color: '#05070B',
+        fontSize:'14px',
+        fontWeight:'400',
+        margin:'-4px 0px'
+      }} >{Rs}{price/2}</span>
+      <span style={{
+        color: '#008B4F',
+        fontSize:'12px',
+        fontWeight:'400'
+      }}>50% off</span>
+
+    </span>
+  )
+
   if (!gym?.batches) return <Loader />;
 
   function generateBatchTile(gym: IGymDetails, batches: IBatch[]) {
@@ -188,10 +219,14 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 ) : null}
               </Flex>
               <Flex flex={1}>
-                <span>
-                  {Rs}
-                  {batch.price}
-                </span>
+                {showDiscount() ? (
+                  discountedPrice(batch.price)
+                ) : (
+                  <span>
+                    {Rs}
+                    {batch.price}
+                  </span>
+                )}
                 <span style={{ marginLeft: "auto" }}>
                   <RightOutlined />
                 </span>

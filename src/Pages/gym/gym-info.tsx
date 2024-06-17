@@ -17,6 +17,7 @@ import {
 } from "../../utils/string-operation";
 import { formatTimeIntToAmPm } from "../../utils/date";
 import { Mixpanel } from "../../mixpanel/init";
+import { discountTxt } from "../../utils/offers";
 
 const maxChar = 250;
 
@@ -246,6 +247,11 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     </svg>
   );
 
+  const discountLine=()=>(
+    <div className="discountLine1">
+      {discountTxt}
+    </div>
+  )
   return (
     <>
       <div
@@ -425,9 +431,10 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         </div>
       </div>
       <div className="bookBtnWrap">
-        <span className="bookBtn" onClick={() => navigateToBatches("all")}>
+        {discountLine()}
+        <button className="bookBtn" onClick={() => navigateToBatches("all")}>
           View Schedule
-        </span>
+        </button>
       </div>
     </>
   );
