@@ -480,7 +480,7 @@ text-transform: capitalize;
     justify-content: center;
     background-color: transparent;
     position: absolute;
-    top: 60px;
+    top: 32px;
     z-index:1000;
 }
 
