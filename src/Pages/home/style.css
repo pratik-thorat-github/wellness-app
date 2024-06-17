@@ -432,6 +432,7 @@ text-transform: uppercase;
     position: fixed;
     width: 100%;
     overflow: hidden;
+    pointer-events: none;
 }
 
 .obImg{
@@ -448,13 +449,13 @@ text-transform: uppercase;
     justify-content: center;
     filter: blur(0px);
     backdrop-filter: blur(0px);
-    background: linear-gradient(0deg, #212121 10%, rgba(33, 33, 33, 0.00) 100%);
-    padding:24px 0px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.00) 0.01%, rgba(0, 0, 0, 0.59) 22.5%, #000 100%);    padding:24px 0px;
     align-items: center;
+    z-index:10000;
 }
 
 .obBtn{
-    border-radius: 10000px;
+border-radius: 12px;
 border: 1px solid #E1E1E1;
 display: flex;
 width: 80vw;
@@ -462,7 +463,6 @@ padding: 16px 8px;
 justify-content: center;
 align-items: center;
 gap: 8px;
-border-radius: 10000px;
 opacity: 0.8;
 background: linear-gradient(180deg, #212121 10%, #C0E4DB 100%);
 box-shadow: 2px 2px 14px 0px #FFF inset, 8px 8px 55px 0px rgba(123, 244, 252, 0.55);
@@ -473,7 +473,7 @@ font-style: normal;
 font-weight: 700;
 line-height: 135%; /* 27px */
 text-transform: capitalize;
-
+cursor: pointer;
 }
 
 .obacitivities{

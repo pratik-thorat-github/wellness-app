@@ -9,3 +9,5 @@ export function deductPercentage(
 
   return [finalAmount, discount];
 }
+
+export const discountTxt = "50% off on your first booking on ZenfitX";
