@@ -99,6 +99,7 @@ function getListOfCenters(
   };
 
   const discountCard = (price: number) => {
+    return null
     return (
       <div className="dCard">
         <div className="dPrice">₹{price / 2}</div>
@@ -150,14 +151,14 @@ function getListOfCenters(
             </div>
           </div>
 
-          {userDetails && (userDetails.noOfBookings as number) < 1 && (
+          {/* {userDetails && (userDetails.noOfBookings as number) < 1 && (
             <div className="discount">
               <div>
                 {discountIcon()}
                 <span className="dTxt">{discountTxt}</span>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     );

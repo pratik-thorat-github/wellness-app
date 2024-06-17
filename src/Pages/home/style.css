@@ -400,3 +400,142 @@ background: rgba(0, 0, 0, 0.75);
 backdrop-filter: blur(1.5px);
 margin:8px;
 }
+
+.obHead{
+    display: flex;
+width: 100%;
+padding: 12px 8px;
+justify-content: center;
+align-items: center;
+gap: 8px;
+background: #212121;
+color: #FFF;
+text-align: center;
+font-family: "Plus Jakarta Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 16.2px */
+letter-spacing: 3.36px;
+text-transform: uppercase;
+}
+
+.obWrap{
+    background: #fff;
+
+    overflow: hidden;
+}
+
+.obImgWrap{
+    height: 100vh;
+    background: linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);
+    position: fixed;
+    width: 100%;
+}
+
+.obImg{
+    width: 100%;
+    height: 100vh;
+}
+
+.exploreBtn{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    filter: blur(0px);
+    backdrop-filter: blur(0px);
+    background: linear-gradient(0deg, #212121 10%, rgba(33, 33, 33, 0.00) 100%);
+    padding:24px 0px;
+    align-items: center;
+}
+
+.obBtn{
+    border-radius: 10000px;
+border: 1px solid #E1E1E1;
+display: flex;
+width: 80vw;
+padding: 16px 8px;
+justify-content: center;
+align-items: center;
+gap: 8px;
+border-radius: 10000px;
+opacity: 0.8;
+background: linear-gradient(180deg, #212121 10%, #C0E4DB 100%);
+box-shadow: 2px 2px 14px 0px #FFF inset, 8px 8px 55px 0px rgba(123, 244, 252, 0.55);
+color: #FFF;
+font-family: "Plus Jakarta Sans";
+font-size: 20px;
+font-style: normal;
+font-weight: 700;
+line-height: 135%; /* 27px */
+text-transform: capitalize;
+
+}
+
+.obacitivities{
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+    position: absolute;
+    top: 60px;
+    z-index:1000;
+}
+
+.obActWrap{
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-left:14px
+}
+
+.obActWrap >div>span{
+font-family: "Plus Jakarta Sans";
+font-size: 36px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 48.6px */
+letter-spacing: 0.54px;
+opacity: 0.4;
+margin-right:8px;
+
+}
+
+.magic{
+}
+
+.obActWrap >div .bold{
+    color: #3A6362 !important;
+     font-size: 36px;
+     font-weight: 700;
+     line-height: 48.60px;
+     letter-spacing: 0.54px;
+     word-wrap: break-word;
+     opacity: 1;
+}
+
+.fh1{
+color: white;
+ font-size: 24px;
+ font-family: Plus Jakarta Sans;
+ font-weight: 400;
+ line-height: 32.40px;
+ letter-spacing: 0.36px;
+ word-wrap: break-word
+
+}
+.fh2{
+color: rgba(255, 255, 255, 0.65);
+ font-size: 16px;
+ font-family: Plus Jakarta Sans;
+ font-weight: 400;
+ line-height: 21.60px;
+ letter-spacing: 0.24px;
+ word-wrap: break-word
+
+}
