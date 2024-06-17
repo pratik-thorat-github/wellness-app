@@ -47,8 +47,7 @@ const acitivities = (slide:number) => (
     </div>
     <div>
     <span style={{color:'#D6AB98'}}>HIIT</span>
-    <span style={{color:'#989BD6'}}>SPIN</span>
-    <span style={{color:'#D69898'}} className={[4,10,16].includes(slide) ?'bold':''}>Strength</span>
+    <span style={{color:'#989BD6'}}>Strength</span>
     </div>
   </div>
 );
