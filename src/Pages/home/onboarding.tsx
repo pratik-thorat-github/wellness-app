@@ -96,6 +96,7 @@ const medias = images.map(i=>(
           interval={1200}
           onChange={(i)=>setSlide(i)}
           infiniteLoop
+          animationHandler="fade"
         >
           {medias}
         </Carousel>
