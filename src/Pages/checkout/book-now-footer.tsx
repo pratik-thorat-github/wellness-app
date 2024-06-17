@@ -7,7 +7,7 @@ import {
   createRzpOrder,
 } from "../../apis/payments/payments";
 import { navigate, useLocation } from "@reach/router";
-import { IBatch, IGymDetails } from "../../types/gyms";
+import { EOfferType, IBatch, IGymDetails } from "../../types/gyms";
 import colors from "../../constants/colours";
 import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { useAtom } from "jotai/react";
@@ -24,6 +24,7 @@ export interface IBookNowFooter {
   checkoutType: ECheckoutType;
   comingFrom: EBookNowComingFromPage;
   batchId: number;
+  totalGuests?: number;
 }
 
 function loadScript(src: string) {
@@ -40,11 +41,20 @@ function loadScript(src: string) {
   });
 }
 
-// function createOrderPayload(props: IBookNowFooter) {
-//   let payload: ICreateRzpOrder;
-//   payload.batchId = (props.batchDetails?.id ||
-//     props.batchDetails?.batchId) as number;
-// }
+function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
+  let payload: ICreateRzpOrder = {
+    batchId: (props.batchDetails?.id || props.batchDetails?.batchId) as number,
+    totalAmount: props.totalAmount,
+    userId: userDetails.id as number,
+    batchPrice: props.batchDetails?.price as number,
+
+    offerPercentage: props.batchDetails?.offerPercentage as number,
+    offerType: props.batchDetails?.offerType as EOfferType,
+    noOfGuests: props.totalGuests as number,
+  };
+
+  return payload;
+}
 
 async function displayRazorpay(
   props: IBookNowFooter,
@@ -54,8 +64,8 @@ async function displayRazorpay(
   setLoading(true);
   const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
 
-  //@ts-ignore
-  const orderResult = await createRzpOrder(props);
+  let payload = createOrderPayload(props, userDetails as IUser);
+  const orderResult = await createRzpOrder(payload);
 
   if (!res) {
     alert("Razorpay SDK failed to load. Are you online?");
@@ -117,8 +127,8 @@ async function displayCashfree(
     return;
   }
 
-  //@ts-ignore
-  const orderResult = await createCfOrder(props);
+  let payload = createOrderPayload(props, userDetails as IUser);
+  const orderResult = await createCfOrder(payload);
 
   const options = {
     paymentSessionId: orderResult.paymentSessionId,

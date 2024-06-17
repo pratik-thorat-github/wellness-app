@@ -27,8 +27,8 @@ interface IClassCheckout {}
 const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalSavings, setTotalSavings] = useState(0);
-  const [baseAmount, setBaseAmount] = useState(0);
-  const [noOfGuests, setNoOfGuests] = useState(1);
+  let [baseAmount, setBaseAmount] = useState(0);
+  let [noOfGuests, setNoOfGuests] = useState(1);
 
   const [batchDetails, setBatchDetails] = useState<IBatch>();
 
@@ -67,6 +67,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   useEffect(() => {
     if (batchDetails?.gymId) {
       setBaseAmount(batchDetails.price);
+      setTotalAmount(batchDetails.price);
       _getGymById(String(batchDetails.gymId));
 
       // offerStrip.current = "50% off on your 1st booking on ZenfitX";
@@ -85,14 +86,23 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   //   A function that adds totalAmount
 
   function addGuests(increment = true) {
-    if (increment) {
-      setBaseAmount(baseAmount + baseAmount);
-    }
+    let noOfGuestIncremented = increment ? noOfGuests + 1 : noOfGuests - 1;
+    noOfGuests = noOfGuests || 1;
+    let baseAmountAfterIncrement =
+      (batchDetails?.price as number) * noOfGuestIncremented;
 
-    let [finalAmount, discount] = deductPercentage(
-      baseAmount,
-      batchDetails?.offerPercentage || 0
-    );
+    setNoOfGuests(noOfGuestIncremented);
+    setBaseAmount(baseAmountAfterIncrement);
+
+    let [finalAmount, discount] = [baseAmountAfterIncrement, 0];
+    if (
+      batchDetails?.offerType == EOfferType.BATCH_WITH_GUESTS &&
+      noOfGuestIncremented >= (batchDetails?.minGuestsForOffer || 0)
+    )
+      [finalAmount, discount] = deductPercentage(
+        baseAmountAfterIncrement,
+        batchDetails?.offerPercentage || 0
+      );
 
     setTotalAmount(finalAmount);
     setTotalSavings(discount);
@@ -119,6 +129,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       <span> Base amount - {baseAmount} </span>
       <span> Discount - {totalSavings} </span>
       <span> Final Amount - {totalAmount} </span>
+      <span> No of guests - {noOfGuests} </span>
 
       <span>
         {" "}
@@ -143,6 +154,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
           checkoutType={ECheckoutType.BATCH}
           totalAmount={totalAmount || batchDetails.price}
           comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
+          totalGuests={noOfGuests}
         />
       </Flex>
     </Flex>

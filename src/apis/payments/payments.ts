@@ -9,9 +9,9 @@ export interface ICreateRzpOrder {
   plusMembershipOpted?: boolean;
   plusMembershipPrice?: number;
   plusMembershipDiscount?: number;
-  // offerPercentage: number;
-  // offerType: EOfferType;
-  // noOfGuests: number;
+  offerPercentage: number;
+  offerType: EOfferType;
+  noOfGuests: number;
 }
 
 export async function createRzpOrder(data: ICreateRzpOrder) {
