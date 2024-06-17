@@ -119,8 +119,10 @@ async function displayRazorpay(
 
 async function displayCashfree(
   props: IBookNowFooter,
-  userDetails: IUser | null
+  userDetails: IUser | null,
+  setLoading: (loading: boolean) => void
 ) {
+  setLoading(true);
   const res = await loadScript("https://sdk.cashfree.com/js/v3/cashfree.js");
   if (!res) {
     alert("CF SDK failed to load. Are you online?");
@@ -139,6 +141,8 @@ async function displayCashfree(
   const cashfree = Cashfree({
     mode: process.env.REACT_APP_CF_ENV,
   });
+
+  setLoading(false);
   cashfree.checkout(options).then((result: any) => {
     if (result.error) {
       // This will be true whenever user clicks on close icon inside the modal or any error happens during the payment
@@ -199,7 +203,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       navigate("/login");
     } else if (
       props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_PAGE &&
-      !props.batchDetails?.guestsAllowed
+      props.batchDetails?.guestsAllowed
     ) {
       Mixpanel.track("open_batch_checkout_booking", {
         batchId: props.batchId,
@@ -211,8 +215,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         phone: userDetails.phone,
       });
       MixpanelBookNowFooterInit(props, props.checkoutType);
-      displayRazorpay(props, userDetails, setLoading);
-      // displayCashfree(props, userDetails);
+      // displayRazorpay(props, userDetails, setLoading);
+      displayCashfree(props, userDetails, setLoading);
     }
   }
 
