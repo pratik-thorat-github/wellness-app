@@ -492,7 +492,7 @@ text-transform: capitalize;
     align-content: flex-start;
     gap: 8px;
     flex-wrap: wrap;
-    margin:0 24px
+    justify-content: center;
 }
 
 .obActWrap >div>span{
@@ -539,4 +539,8 @@ color: rgba(255, 255, 255, 0.65);
  letter-spacing: 0.24px;
  word-wrap: break-word
 
+}
+
+.slide{
+    overflow-y: hidden;
 }
