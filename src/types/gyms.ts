@@ -11,6 +11,7 @@ export interface IGymCard {
 export enum EOfferType {
   NONE = "NONE",
   BATCH_WITH_GUESTS = "BATCH_WITH_GUESTS",
+  PLATFORM = "PLATFORM",
 }
 
 export interface IBatch {
