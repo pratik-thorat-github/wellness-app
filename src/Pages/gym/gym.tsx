@@ -38,6 +38,10 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   });
 
   useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  useEffect(() => {
     _getGymById(gymId as string);
   }, [gymId]);
 

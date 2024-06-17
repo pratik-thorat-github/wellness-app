@@ -14,7 +14,7 @@ import Login from "./Pages/auth/login";
 import VerifyMagicLink from "./Pages/auth/verify";
 import Profile from "./Pages/profile/Profle";
 import LandingPage from "./Pages/landing/Landing";
-import Checkout from "./Pages/checkout/checkout";
+import SchedulePage from "./Pages/checkout/schedule-page";
 import Activity from "./Pages/activity/Activity";
 
 // Create a client
@@ -29,13 +29,13 @@ function App() {
       <Router>
         {/* <LandingPage path="/" /> */}
         <Home path="/" />
-        <Activity path="/:activity"/>
+        <Activity path="/:activity" />
         <Login path="/login" />
         <VerifyMagicLink path="/verify" />
 
         <Profile path="/profile" />
         <Gym path="/gym/:gymId" />
-        <Checkout path="/gym/:gymId/batch" />
+        <SchedulePage path="/gym/:gymId/batch" />
         <BatchCheckout path="/checkout/batch/:batchId" />
         <PlusCheckout path="/checkout/plus" />
         <BatchPaymentSuccess path="/checkout/success" />

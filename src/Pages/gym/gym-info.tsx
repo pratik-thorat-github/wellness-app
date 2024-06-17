@@ -18,7 +18,7 @@ import {
 import { formatTimeIntToAmPm } from "../../utils/date";
 import { Mixpanel } from "../../mixpanel/init";
 
-const maxChar = 150;
+const maxChar = 250;
 
 interface IGymInfo {
   gymData: IGymDetails;
@@ -384,7 +384,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             <div>{parser(description)}</div>
           )}
         </div>
-        {gymData.amenities.length && (
+        {gymData.amenities.length>0 && (
           <>
             {" "}
             <div className="gymPageheading">Amenities</div>

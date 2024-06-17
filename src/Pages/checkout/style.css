@@ -155,3 +155,9 @@ transform: translate(-20px,0px);
     height: 100%;
     padding-bottom: 130px;
 }
+
+.stickyWrap{
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+}

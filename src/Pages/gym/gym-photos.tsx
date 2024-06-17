@@ -98,7 +98,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
   if (gym?.medias?.length) {
     const medias = gym?.medias.map((p:{type:string,url:string}, ind) => {
       if(p.type==="VIDEO"){
-      return <ReactPlayer url={p.url} playing muted playsinline controls volume={1} width="100%" height={'180px'}  config={{
+      return <ReactPlayer className="player" url={p.url} playing muted playsinline controls volume={1} width="100%" height={'180px'}  config={{
         file: {
           attributes: {
             controlsList: "nofullscreen",

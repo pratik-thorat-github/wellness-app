@@ -42,7 +42,11 @@ interface IClassCheckout extends RouteComponentProps {}
 
 interface IClassCheckout {}
 
+<<<<<<< HEAD:src/Pages/checkout/checkout.tsx
 const Checkout: React.FC<IClassCheckout> = ({}) => {
+=======
+const SchedulePage: React.FC<IClassCheckout> = ({}) => {
+>>>>>>> staging:src/Pages/checkout/schedule-page.tsx
   const [selectedDate, setSelectedDate] = useState(
     formatDate(new Date()).isoDate
   );
@@ -372,6 +376,7 @@ const Checkout: React.FC<IClassCheckout> = ({}) => {
   }
 
   return (
+<<<<<<< HEAD:src/Pages/checkout/checkout.tsx
     <>
       <Banner />
 
@@ -417,10 +422,58 @@ const Checkout: React.FC<IClassCheckout> = ({}) => {
           {batches && batches.length
             ? generateBatchTile(gym, batches)
             : noBatchComponent()}
+=======
+    <div>
+      <div className="stickyWrap">
+        {" "}
+        <Banner />
+        <div className="dateTileWrap">
+          <div className="detailWrap">
+            <div className="backBtn" onClick={() => goToGymPage()}>
+              {backBtn()}
+            </div>
+            <div className="gymNames">{gym?.name}</div>
+            <div className="locationName">
+              <span>{locationIcon()}</span>
+              <span>{gym?.area}</span>
+            </div>
+          </div>
+          <div style={{ margin: "0px 8px 0px 24px" }}>
+            {!gym?.isOnlyWeekend && generateDateTiles()}
+          </div>
+        </div>
+      </div>
+
+      {!gym?.isOnlyWeekend && (
+        <Flex flex={1} style={{ paddingLeft: "24px" }}>
+          <ActivityTiles
+            activities={gym.activities}
+            activitySelected={selectedActivity}
+            onClickFunction={(activity: string) => {
+              Mixpanel.track("clicked_activity_pill_gym", {
+                gymId: gym.gymId,
+                activity,
+              });
+              setSelectedActivity(activity);
+              _getGymBatchesForDate({
+                id: gym.gymId,
+                date: selectedDate,
+                activity: activity,
+              });
+            }}
+            reposition
+          />
+>>>>>>> staging:src/Pages/checkout/schedule-page.tsx
         </Flex>
+      )}
+
+      <Flex flex={3} style={{ marginTop: "10px" }}>
+        {batches && batches.length
+          ? generateBatchTile(gym, batches)
+          : noBatchComponent()}
       </Flex>
-    </>
+    </div>
   );
 };
 
-export default Checkout;
+export default SchedulePage;
