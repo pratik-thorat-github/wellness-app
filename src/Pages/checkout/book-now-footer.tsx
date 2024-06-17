@@ -16,6 +16,7 @@ import IUser from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
+import { discountTxt } from "../../utils/offers";
 
 export interface IBookNowFooter {
   batchDetails?: IBatch;
@@ -226,7 +227,19 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
 
   if (loading) return <Loader />;
 
+
+  const showDiscount=()=>{
+    return userDetails && userDetails.noOfBookings<1;
+  }
+
+  const discountLine=()=>(
+    <div className="discountLine">
+      {discountTxt}
+    </div>
+  )
+
   return (
+    <>
     <Flex
       flex={1}
       justify="stretch"
@@ -238,15 +251,17 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         borderTopWidth: "1px",
         paddingTop: "12px",
         paddingBottom: "12px",
-        paddingRight: "24px",
-        paddingLeft: "24px",
         position: "fixed",
         bottom: 0,
-        width: "90%",
+        width: "100%",
       }}
     >
+      {showDiscount() ? discountLine():null} 
       {!userDetails ? (
-        <Flex flex={1} vertical>
+        <Flex flex={1} vertical style={{
+          paddingRight: "24px",
+          paddingLeft: "24px",
+        }}>
           <Flex flex={1} style={{ fontWeight: "bolder", fontSize: "16px" }}>
             Almost There
           </Flex>
@@ -287,6 +302,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
             alignItems: "center",
             justifyContent: "space-between",
             width: "100%",
+            paddingRight: "24px",
+            paddingLeft: "24px",
           }}
         >
           <Flex flex={2} vertical justify="center" align="left">
@@ -315,6 +332,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         </div>
       )}
     </Flex>
+    </>
   );
 };
 
