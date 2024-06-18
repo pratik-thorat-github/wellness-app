@@ -216,8 +216,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         phone: userDetails.phone,
       });
       MixpanelBookNowFooterInit(props, props.checkoutType);
-      // displayRazorpay(props, userDetails, setLoading);
-      displayCashfree(props, userDetails, setLoading);
+      displayRazorpay(props, userDetails, setLoading);
+      // displayCashfree(props, userDetails, setLoading);
     }
   }
 
@@ -227,111 +227,110 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
 
   if (loading) return <Loader />;
 
+  const showDiscount = () => {
+    return userDetails && userDetails.noOfBookings < 1;
+  };
 
-  const showDiscount=()=>{
-    return userDetails && userDetails.noOfBookings<1;
-  }
-
-  const discountLine=()=>(
-    <div className="discountLine">
-      {discountTxt}
-    </div>
-  )
+  const discountLine = () => <div className="discountLine">{discountTxt}</div>;
 
   return (
     <>
-    <Flex
-      flex={1}
-      justify="stretch"
-      style={{
-        // maxHeight: "18vh",
-        backgroundColor: "white",
-        borderTopStyle: "solid",
-        borderTopColor: colors.border,
-        borderTopWidth: "1px",
-        paddingTop: "12px",
-        paddingBottom: "12px",
-        position: "fixed",
-        bottom: 0,
-        width: "100%",
-      }}
-    >
-      {showDiscount() ? discountLine():null} 
-      {!userDetails ? (
-        <Flex flex={1} vertical style={{
-          paddingRight: "24px",
-          paddingLeft: "24px",
-        }}>
-          <Flex flex={1} style={{ fontWeight: "bolder", fontSize: "16px" }}>
-            Almost There
-          </Flex>
+      <Flex
+        flex={1}
+        justify="stretch"
+        style={{
+          // maxHeight: "18vh",
+          backgroundColor: "white",
+          borderTopStyle: "solid",
+          borderTopColor: colors.border,
+          borderTopWidth: "1px",
+          paddingTop: "12px",
+          paddingBottom: "12px",
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+        }}
+      >
+        {showDiscount() ? discountLine() : null}
+        {!userDetails ? (
           <Flex
             flex={1}
+            vertical
             style={{
-              fontSize: "12px",
-              marginTop: "4px",
-              color: colors.secondary,
+              paddingRight: "24px",
+              paddingLeft: "24px",
             }}
           >
-            Login quickly to finish the class booking
+            <Flex flex={1} style={{ fontWeight: "bolder", fontSize: "16px" }}>
+              Almost There
+            </Flex>
+            <Flex
+              flex={1}
+              style={{
+                fontSize: "12px",
+                marginTop: "4px",
+                color: colors.secondary,
+              }}
+            >
+              Login quickly to finish the class booking
+            </Flex>
+            <Flex
+              onClick={() => {
+                processBookNowCta();
+              }}
+              flex={1}
+              justify="center"
+              align="center"
+              style={{
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "16px",
+                backgroundColor: "#05070B",
+                borderRadius: "10px",
+                marginTop: "16px",
+                padding: "16px",
+              }}
+            >
+              Proceed with Phone Number
+            </Flex>
           </Flex>
-          <Flex
-            onClick={() => {
-              processBookNowCta();
-            }}
-            flex={1}
-            justify="center"
-            align="center"
-            style={{
-              color: "white",
-              fontWeight: "bold",
-              fontSize: "16px",
-              backgroundColor: "#05070B",
-              borderRadius: "10px",
-              marginTop: "16px",
-              padding: "16px",
-            }}
-          >
-            Proceed with Phone Number
-          </Flex>
-        </Flex>
-      ) : (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-            paddingRight: "24px",
-            paddingLeft: "24px",
-          }}
-        >
-          <Flex flex={2} vertical justify="center" align="left">
-            <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-              {Rs}
-              {props.totalAmount}
-            </span>
-          </Flex>
+        ) : (
           <div
             style={{
-              color: "white",
-              fontWeight: "700",
-              fontSize: "16px",
-              backgroundColor: "#05070B",
-              borderRadius: "8px",
-              padding: "12px 24px",
               display: "flex",
               alignItems: "center",
-            }}
-            onClick={() => {
-              processBookNowCta();
+              justifyContent: "space-between",
+              width: "100%",
+              paddingRight: "24px",
+              paddingLeft: "24px",
             }}
           >
-            <span>Book Now</span>
+            <Flex flex={2} vertical justify="center" align="left">
+              <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+                {Rs}
+                {props.totalAmount}
+              </span>
+            </Flex>
+            <div
+              style={{
+                color: "white",
+                fontWeight: "700",
+                fontSize: "16px",
+                backgroundColor: "#05070B",
+                borderRadius: "8px",
+                padding: "12px 24px",
+                display: "flex",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                processBookNowCta();
+              }}
+            >
+              <span>Book Now</span>
+            </div>
           </div>
-        </div>
-      )}
-    </Flex>
+        )}
+      </Flex>
     </>
   );
 };
