@@ -82,7 +82,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   }, [batchDetails]);
 
   useEffect(()=>{
-    if(!userDetails || (userDetails && userDetails.noOfBookings<1)){
+    if((!userDetails || (userDetails && userDetails.noOfBookings<1)) && batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS){
       const [newTotalAmount, discount] = deductPercentage(
         batchDetails?.price || 0,
         50
