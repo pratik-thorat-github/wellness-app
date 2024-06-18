@@ -428,10 +428,10 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               {backBtn()}
             </div>
             <div className="gymNames">{gym?.name}</div>
-            <div className="locationName">
+            {gym?.area && <div className="locationName">
               <span>{locationIcon()}</span>
               <span>{gym?.area}</span>
-            </div>
+            </div>}
           </div>
           <div style={{ margin: "0px 8px 0px 24px" }}>
             {!gym?.isOnlyWeekend && generateDateTiles()}

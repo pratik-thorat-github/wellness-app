@@ -26,6 +26,7 @@ export interface IBookNowFooter {
   comingFrom: EBookNowComingFromPage;
   batchId: number;
   totalGuests?: number;
+  forceBookNowCta?:boolean
 }
 
 function loadScript(src: string) {
@@ -231,6 +232,14 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     return userDetails && userDetails.noOfBookings < 1;
   };
 
+
+  const showCTA = () => {
+    if (props.forceBookNowCta) return false;
+    else {
+      return !userDetails;
+    }
+  };
+
   const discountLine = () => <div className="discountLine">{discountTxt}</div>;
 
   return (
@@ -252,7 +261,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         }}
       >
         {showDiscount() ? discountLine() : null}
-        {!userDetails ? (
+        {showCTA() ? (
           <Flex
             flex={1}
             vertical

@@ -371,6 +371,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         batchId={Number(batchId)}
         totalAmount={batchDetails?.price as number}
         comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
+        forceBookNowCta={true}
       />
     </Flex>
   );
