@@ -236,7 +236,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   if (loading) return <Loader />;
 
   const showDiscount = () => {
-    return userDetails && userDetails.noOfBookings < 1;
+    return !userDetails || (userDetails && userDetails.noOfBookings < 1);
   };
 
 

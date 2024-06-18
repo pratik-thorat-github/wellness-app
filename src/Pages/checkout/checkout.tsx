@@ -76,12 +76,12 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
         batchDetails.offerPercentage
       )
         offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people`;
-      else if (userDetails && userDetails.noOfBookings < 1)
+      else if (!userDetails || (userDetails && userDetails.noOfBookings < 1))
         offerStrip.current = "50% off on your 1st booking on ZenfitX";
     }
   }, [batchDetails]);
 
-  if (!batchDetails || !gym) return <Loader />;
+  if  (!gym) return <Loader />;
 
   //   A function that adds totalAmount
 
@@ -259,25 +259,25 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
         <div className="backBtn2">{backBtn()}</div>
         <div className="checkoutDetail">
           <span className="actImg">
-            <img src={batchDetails.image} width="90px" height="90px" />
+            <img src={batchDetails?.image} width="90px" height="90px" />
           </span>
           <span className="actDetail">
             <div className="actName">
-              {batchDetails.activityName}
-              {batchDetails.trainer ? ` with ${batchDetails.trainer}` : null}
+              {batchDetails?.activityName}
+              {batchDetails?.trainer ? ` with ${batchDetails.trainer}` : null}
             </div>
             <div className="actGym"> {gym.name}</div>
             <div className="actLoc">{gym.area}</div>
             <div className="actTime">
               {" "}
-              {formatDate(batchDetails.date)["date suffix"]} &bull;{" "}
-              {formatTimeIntToAmPm(batchDetails.startTime)} &bull;{" "}
-              {batchDetails.DurationMin} min
+              {batchDetails?.date && formatDate(batchDetails?.date)["date suffix"]} &bull;{" "}
+              {batchDetails?.startTime  && formatTimeIntToAmPm(batchDetails?.startTime)} &bull;{" "}
+              {batchDetails?.DurationMin} min
             </div>
           </span>
         </div>
         <div className="actLine"></div>
-        {batchDetails.guestsAllowed && (
+        {batchDetails?.guestsAllowed && (
           <div className="guestCount flexy">
             <span className="guestIcon">
               {guestIcon()} &nbsp;Guest{noOfGuests > 1 && "s"}
@@ -289,13 +289,13 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
             </span>
           </div>
         )}
-        {batchDetails.guestsAllowed && <div className="actLine"></div>}
-        {!batchDetails.guestsAllowed && (
+        {batchDetails?.guestsAllowed && <div className="actLine"></div>}
+        {!batchDetails?.guestsAllowed && (
           <div className="priceArea">
             <div className="priceHead">Total</div>
             <div className="flexy">
               <span className="checkDsc">Session price</span>
-              <span className="checkAmt">₹{batchDetails.price}</span>
+              <span className="checkAmt">₹{batchDetails?.price}</span>
             </div>
             {totalSavings>0 &&<div className="flexy">
                <span className="saveDsc">Saving ₹{totalSavings}</span>
@@ -303,7 +303,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
             </div>}
           </div>
         )}
-        {batchDetails.guestsAllowed && <div className="guestArea">
+        {batchDetails?.guestsAllowed && <div className="guestArea">
           <div className="priceHead">Total</div>
           <span className="flexy">
             <span className="checkDsc">
@@ -330,7 +330,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
           gymData={gym}
           batchId={Number(batchId)}
           checkoutType={ECheckoutType.BATCH}
-          totalAmount={totalAmount || batchDetails.price}
+          totalAmount={totalAmount || batchDetails?.price || 0}
           comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
           totalGuests={noOfGuests}
         />
