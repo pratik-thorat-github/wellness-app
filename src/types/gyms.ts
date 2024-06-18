@@ -4,8 +4,10 @@ export interface IGymCard {
   name: string;
   photos: string[];
   activities: string[];
-  minPrice?: number;
-  medias: [];
+  minPrice: number;
+  medias: string[];
+  offerType: EOfferType;
+  isExclusive: boolean;
 }
 
 export enum EOfferType {
@@ -39,7 +41,7 @@ export interface IBatch {
   minGuestsForOffer?: number;
 }
 
-export interface IGymDetails extends IGymCard {
+export interface IGymDetails extends Omit<IGymCard, "medias"> {
   description: string;
   batches: IBatch[];
   lat: number;
@@ -53,4 +55,5 @@ export interface IGymDetails extends IGymCard {
   isExclusive: boolean;
   instaLink?: string;
   isOnlyWeekend: boolean;
+  medias: [{ type: string; url: string }];
 }

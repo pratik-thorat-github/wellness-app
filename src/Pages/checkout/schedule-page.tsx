@@ -36,6 +36,7 @@ import { getGymById } from "../../apis/gym/activities";
 import Loader from "../../components/Loader";
 import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
+import { showDiscountText } from "../../utils/offers";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -55,6 +56,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const gymId = window.location.pathname.split("/")[2] || "";
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
+  const [userDetails] = useAtom(userDetailsAtom);
 
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");
@@ -121,36 +123,46 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     }
   }, [gym]);
 
-  const showDiscount=()=>{
-    return true 
-  }
-
-  const discountedPrice=(price:number)=>(
-    <span style={{
-      display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end'
-    }}>
-      <span style={{
-        color: '#828081',
-        fontSize:'8px',
-        fontWeight:'400',
-        textDecorationLine:'line-through'
-      }} >{price}</span>
-      <span style={{
-        color: '#05070B',
-        fontSize:'14px',
-        fontWeight:'400',
-        margin:'-4px 0px'
-      }} >{Rs}{price/2}</span>
-      <span style={{
-        color: '#008B4F',
-        fontSize:'12px',
-        fontWeight:'400'
-      }}>50% off</span>
-
+  const discountedPrice = (price: number) => (
+    <span
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-end",
+      }}
+    >
+      <span
+        style={{
+          color: "#828081",
+          fontSize: "8px",
+          fontWeight: "400",
+          textDecorationLine: "line-through",
+        }}
+      >
+        {price}
+      </span>
+      <span
+        style={{
+          color: "#05070B",
+          fontSize: "14px",
+          fontWeight: "400",
+          margin: "-4px 0px",
+        }}
+      >
+        {Rs}
+        {Math.floor(price / 2)}
+      </span>
+      <span
+        style={{
+          color: "#008B4F",
+          fontSize: "12px",
+          fontWeight: "400",
+        }}
+      >
+        50% off
+      </span>
     </span>
-  )
+  );
 
   if (!gym?.batches) return <Loader />;
 
@@ -219,7 +231,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 ) : null}
               </Flex>
               <Flex flex={1}>
-                {showDiscount() ? (
+                {showDiscountText(gym, userDetails) ? (
                   discountedPrice(batch.price)
                 ) : (
                   <span>

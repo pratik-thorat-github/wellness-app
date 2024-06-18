@@ -17,7 +17,9 @@ import {
 } from "../../utils/string-operation";
 import { formatTimeIntToAmPm } from "../../utils/date";
 import { Mixpanel } from "../../mixpanel/init";
-import { discountTxt } from "../../utils/offers";
+import { discountTxt, showDiscountText } from "../../utils/offers";
+import { useAtom } from "jotai";
+import { userDetailsAtom } from "../../atoms/atom";
 
 const maxChar = 250;
 
@@ -32,7 +34,9 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   let shortDescription = useRef(description.substring(0, maxChar));
   shortDescription.current.replace(/<br>/, "");
 
-  const params = new URLSearchParams(window.location.search);
+  const [userDetails] = useAtom(userDetailsAtom);
+
+  let showDiscount = showDiscountText(gymData, userDetails);
 
   const [showTimeOptions, setShowTimeOptions] = useState<Boolean>(false);
 
@@ -247,11 +251,11 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     </svg>
   );
 
-  const discountLine=()=>(
-    <div className="discountLine1">
-      {discountTxt}
-    </div>
-  )
+  const discountLine = () => {
+    return showDiscount ? (
+      <div className="discountLine1">{discountTxt}</div>
+    ) : null;
+  };
   return (
     <>
       <div
@@ -390,7 +394,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             <div>{parser(description)}</div>
           )}
         </div>
-        {gymData.amenities.length>0 && (
+        {gymData.amenities.length > 0 && (
           <>
             {" "}
             <div className="gymPageheading">Amenities</div>
