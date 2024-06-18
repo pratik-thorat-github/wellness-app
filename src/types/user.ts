@@ -16,6 +16,7 @@ interface IUser {
   addressLine1?: string;
   addressLine2?: string;
   noOfBookings:number;
+  offerType?:string;
 }
 
 export interface IBookings {

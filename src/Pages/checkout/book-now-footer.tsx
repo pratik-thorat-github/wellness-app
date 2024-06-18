@@ -236,6 +236,9 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   if (loading) return <Loader />;
 
   const showDiscount = () => {
+    if(userDetails?.offerType ==='BATCH_WITH_GUESTS'){
+      return false
+    }
     return !userDetails || (userDetails && userDetails.noOfBookings < 1);
   };
 
@@ -247,7 +250,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     }
   };
 
-  const discountLine = () => <div className="discountLine">{discountTxt}pp</div>;
+  const discountLine = () => <div className="discountLine">{discountTxt}</div>;
 
   return (
     <>
