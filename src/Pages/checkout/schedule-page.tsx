@@ -215,9 +215,14 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               }}
             >
               <Flex flex={2} vertical>
-                <Flex flex={1} style={{ fontWeight: "bold" }}>
-                  {batch.activityName}
-                </Flex>
+                <div style={{
+                  display:'flex',flexDirection:'column'
+                }}>
+                  <span>{formatDate(batch.date)['date suffix']}</span>
+                  <span  style={{ fontWeight: "bold" }}>{batch.activityName}</span>
+                  <span>{batch.venue}</span>
+
+                </div>
                 {batch.trainer ? (
                   <Flex flex={1}>By {batch.trainer}</Flex>
                 ) : null}
