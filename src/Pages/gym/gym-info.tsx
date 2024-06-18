@@ -269,7 +269,18 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           </div>
           <div className="gymName">{gymData.name}</div>
           <div style={{ marginBottom: "16px" }}>
-            <span className="price">₹{gymData.minPrice} onwards</span>
+            {showDiscount ? (
+              <span>
+                <span className="slashed-price">
+                  {" "}
+                  ₹{Math.floor(gymData.minPrice / 2)}{" "}
+                </span>
+                <span className="price"> ₹{gymData.minPrice} onwards</span>
+              </span>
+            ) : (
+              <span className="price">₹{gymData.minPrice} onwards</span>
+            )}
+
             <span style={{ margin: "0px 4px" }}>&bull;</span>
             {gymData.googleRating && (
               <span className="gRating">

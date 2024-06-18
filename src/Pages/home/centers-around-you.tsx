@@ -117,12 +117,19 @@ function getListOfCenters(
     );
   };
 
-  const discountCard = (price: number) => {
-    return null;
-    return (
+  const priceCard = (price: number, showDiscount: boolean) => {
+    return showDiscount ? (
       <div className="dCard">
-        <div className="dPrice">₹{price / 2}</div>
+        <div className="dPrice">₹{Math.floor(price / 2)}</div>
         <div className="sPrice slash">₹{price}</div>
+        <div className="sPrice">onwards</div>
+      </div>
+    ) : (
+      <div className="dCard">
+        <div className="dPrice">
+          {Rs}
+          {price}
+        </div>
         <div className="sPrice">onwards</div>
       </div>
     );
@@ -157,7 +164,7 @@ function getListOfCenters(
         >
           <div className="activityDetail">
             <div className={name.length > 25 ? "nameInc" : "name"}>
-              <span>{name}</span> {discountCard(minPrice)}
+              <span>{name}</span> {priceCard(minPrice, showDiscount)}
             </div>
             <div className="activity">
               {concatAndUpperCaseActivities(activities.slice(0, 8))}
