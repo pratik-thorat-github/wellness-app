@@ -271,11 +271,11 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           <div style={{ marginBottom: "16px" }}>
             {showDiscount ? (
               <span>
-                <span className="slashed-price">
+                  <span className="slashed-price"> ₹{gymData.minPrice} </span>
+                <span className="price">
                   {" "}
-                  ₹{Math.floor(gymData.minPrice / 2)}{" "}
+                  ₹{Math.floor(gymData.minPrice / 2)}&nbsp;onwards
                 </span>
-                <span className="price"> ₹{gymData.minPrice} onwards</span>
               </span>
             ) : (
               <span className="price">₹{gymData.minPrice} onwards</span>

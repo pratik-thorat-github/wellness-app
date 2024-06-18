@@ -66,7 +66,7 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
     setUserDetailsAtom(res.user);
     mixpanelEvents(res.user);
 
-    navigate(`/checkout/batch/${checkoutSdkRedirectProps?.batchId}`, {
+    navigate(`/checkout/batch/${checkoutSdkRedirectProps?.batchId}/booking`, {
       replace: true,
       state: { ...checkoutSdkRedirectProps },
     });

@@ -16,7 +16,7 @@ import IUser from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
-import { discountTxt } from "../../utils/offers";
+import { deductPercentage, discountTxt } from "../../utils/offers";
 
 export interface IBookNowFooter {
   batchDetails?: IBatch;
@@ -188,6 +188,8 @@ function MixpanelBookNowFooterInit(
 
 const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [userDetails] = useAtom(userDetailsAtom);
+  const [showDiscount,setShowDiscount]=useState(false)
+  const [discountedAmount,setDiscountedAmount]=useState(props.totalAmount)
   const [_, setCheckoutSdkRedirectAtom] = useAtom(checkoutSdkRedirectAtom);
 
   let locationStates = useLocation().state;
@@ -233,16 +235,41 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     setCheckoutSdkRedirectAtom(null);
   }, []);
 
-  if (loading) return <Loader />;
-
-  const showDiscount = () => {
-    if(userDetails?.offerType ==='BATCH_WITH_GUESTS'){
-      return false
+  useEffect(() => {
+    if(props.batchDetails){
+    if (!userDetails && props.batchDetails?.offerType !== "BATCH_WITH_GUESTS") {
+      setShowDiscount(true);
+    } else {
+      if (
+        userDetails &&
+        userDetails.noOfBookings < 1 &&
+        props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
+      ) {
+        setShowDiscount(true);
+      }
+      if (props.batchDetails?.offerType === "BATCH_WITH_GUESTS") {
+        setShowDiscount(false);
+      }
     }
-    return !userDetails || (userDetails && userDetails.noOfBookings < 1);
-  };
+  }
+  if (showCTA()) {
+    setShowDiscount(false);
+  }
+  }, [props.batchDetails]);
 
+  useEffect(()=>{
+    if(showDiscount){
 
+      const [newTotalAmount] = deductPercentage(
+        props.batchDetails?.price || 0,
+        50
+      );
+      setDiscountedAmount(newTotalAmount)
+    }
+
+  },[showDiscount])
+
+  if (loading) return <Loader />;
   const showCTA = () => {
     if (props.forceBookNowCta) return false;
     else {
@@ -270,7 +297,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           width: "100%",
         }}
       >
-        {showDiscount() && !showCTA() ? discountLine() : null}
+        {showDiscount ? discountLine() : null}
         {showCTA() ? (
           <Flex
             flex={1}
@@ -324,10 +351,12 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               paddingLeft: "24px",
             }}
           >
-            <Flex flex={2} vertical justify="center" align="left">
-              <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+            <Flex flex={2} vertical justify="center" align="left" className={discountedAmount?'discountedAmountWrap':''}>
+            <span >{Rs}{discountedAmount}</span>&nbsp;&nbsp;
+              <span style={{ fontWeight: "bold", fontSize: "20px",  textDecorationLine: showDiscount?'line-through':'',marginBottom: showDiscount?'3px':''}} className={discountedAmount?'discountedAmount':''}>
                 {Rs}
                 {props.totalAmount}
+               
               </span>
             </Flex>
             <div
