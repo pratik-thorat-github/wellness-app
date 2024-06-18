@@ -281,8 +281,8 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
               <span className="price">₹{gymData.minPrice} onwards</span>
             )}
 
-            <span style={{ margin: "0px 4px" }}>&bull;</span>
-            {gymData.googleRating && (
+{gymData.googleRating && gymData.googleRating>0 && <><span style={{ margin: "0px 4px" }}>&bull;</span>
+             
               <span className="gRating">
                 <span className="gIcon">{Gicon()}</span>
                 <span style={{ marginLeft: "16px", marginRight: "4px" }}>
@@ -292,7 +292,8 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
                 <span>{starIcon()}&nbsp;</span>
                 <span>({gymData.googleReviews})</span>
               </span>
-            )}
+              </>
+            }
           </div>
           {gymData.area && <>
           <div className="line"></div>
