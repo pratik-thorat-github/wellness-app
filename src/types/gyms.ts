@@ -4,11 +4,20 @@ export interface IGymCard {
   name: string;
   photos: string[];
   activities: string[];
-  minPrice?: number;
-  medias: [];
+  minPrice: number;
+  medias: string[];
+  offerType: EOfferType;
+  isExclusive: boolean;
+}
+
+export enum EOfferType {
+  NONE = "NONE",
+  BATCH_WITH_GUESTS = "BATCH_WITH_GUESTS",
+  PLATFORM = "PLATFORM",
 }
 
 export interface IBatch {
+  id?: number;
   batchId: number;
   date: Date;
   duration: number;
@@ -25,9 +34,14 @@ export interface IBatch {
   moreInfo?: string;
   gymId: number;
   image?: string;
+
+  guestsAllowed?: boolean;
+  offerType?: EOfferType;
+  offerPercentage?: number;
+  minGuestsForOffer?: number;
 }
 
-export interface IGymDetails extends IGymCard {
+export interface IGymDetails extends Omit<IGymCard, "medias"> {
   description: string;
   batches: IBatch[];
   lat: number;
@@ -41,4 +55,5 @@ export interface IGymDetails extends IGymCard {
   isExclusive: boolean;
   instaLink?: string;
   isOnlyWeekend: boolean;
+  medias: [{ type: string; url: string }];
 }

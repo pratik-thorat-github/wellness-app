@@ -46,41 +46,39 @@ const BatchPaymentSuccess: React.FC<IPaymentSuccess> = ({
   }, []);
 
   return (
-    <Flex
-      flex={1}
-      vertical
-      style={{ minHeight: "88vh", padding: "16px" }}
+    <div
+      style={{ display:"flex", flexDirection:'column', height:'100vh',justifyContent:'center',  padding: "24px" }}
       // justify="center"
       // align="center"
     >
-      <Flex flex={1} justify="center" align="center">
+      <div style={{display:"flex", justifyContent:'center', alignItems:'center'}}>
         <BatchInfoOnCheckout
           gymData={gymData as IGymDetails}
           batchDetails={batchDetails as IBatch}
           logoTsx={logoTsx}
         />
-      </Flex>
-      <Flex vertical flex={1} justify="flex-end" align="center">
-        <Flex
+      </div>
+      <div style={{display:"flex", justifyContent:'center', alignItems:'center',flexDirection:'column',gap:'100px'}}>
+        <div
           style={{
             color: colors.secondary,
-            marginBottom: "24px",
+            margin: "16px 0px",
             fontSize: "12px",
+            textAlign:'center'
           }}
         >
-          You can find your booking in the profile section, please show the
-          booking ID at the center.
-        </Flex>
-        <Flex
-          style={{ cursor: "pointer", fontWeight: "bold" }}
+         You can find your booking in the profile section, please show the booking ID at the venue.
+        </div>
+        <div
+          style={{ cursor: "pointer", fontSize:'12px',fontWeight:400,textAlign:"center" }}
           onClick={() => {
             navigate("/");
           }}
         >
-          Redirect to home ...
-        </Flex>
-      </Flex>
-    </Flex>
+          Redirect to home screen ...
+        </div>
+      </div>
+    </div>
   );
 };
 

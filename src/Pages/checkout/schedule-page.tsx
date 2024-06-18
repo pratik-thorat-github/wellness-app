@@ -2,7 +2,6 @@ import { RouteComponentProps, navigate, useLocation } from "@reach/router";
 import BatchInfoOnCheckout from "./batch-info";
 import BatchPrice from "./batch-price";
 import CheckoutPlusPrice from "./batch-checkout-plus-price";
-import BookNowFooter from "./book-now-footer";
 import { useEffect, useRef } from "react";
 import { ECheckoutType, ESelectedPlan } from "../../types/checkout";
 import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
@@ -37,6 +36,7 @@ import { getGymById } from "../../apis/gym/activities";
 import Loader from "../../components/Loader";
 import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
+import { showDiscountText } from "../../utils/offers";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -56,6 +56,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const gymId = window.location.pathname.split("/")[2] || "";
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
+  const [userDetails] = useAtom(userDetailsAtom);
 
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");
@@ -121,6 +122,47 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       }
     }
   }, [gym]);
+
+  const discountedPrice = (price: number) => (
+    <span
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-end",
+      }}
+    >
+      <span
+        style={{
+          color: "#828081",
+          fontSize: "8px",
+          fontWeight: "400",
+          textDecorationLine: "line-through",
+        }}
+      >
+        {price}
+      </span>
+      <span
+        style={{
+          color: "#05070B",
+          fontSize: "14px",
+          fontWeight: "400",
+          margin: "-4px 0px",
+        }}
+      >
+        {Rs}
+        {Math.floor(price / 2)}
+      </span>
+      <span
+        style={{
+          color: "#008B4F",
+          fontSize: "12px",
+          fontWeight: "400",
+        }}
+      >
+        50% off
+      </span>
+    </span>
+  );
 
   if (!gym?.batches) return <Loader />;
 
@@ -189,10 +231,14 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 ) : null}
               </Flex>
               <Flex flex={1}>
-                <span>
-                  {Rs}
-                  {batch.price}
-                </span>
+                {showDiscountText(gym, userDetails) ? (
+                  discountedPrice(batch.price)
+                ) : (
+                  <span>
+                    {Rs}
+                    {batch.price}
+                  </span>
+                )}
                 <span style={{ marginLeft: "auto" }}>
                   <RightOutlined />
                 </span>
@@ -382,10 +428,10 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               {backBtn()}
             </div>
             <div className="gymNames">{gym?.name}</div>
-            <div className="locationName">
+            {gym?.area && <div className="locationName">
               <span>{locationIcon()}</span>
               <span>{gym?.area}</span>
-            </div>
+            </div>}
           </div>
           <div style={{ margin: "0px 8px 0px 24px" }}>
             {!gym?.isOnlyWeekend && generateDateTiles()}

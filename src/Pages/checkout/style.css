@@ -159,5 +159,193 @@ transform: translate(-20px,0px);
 .stickyWrap{
     position: sticky;
     top: 0px;
-    z-index: 100;
+    z-index: 10;
+}
+
+.checkWrapper{
+    padding:24px;
+}
+.backBtn2{
+    text-align: start;
+}
+
+.checkoutDetail{
+    padding:8px;
+    display: flex;
+    gap:16px;
+    align-items: flex-start;
+}
+
+.actImg >img{
+    border-radius: 12px;    
+}
+
+.actDetail{
+
+}
+
+.actName{
+    color: #212121;
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: 135%; /* 21.6px */
+letter-spacing: 0.24px;
+}
+
+.actGym , .actLoc{
+    color: rgba(33, 33, 33, 0.75);
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 16.2px */
+letter-spacing: 0.18px;
+}
+
+.actTime{
+    color: rgba(33, 33, 33, 0.75);
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 18.9px */
+letter-spacing: 0.21px;
+}
+
+.actLine{
+    height: 1px;
+    background: #E9E9E9;
+    margin:12px 0px;
+}
+
+.priceHead{
+    color: #212121;
+font-family: "Plus Jakarta Sans";
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: 135%; /* 21.6px */
+letter-spacing: 0.24px;
+}
+
+.checkDsc{
+    color: var(--Text-Primary, #05070B);
+font-family: "Plus Jakarta Sans";
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 18.9px */
+letter-spacing: 0.21px;
+}
+
+.checkAmt{
+    color: var(--Text-Primary, #05070B);
+font-family: "Plus Jakarta Sans";
+font-size: 14px;
+font-style: normal;
+font-weight: 700;
+line-height: 135%; /* 18.9px */
+letter-spacing: 0.21px;
+}
+
+.flexy{
+    display: flex;
+    justify-content: space-between;
+    padding:2px 0px
+}
+
+.saveDsc{
+    color: #3EAA63;
+font-family: "Plus Jakarta Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 16.2px */
+letter-spacing: 0.18px;
+}
+.saveAmt{
+    color: var(--Text-Secondary, #828081);
+font-family: "Plus Jakarta Sans";
+font-size: 10px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 13.5px */
+letter-spacing: 0.15px;
+text-decoration-line: line-through;
+}
+
+.guestCount{
+
+}
+
+.guestIcon{
+    display: flex;
+    align-items: center;
+    color: var(--Text-Primary, #05070B);
+font-family: "Plus Jakarta Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 135%; /* 16.2px */
+letter-spacing: 0.18px;
+text-transform: capitalize;
+}
+
+.counter{
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.disabled{
+    pointer-events: none;
+    border:1px solid #828081 !important;
+    opacity: 0.5;
+
+}
+
+.counter >span>svg{
+    border:1px solid #000;
+    border-radius: 50%;
+}
+
+.offer{
+    border-radius: 12px;
+    padding: 4px 12px;
+    font-family: "Plus Jakarta Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: 135%; /* 16.2px */
+display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0px;
+}
+
+.offerGray{
+    background: #F1F1F1;
+    color:#05070B;
+}
+.offerGreen{
+    color: #1AAC6D;
+    background: #EDF8F4;  
+}
+.guestArea{
+    padding:16px 0px;
+}
+
+.discountLine {
+    position: absolute;
+    bottom:69px;
+    background-color: #1AAC6D;
+    color: #FFF;
+    text-align: center;
+    font-family: "Plus Jakarta Sans";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 135%;
+    width: 100%;
+    /* 16.2px */
+    letter-spacing: 0.18px;
 }

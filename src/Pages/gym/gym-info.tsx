@@ -17,6 +17,9 @@ import {
 } from "../../utils/string-operation";
 import { formatTimeIntToAmPm } from "../../utils/date";
 import { Mixpanel } from "../../mixpanel/init";
+import { discountTxt, showDiscountText } from "../../utils/offers";
+import { useAtom } from "jotai";
+import { userDetailsAtom } from "../../atoms/atom";
 
 const maxChar = 250;
 
@@ -31,7 +34,9 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   let shortDescription = useRef(description.substring(0, maxChar));
   shortDescription.current.replace(/<br>/, "");
 
-  const params = new URLSearchParams(window.location.search);
+  const [userDetails] = useAtom(userDetailsAtom);
+
+  let showDiscount = showDiscountText(gymData, userDetails);
 
   const [showTimeOptions, setShowTimeOptions] = useState<Boolean>(false);
 
@@ -246,6 +251,11 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     </svg>
   );
 
+  const discountLine = () => {
+    return showDiscount ? (
+      <div className="discountLine1">{discountTxt}</div>
+    ) : null;
+  };
   return (
     <>
       <div
@@ -259,7 +269,18 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           </div>
           <div className="gymName">{gymData.name}</div>
           <div style={{ marginBottom: "16px" }}>
-            <span className="price">₹{gymData.minPrice} onwards</span>
+            {showDiscount ? (
+              <span>
+                <span className="slashed-price">
+                  {" "}
+                  ₹{Math.floor(gymData.minPrice / 2)}{" "}
+                </span>
+                <span className="price"> ₹{gymData.minPrice} onwards</span>
+              </span>
+            ) : (
+              <span className="price">₹{gymData.minPrice} onwards</span>
+            )}
+
             <span style={{ margin: "0px 4px" }}>&bull;</span>
             {gymData.googleRating && (
               <span className="gRating">
@@ -273,6 +294,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
               </span>
             )}
           </div>
+          {gymData.area && <>
           <div className="line"></div>
           <div className="locWrp">
             <span className="baseTxt">
@@ -337,7 +359,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
               </span>
             </div>
           </div>
-          <div className="line"></div>
+          <div className="line"></div></>}
         </div>
         <div className="gymPageheading">
           <div>Book Activities</div>
@@ -384,7 +406,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             <div>{parser(description)}</div>
           )}
         </div>
-        {gymData.amenities.length>0 && (
+        {gymData.amenities.length > 0 && (
           <>
             {" "}
             <div className="gymPageheading">Amenities</div>
@@ -406,7 +428,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             </a>
           </span>
         </div>
-        <div className="line"></div>
+        {gymData.addressLine1 && <><div className="line"></div>
         <div className="locWrp">
           <div>
             <div className="baseTxt">
@@ -422,12 +444,13 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
               {gymData.addressLine1},{gymData.addressLine2}
             </div>
           </div>
-        </div>
+        </div></>}
       </div>
       <div className="bookBtnWrap">
-        <span className="bookBtn" onClick={() => navigateToBatches("all")}>
+        {discountLine()}
+        <button className="bookBtn" onClick={() => navigateToBatches("all")}>
           View Schedule
-        </span>
+        </button>
       </div>
     </>
   );

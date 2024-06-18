@@ -6,7 +6,11 @@ import BatchCheckoutPlusPrice from "./batch-checkout-plus-price";
 import BookNowFooter from "./book-now-footer";
 import { IBatch, IGymDetails } from "../../types/gyms";
 import { useEffect, useRef, useState } from "react";
-import { ECheckoutType, ESelectedPlan } from "../../types/checkout";
+import {
+  EBookNowComingFromPage,
+  ECheckoutType,
+  ESelectedPlan,
+} from "../../types/checkout";
 import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import { useAtom } from "jotai/react";
 import activityToSvgMap from "../../images/class-images/activity-map";
@@ -92,7 +96,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
           .share({
             title: "ZenfitX",
             text: `Hey, I'm signing up for this awesome activity on ZenfitX. Wanna join me? Let's sweat it out together and grab those first-booking discounts! 💪`,
-            url: window.location.href, 
+            url: window.location.href,
           })
           .then(() => console.log("Successful share"))
           .catch((error) => console.log("Error sharing", error));
@@ -260,15 +264,17 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
       }}
     >
       {shareAndBack()}
-      {batchDetails?.image && <div style={{ clipPath: "ellipse(100% 93% at 50% 5%)" }}>
-        <img
-          width="360px"
-          height="250px"
-          className="activityImg"
-          src={batchDetails?.image}
-          alt="img"
-        ></img>
-      </div>}
+      {batchDetails?.image && (
+        <div style={{ clipPath: "ellipse(100% 93% at 50% 5%)" }}>
+          <img
+            width="360px"
+            height="250px"
+            className="activityImg"
+            src={batchDetails?.image}
+            alt="img"
+          ></img>
+        </div>
+      )}
       <div className="activityContainer">
         <div className="activityHeading">
           <span style={{ maxWidth: "220px" }}>
@@ -277,10 +283,15 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
           </span>
         </div>
         <div className="activityDate">
-          <span>{batchDetails?.date ? formatDate(batchDetails.date)["date suffix - Day"] : 'Date not available'}</span>
+          <span>
+            {batchDetails?.date
+              ? formatDate(batchDetails.date)["date suffix"]
+              : "Date not available"}
+          </span>
           <span className="dot"></span>
           {formatTimeIntToAmPm(batchDetails?.startTime || 0)}
-          <span className="dot"></span> {batchDetails?.DurationMin || 'Duration not available'} min
+          <span className="dot"></span>{" "}
+          {batchDetails?.DurationMin || "Duration not available"} min
         </div>
         <div className="activityLoc">
           <span className="locIcon">{locationIcon()}</span>
@@ -357,13 +368,10 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         checkoutType={ECheckoutType.BATCH}
         batchDetails={batchDetails}
         gymData={gym || undefined}
+        batchId={Number(batchId)}
         totalAmount={batchDetails?.price as number}
-        userId={userDetails?.id as number}
-        batchId={parseInt(batchId)}
-        plusMembershipDiscount={plusDetails?.plusDiscountPercent as number}
-        plusMembershipPrice={plusDetails?.plusMemberShipPrice as number}
-        plusMembershipOpted={selectedPlan === ESelectedPlan.BATCH_WITH_PLUS}
-        batchPrice={batchDetails?.price as number}
+        comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
+        forceBookNowCta={true}
       />
     </Flex>
   );

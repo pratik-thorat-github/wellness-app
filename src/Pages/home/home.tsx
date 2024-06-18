@@ -22,6 +22,7 @@ import useAuthRedirect from "../auth/redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
 import { getUserDeatils } from "../../apis/user/userDetails";
+import Onboarding from "./onboarding";
 
 interface IHome extends RouteComponentProps {
   activitySelected?: string;
@@ -58,7 +59,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
 
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
   const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
-
+  const [onboarding,setOnboarding] = useState<boolean>(false);
   const showClassesNearYouRef = useRef(true);
 
   const mixpanelSet = useRef(false);
@@ -132,6 +133,12 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     },
   });
 
+  useEffect(()=>{
+    if(onboarding){
+      setCookie('onboarding', 'done', 1);
+    }
+  },[onboarding])
+
   useEffect(() => {
     const userDetails =
       window.localStorage["zenfitx-user-details"] &&
@@ -154,9 +161,35 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     }
   }, [userDetails]);
 
+  function setCookie(name:string, value:string, days:number) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Convert days to milliseconds
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+  }
+  
+  // Set the 'onboarding' cookie to 'done' and expire it after 1 day
+  const showOnBoarding =()=>{
+    return !onboarding && !userDetails?.id  && getCookie('onboarding')!=='done'
+  }
+
+  function getCookie(name:string) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+  
+  
+  if(showOnBoarding()) return <Onboarding setOnboarding={setOnboarding}/>
   if (!activities.length || !gymCardsData.length) return <Loader />;
 
   return (
+    <>
     <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
       <div>
         <Space></Space>
@@ -185,6 +218,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
         />
       </Flex>
     </Flex>
+
+    </>
   );
 };
 

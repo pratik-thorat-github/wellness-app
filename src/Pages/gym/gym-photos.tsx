@@ -1,55 +1,50 @@
 import { useEffect, useState } from "react";
-import { IGymCard } from "../../types/gyms";
+import { IGymCard, IGymDetails } from "../../types/gyms";
 import "./style.css";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { navigate } from "@reach/router";
-import ReactPlayer from 'react-player'
+import ReactPlayer from "react-player";
 
 interface IGymPhotos {
-  gym?: IGymCard;
+  gym?: IGymDetails;
   showArray?: boolean;
 }
 
 const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
+  const [isClicked, setIsClicked] = useState<Boolean>(false);
 
-  const [isClicked,setIsClicked]=useState<Boolean>(false)
-
-
-  useEffect(()=>{
-    const shareButton = document.getElementById("share-button"); 
-      shareButton?.addEventListener("click", () => { 
-        if (navigator.share) {
-          navigator.share({
-            title: 'ZenfitX',
+  useEffect(() => {
+    const shareButton = document.getElementById("share-button");
+    shareButton?.addEventListener("click", () => {
+      if (navigator.share) {
+        navigator
+          .share({
+            title: "ZenfitX",
             text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉 `,
             url: window.location.href,
           })
-            .then(() => console.log('Successful share'))
-            .catch((error) => console.log('Error sharing', error));
-        } else {
-          console.log('error')
-        }
-      });
-    shareButton?.removeEventListener('click',()=>{
-      setIsClicked(false)
-    })    
+          .then(() => console.log("Successful share"))
+          .catch((error) => console.log("Error sharing", error));
+      } else {
+        console.log("error");
+      }
+    });
+    shareButton?.removeEventListener("click", () => {
+      setIsClicked(false);
+    });
+  }, [isClicked]);
 
-  },[isClicked])
-
- 
-
-
-  const onSlideChange=(args:any)=>{
-    console.log(args)
+  const onSlideChange = (args: any) => {
+    console.log(args);
     // args!==1 && pauseVideo()
-  }
+  };
 
-  const navigateToHome=()=>{
-    navigate(window.location.origin)
-  }
+  const navigateToHome = () => {
+    navigate(window.location.origin);
+  };
 
-  const shareAndBack=()=>{
+  const shareAndBack = () => {
     return (
       <div className="shareAndBack">
         <span className="Btn" onClick={() => navigateToHome()}>
@@ -92,21 +87,39 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
         </span>
       </div>
     );
-
-  }
+  };
 
   if (gym?.medias?.length) {
-    const medias = gym?.medias.map((p:{type:string,url:string}, ind) => {
-      if(p.type==="VIDEO"){
-      return <ReactPlayer className="player" url={p.url} playing muted playsinline controls volume={1} width="100%" height={'180px'}  config={{
-        file: {
-          attributes: {
-            controlsList: "nofullscreen",
-          },
-        },
-      }}/>
-      }
-      else return <img key={`${gym.gymId}-${ind}`} src={p.url} width="100%" height={'180px'} />;
+    const medias = gym?.medias.map((p: { type: string; url: string }, ind) => {
+      if (p.type === "VIDEO") {
+        return (
+          <ReactPlayer
+            className="player"
+            url={p.url}
+            playing
+            muted
+            playsinline
+            volume={1}
+            width="100%"
+            height={"180px"}
+            config={{
+              file: {
+                attributes: {
+                  controlsList: "nofullscreen",
+                },
+              },
+            }}
+          />
+        );
+      } else
+        return (
+          <img
+            key={`${gym.gymId}-${ind}`}
+            src={p.url}
+            width="100%"
+            height={"180px"}
+          />
+        );
     });
     return (
       <div className="carouselWrap">
@@ -120,19 +133,21 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
           onChange={onSlideChange}
           renderIndicator={(onClickHandler, isSelected, index, label) => {
             const defStyle = {
-              display:'block',
+              display: "block",
               borderRadius: "100px",
               background: "rgba(201, 201, 201, 0.55)",
               backdropFilter: "blur(1.5px)",
               width: "14px",
               height: "2px",
-               marginLeft: 2, cursor: "pointer" };
+              marginLeft: 2,
+              cursor: "pointer",
+            };
             const style = isSelected
               ? { ...defStyle, background: "white" }
               : { ...defStyle };
             return (
               <span
-              className="customDots"
+                className="customDots"
                 style={style}
                 onClick={onClickHandler}
                 onKeyDown={onClickHandler}
@@ -141,7 +156,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
                 tabIndex={0}
                 aria-label={`${label} ${index + 1}`}
               >
-                {''}
+                {""}
               </span>
             );
           }}

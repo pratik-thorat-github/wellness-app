@@ -1,7 +1,7 @@
 import { RouteComponentProps } from "@reach/router";
 import { Flex } from "antd";
 import BookNowFooter from "./book-now-footer";
-import { ECheckoutType } from "../../types/checkout";
+import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import { useAtom } from "jotai/react";
 import { ReactComponent as Membership } from "../../images/checkout/membership.svg";
@@ -110,14 +110,10 @@ const PlusCheckout: React.FC<IPlusCheckout> = ({}) => {
 
       <Flex flex={1} align="flex-end">
         <BookNowFooter
+          batchId={0}
           checkoutType={ECheckoutType.PLUS}
           totalAmount={plusDetails?.plusMemberShipPrice as number}
-          userId={userDetails?.id as number}
-          batchId={0}
-          plusMembershipDiscount={plusDetails?.plusDiscountPercent as number}
-          plusMembershipPrice={plusDetails?.plusMemberShipPrice as number}
-          plusMembershipOpted={true}
-          batchPrice={0}
+          comingFrom={EBookNowComingFromPage.PLUS_CHECKOUT}
         />
       </Flex>
     </Flex>
