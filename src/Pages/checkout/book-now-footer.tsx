@@ -352,8 +352,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
             }}
           >
             <Flex flex={2} vertical justify="center" align="left" className={discountedAmount?'discountedAmountWrap':''}>
-            <span >{Rs}{discountedAmount}</span>&nbsp;&nbsp;
-              <span style={{ fontWeight: "bold", fontSize: "20px",  textDecorationLine: showDiscount?'line-through':'',marginBottom: showDiscount?'3px':''}} className={discountedAmount?'discountedAmount':''}>
+            {showDiscount && <span >{Rs}{discountedAmount}</span>}&nbsp;&nbsp;
+              <span style={{ fontWeight: "bold", fontSize: "20px",  textDecorationLine: showDiscount?'line-through':'',marginBottom: showDiscount?'3px':''}} className={showDiscount?'discountedAmount':''}>
                 {Rs}
                 {props.totalAmount}
                
