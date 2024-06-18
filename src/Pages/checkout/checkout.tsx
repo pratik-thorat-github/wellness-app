@@ -331,7 +331,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
             </span>
           ) : null}
         </div>}
-        {totalSavings>0 && <div className={totalSavings ? "offer offerGreen" : "offer offerGray"}>
+        {<div className={totalSavings ? "offer offerGreen" : "offer offerGray"}>
           {totalSavings ? discountIconGreen() : discountIconGray()}
           {offerStrip.current ? offerStrip.current : null}
         </div>}

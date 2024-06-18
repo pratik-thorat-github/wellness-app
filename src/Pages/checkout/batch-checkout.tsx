@@ -362,6 +362,25 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
               </div>
             </div>
           )}
+          {batchDetails?.address && (
+            <div className="sectionAct">
+            <div className="sectionActHeading">
+              {leftDivider()}
+              <span style={{ margin: "0px 12px" }}>Address</span>
+              {rightDivider()}
+            </div>
+             <div className="locWrp">
+               <div
+                 className="baseTxt"
+                 style={{ color: "#828081", marginLeft: "16px" }}
+                 
+               >
+                Location : <span style={{textDecoration:'underline',color:"#000"}} onClick={()=>window.open(batchDetails?.address)}>View on map</span>
+               </div>
+           </div>
+           </div>
+
+          )}
         </div>
       </div>
       <BookNowFooter

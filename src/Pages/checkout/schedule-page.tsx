@@ -218,9 +218,9 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 <div style={{
                   display:'flex',flexDirection:'column'
                 }}>
-                  <span>{formatDate(batch.date)['date suffix']}</span>
+                   {batch.venue && <span>{formatDate(batch.date)['date suffix']}</span>}
                   <span  style={{ fontWeight: "bold" }}>{batch.activityName}</span>
-                  <span>{batch.venue}</span>
+                  {batch.venue && <span>{batch.venue}</span>}
 
                 </div>
                 {batch.trainer ? (
