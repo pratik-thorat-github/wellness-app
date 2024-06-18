@@ -81,6 +81,19 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
     }
   }, [batchDetails]);
 
+  useEffect(()=>{
+    if(!userDetails || (userDetails && userDetails.noOfBookings<1)){
+      const [newTotalAmount, discount] = deductPercentage(
+        batchDetails?.price || 0,
+        50
+      );
+
+    setTotalAmount(newTotalAmount);
+    setTotalSavings(discount);
+    }
+
+  },[batchDetails])
+
   if  (!gym) return <Loader />;
 
   //   A function that adds totalAmount
@@ -295,11 +308,11 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
             <div className="priceHead">Total</div>
             <div className="flexy">
               <span className="checkDsc">Session price</span>
-              <span className="checkAmt">₹{batchDetails?.price}</span>
+              <span className="checkAmt">₹{totalAmount}</span>
             </div>
             {totalSavings>0 &&<div className="flexy">
                <span className="saveDsc">Saving ₹{totalSavings}</span>
-              <span className="saveAmt">₹{totalAmount}</span>
+              <span className="saveAmt">₹{batchDetails?.price}</span>
             </div>}
           </div>
         )}

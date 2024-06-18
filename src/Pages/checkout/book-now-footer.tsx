@@ -247,7 +247,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     }
   };
 
-  const discountLine = () => <div className={showCTA()?"discountLineAlmost":"discountLine"}>{discountTxt}pp</div>;
+  const discountLine = () => <div className="discountLine">{discountTxt}pp</div>;
 
   return (
     <>
@@ -267,7 +267,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           width: "100%",
         }}
       >
-        {showDiscount() ? discountLine() : null}
+        {showDiscount() && !showCTA() ? discountLine() : null}
         {showCTA() ? (
           <Flex
             flex={1}
