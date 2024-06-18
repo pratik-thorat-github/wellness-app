@@ -247,7 +247,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     }
   };
 
-  const discountLine = () => <div className="discountLine">{discountTxt}</div>;
+  const discountLine = () => <div className={showCTA()?"discountLineAlmost":"discountLine"}>{discountTxt}pp</div>;
 
   return (
     <>
