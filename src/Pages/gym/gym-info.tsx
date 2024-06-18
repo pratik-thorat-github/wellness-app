@@ -428,7 +428,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             </a>
           </span>
         </div>
-        <div className="line"></div>
+        {gymData.addressLine1 && <><div className="line"></div>
         <div className="locWrp">
           <div>
             <div className="baseTxt">
@@ -444,7 +444,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
               {gymData.addressLine1},{gymData.addressLine2}
             </div>
           </div>
-        </div>
+        </div></>}
       </div>
       <div className="bookBtnWrap">
         {discountLine()}

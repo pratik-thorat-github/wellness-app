@@ -285,7 +285,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         <div className="activityDate">
           <span>
             {batchDetails?.date
-              ? formatDate(batchDetails.date)["date suffix - Day"]
+              ? formatDate(batchDetails.date)["date suffix"]
               : "Date not available"}
           </span>
           <span className="dot"></span>

@@ -196,6 +196,13 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [loading, setLoading] = useState(false);
 
   function processBookNowCta() {
+    if(props.forceBookNowCta){
+      Mixpanel.track("open_batch_checkout_booking", {
+        batchId: props.batchId,
+      });
+      navigate(`/checkout/batch/${props.batchId}/booking`);
+      return
+    }
     if (!userDetails) {
       Mixpanel.track("open_batch_checkout_login_with_phone", {
         batchId: props.batchId,

@@ -295,15 +295,15 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
             <div className="priceHead">Total</div>
             <div className="flexy">
               <span className="checkDsc">Session price</span>
-              <span className="checkAmt">{batchDetails.price}</span>
+              <span className="checkAmt">₹{batchDetails.price}</span>
             </div>
-            <div className="flexy">
-              <span className="saveDsc">Saving ₹{totalSavings}</span>
+            {totalSavings>0 &&<div className="flexy">
+               <span className="saveDsc">Saving ₹{totalSavings}</span>
               <span className="saveAmt">₹{totalAmount}</span>
-            </div>
+            </div>}
           </div>
         )}
-        <div className="guestArea">
+        {batchDetails.guestsAllowed && <div className="guestArea">
           <div className="priceHead">Total</div>
           <span className="flexy">
             <span className="checkDsc">
@@ -317,11 +317,11 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
               <span className="saveAmt">₹{baseAmount}</span>
             </span>
           ) : null}
-        </div>
-        <div className={totalSavings ? "offer offerGreen" : "offer offerGray"}>
+        </div>}
+        {totalSavings>0 && <div className={totalSavings ? "offer offerGreen" : "offer offerGray"}>
           {totalSavings ? discountIconGreen() : discountIconGray()}
           {offerStrip.current ? offerStrip.current : null}
-        </div>
+        </div>}
       </div>
 
       <Flex>
