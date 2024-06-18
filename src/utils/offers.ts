@@ -1,3 +1,6 @@
+import { EOfferType, IGymCard, IGymDetails } from "../types/gyms";
+import IUser from "../types/user";
+
 export function deductPercentage(
   basePrice: number,
   discountPercentage: number
@@ -12,3 +15,14 @@ export function deductPercentage(
 
 export const discountTxt = "50% off on your first booking on ZenfitX";
 
+export function showDiscountText(
+  gym: IGymCard | IGymDetails,
+  userDetails: IUser | null
+) {
+  let showDiscount = false;
+  if (gym.offerType == EOfferType.BATCH_WITH_GUESTS) showDiscount = false;
+  else if (!userDetails) showDiscount = true;
+  else if (userDetails && userDetails.noOfBookings < 1) showDiscount = true;
+
+  return showDiscount;
+}

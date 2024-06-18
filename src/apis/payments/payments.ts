@@ -1,3 +1,4 @@
+import { EOfferType } from "../../types/gyms";
 import networkAdapter from "../network";
 
 export interface ICreateRzpOrder {
@@ -5,9 +6,12 @@ export interface ICreateRzpOrder {
   batchId: number;
   totalAmount: number;
   batchPrice: number;
-  plusMembershipOpted: boolean;
-  plusMembershipPrice: number;
-  plusMembershipDiscount: number;
+  plusMembershipOpted?: boolean;
+  plusMembershipPrice?: number;
+  plusMembershipDiscount?: number;
+  offerPercentage: number;
+  offerType: EOfferType;
+  noOfGuests: number;
 }
 
 export async function createRzpOrder(data: ICreateRzpOrder) {

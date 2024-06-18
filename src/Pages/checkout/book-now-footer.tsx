@@ -7,20 +7,25 @@ import {
   createRzpOrder,
 } from "../../apis/payments/payments";
 import { navigate, useLocation } from "@reach/router";
-import { IBatch, IGymDetails } from "../../types/gyms";
+import { EOfferType, IBatch, IGymDetails } from "../../types/gyms";
 import colors from "../../constants/colours";
-import { ECheckoutType } from "../../types/checkout";
+import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { useAtom } from "jotai/react";
 import { checkoutSdkRedirectAtom, userDetailsAtom } from "../../atoms/atom";
 import IUser from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
+import { discountTxt } from "../../utils/offers";
 
-export interface IBookNowFooter extends ICreateRzpOrder {
+export interface IBookNowFooter {
   batchDetails?: IBatch;
+  totalAmount: number;
   gymData?: IGymDetails;
   checkoutType: ECheckoutType;
+  comingFrom: EBookNowComingFromPage;
+  batchId: number;
+  totalGuests?: number;
 }
 
 function loadScript(src: string) {
@@ -37,6 +42,21 @@ function loadScript(src: string) {
   });
 }
 
+function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
+  let payload: ICreateRzpOrder = {
+    batchId: (props.batchDetails?.id || props.batchDetails?.batchId) as number,
+    totalAmount: props.totalAmount,
+    userId: userDetails.id as number,
+    batchPrice: props.batchDetails?.price as number,
+
+    offerPercentage: props.batchDetails?.offerPercentage as number,
+    offerType: props.batchDetails?.offerType as EOfferType,
+    noOfGuests: props.totalGuests as number,
+  };
+
+  return payload;
+}
+
 async function displayRazorpay(
   props: IBookNowFooter,
   userDetails: IUser | null,
@@ -44,7 +64,9 @@ async function displayRazorpay(
 ) {
   setLoading(true);
   const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-  const orderResult = await createRzpOrder(props);
+
+  let payload = createOrderPayload(props, userDetails as IUser);
+  const orderResult = await createRzpOrder(payload);
 
   if (!res) {
     alert("Razorpay SDK failed to load. Are you online?");
@@ -52,8 +74,8 @@ async function displayRazorpay(
   }
 
   let description = `Checkout for batch - ${props.batchId}`;
-  if (props.plusMembershipOpted)
-    description += `, and plus membership for onePass`;
+  // if (props.plusMembershipOpted)
+  //   description += `, and plus membership for onePass`;
 
   const options = {
     key: process.env.REACT_APP_RZP_CLIENT_KEY,
@@ -89,7 +111,7 @@ async function displayRazorpay(
     },
   };
 
-  setLoading(false)
+  setLoading(false);
 
   //@ts-ignore
   const paymentObject = new window.Razorpay(options);
@@ -98,15 +120,18 @@ async function displayRazorpay(
 
 async function displayCashfree(
   props: IBookNowFooter,
-  userDetails: IUser | null
+  userDetails: IUser | null,
+  setLoading: (loading: boolean) => void
 ) {
+  setLoading(true);
   const res = await loadScript("https://sdk.cashfree.com/js/v3/cashfree.js");
   if (!res) {
     alert("CF SDK failed to load. Are you online?");
     return;
   }
 
-  const orderResult = await createCfOrder(props);
+  let payload = createOrderPayload(props, userDetails as IUser);
+  const orderResult = await createCfOrder(payload);
 
   const options = {
     paymentSessionId: orderResult.paymentSessionId,
@@ -117,6 +142,8 @@ async function displayCashfree(
   const cashfree = Cashfree({
     mode: process.env.REACT_APP_CF_ENV,
   });
+
+  setLoading(false);
   cashfree.checkout(options).then((result: any) => {
     if (result.error) {
       // This will be true whenever user clicks on close icon inside the modal or any error happens during the payment
@@ -165,9 +192,9 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   let locationStates = useLocation().state;
   console.log(locationStates);
 
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
 
-  function checkIfLoggedIn() {
+  function processBookNowCta() {
     if (!userDetails) {
       Mixpanel.track("open_batch_checkout_login_with_phone", {
         batchId: props.batchId,
@@ -175,14 +202,22 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       setCheckoutSdkRedirectAtom(props);
 
       navigate("/login");
+    } else if (
+      props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_PAGE &&
+      props.batchDetails?.guestsAllowed
+    ) {
+      Mixpanel.track("open_batch_checkout_booking", {
+        batchId: props.batchId,
+      });
+      navigate(`/checkout/batch/${props.batchId}/booking`);
     } else {
       Mixpanel.track("open_batch_checkout_pay_now", {
         batchId: props.batchId,
         phone: userDetails.phone,
       });
       MixpanelBookNowFooterInit(props, props.checkoutType);
-      displayRazorpay(props, userDetails,setLoading);
-      // displayCashfree(props, userDetails);
+      // displayRazorpay(props, userDetails, setLoading);
+      displayCashfree(props, userDetails, setLoading);
     }
   }
 
@@ -190,9 +225,21 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     setCheckoutSdkRedirectAtom(null);
   }, []);
 
-  if(loading)return <Loader/>
+  if (loading) return <Loader />;
+
+
+  const showDiscount=()=>{
+    return userDetails && userDetails.noOfBookings<1;
+  }
+
+  const discountLine=()=>(
+    <div className="discountLine">
+      {discountTxt}
+    </div>
+  )
 
   return (
+    <>
     <Flex
       flex={1}
       justify="stretch"
@@ -204,15 +251,17 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         borderTopWidth: "1px",
         paddingTop: "12px",
         paddingBottom: "12px",
-        paddingRight: "24px",
-        paddingLeft: "24px",
         position: "fixed",
         bottom: 0,
-        width: "90%",
+        width: "100%",
       }}
     >
+      {showDiscount() ? discountLine():null} 
       {!userDetails ? (
-        <Flex flex={1} vertical>
+        <Flex flex={1} vertical style={{
+          paddingRight: "24px",
+          paddingLeft: "24px",
+        }}>
           <Flex flex={1} style={{ fontWeight: "bolder", fontSize: "16px" }}>
             Almost There
           </Flex>
@@ -228,7 +277,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           </Flex>
           <Flex
             onClick={() => {
-              checkIfLoggedIn();
+              processBookNowCta();
             }}
             flex={1}
             justify="center"
@@ -253,6 +302,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
             alignItems: "center",
             justifyContent: "space-between",
             width: "100%",
+            paddingRight: "24px",
+            paddingLeft: "24px",
           }}
         >
           <Flex flex={2} vertical justify="center" align="left">
@@ -273,7 +324,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               alignItems: "center",
             }}
             onClick={() => {
-              checkIfLoggedIn();
+              processBookNowCta();
             }}
           >
             <span>Book Now</span>
@@ -281,6 +332,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         </div>
       )}
     </Flex>
+    </>
   );
 };
 
