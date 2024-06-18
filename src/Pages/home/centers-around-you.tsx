@@ -154,7 +154,7 @@ function getListOfCenters(
       >
         <div className="activityImg1">
           {isExclusive && <span className="sWrap">{exclusiveIcon()}</span>}
-          <img src={medias[0]} className="activityImg1Img" alt="activity pic" />
+          {medias.length>0 &&<img src={medias[0]} className="activityImg1Img" alt="activity pic" />}
         </div>
         <div
           // className="activityDetailWrapper"
