@@ -10,7 +10,8 @@ import ActivityTiles from "../../components/activity-tiles";
 import { useAtom } from "jotai";
 import { userDetailsAtom } from "../../atoms/atom";
 import { concatAndUpperCaseActivities } from "../../utils/activities";
-import { discountTxt } from "../../utils/offers";
+import { discountTxt, showDiscountText } from "../../utils/offers";
+import { Rs } from "../../constants/symbols";
 
 
 interface IActivity extends RouteComponentProps {}
@@ -153,10 +154,13 @@ const exclusiveIcon = () => {
   };
 
 
-const cardWidget = (gymCard: any) => {
+  const cardWidget = (gymCard: IGymCard) => {
     console.log(gymCard);
     const { medias, name, activities, area, minPrice, isExclusive } = gymCard;
     console.log(medias, "media");
+
+    let showDiscount = showDiscountText(gymCard, userDetails);
+
     return (
       <div
         className="cardWrapper"
@@ -168,22 +172,18 @@ const cardWidget = (gymCard: any) => {
         key={gymCard.gymId}
       >
         <div className="activityImg1">
-          {(isExclusive) && (
-            <span className="sWrap">{exclusiveIcon()}</span>
-          )}
-          {medias.length>0 && <img src={medias[0]} className="activityImg1Img" alt="activity pic" />}
+          {isExclusive && <span className="sWrap">{exclusiveIcon()}</span>}
+          {medias.length>0 &&<img src={medias[0]} className="activityImg1Img" alt="activity pic" />}
         </div>
         <div
           // className="activityDetailWrapper"
           className={
-            userDetails && (userDetails?.noOfBookings as number) < 1
-              ? "activityDetailWrapper2"
-              : "activityDetailWrapper"
+            showDiscount ? "activityDetailWrapper2" : "activityDetailWrapper"
           }
         >
           <div className="activityDetail">
-            <div className="name">
-              {name} {discountCard(minPrice)}
+            <div className={name.length > 25 ? "nameInc" : "name"}>
+              <span>{name}</span> {priceCard(minPrice, showDiscount)}
             </div>
             <div className="activity">
               {concatAndUpperCaseActivities(activities.slice(0, 8))}
@@ -195,15 +195,33 @@ const cardWidget = (gymCard: any) => {
             </div>
           </div>
 
-          {/* {userDetails && (userDetails.noOfBookings as number) < 1 && (
+          {showDiscount && (
             <div className="discount">
               <div>
                 {discountIcon()}
                 <span className="dTxt">{discountTxt}</span>
               </div>
             </div>
-          )} */}
+          )}
         </div>
+      </div>
+    );
+  };
+
+  const priceCard = (price: number, showDiscount: boolean) => {
+    return showDiscount ? (
+      <div className="dCard">
+        <div className="dPrice">₹{Math.floor(price / 2)}</div>
+        <div className="sPrice slash">₹{price}</div>
+        <div className="sPrice">onwards</div>
+      </div>
+    ) : (
+      <div className="dCard">
+        <div className="dPrice">
+          {Rs}
+          {price}
+        </div>
+        <div className="sPrice">onwards</div>
       </div>
     );
   };
