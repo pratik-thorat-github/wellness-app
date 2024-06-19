@@ -83,7 +83,7 @@ const medias = images.map(i=>(
 ))
 
   return (
-    <>
+    <div className="obWrap">
         <div className="obacitivities">
             {acitivities(slide)}
         </div>
@@ -111,7 +111,7 @@ const medias = images.map(i=>(
         </div>
         </div>
         <span className="obBtn" onClick={() => setOnboarding(true)}>Explore Now</span></div>
-    </>
+    </div>
   );
 };
 
