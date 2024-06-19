@@ -279,3 +279,14 @@ letter-spacing: 0.18px;
     margin:0px 24px;
     border-radius: 8px 8px 0px 0px;
 }
+
+.muteIcon{
+    position: absolute;
+    z-index: 1000;
+    top: 144px;
+    right: 16px;
+    height: 30px;
+    width: 30px;
+    font-size:20px;
+
+}

@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IGymCard, IGymDetails } from "../../types/gyms";
 import "./style.css";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { navigate } from "@reach/router";
 import ReactPlayer from "react-player";
+import { MutedOutlined, SoundOutlined } from "@ant-design/icons";
 
 interface IGymPhotos {
   gym?: IGymDetails;
@@ -13,6 +14,7 @@ interface IGymPhotos {
 
 const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
   const [isClicked, setIsClicked] = useState<Boolean>(false);
+  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
     const shareButton = document.getElementById("share-button");
@@ -89,17 +91,25 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
     );
   };
 
+const handleToggleMute = () => setMuted((current) => !current);
+
+                
   if (gym?.medias?.length) {
     const medias = gym?.medias.map((p: { type: string; url: string }, ind) => {
       if (p.type === "VIDEO") {
         return (
+          <>
+           <span className='muteIcon' style={{zIndex:1000}}onClick={handleToggleMute}>{
+            muted ? <MutedOutlined /> :<SoundOutlined />
+           }</span>
           <ReactPlayer
             className="player"
             url={p.url}
             playing
-            muted
+            muted={muted}
             playsinline
             volume={1}
+            loop
             width="100%"
             height={"180px"}
             config={{
@@ -110,6 +120,9 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
               },
             }}
           />
+         
+          </>
+
         );
       } else
         return (
