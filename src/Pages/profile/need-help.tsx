@@ -4,7 +4,7 @@ import { helpLine } from "../../constants/info";
 
 const NeedHelpBanner: React.FC = () => {
   return (
-    <Flex vertical flex={1} style={{ padding: "16px" }}>
+    <Flex vertical flex={1} style={{ padding: "24px 16px 16px 16px" }}>
       <Flex flex={1} style={{ fontWeight: "bold" }}>
         Need help?
       </Flex>

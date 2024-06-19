@@ -449,7 +449,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
       </div>
       <div className="bookBtnWrap">
         {discountLine()}
-        <button className="bookBtn" onClick={() => navigateToBatches("all")}>
+        <button className={showDiscount ? "bookBtn":'bookBtn2' } onClick={() => navigateToBatches("all")}>
           View Schedule
         </button>
       </div>

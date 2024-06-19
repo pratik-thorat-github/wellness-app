@@ -16,7 +16,7 @@
 
 .Btn{
     padding:8px;
-    border-radius: 100px;
+    border-radius: 50%;
 background: rgba(0, 0, 0, 0.75);
 backdrop-filter: blur(1.5px);
 margin:8px;

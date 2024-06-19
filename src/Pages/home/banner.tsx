@@ -80,9 +80,6 @@ const HomeBanner: React.FC = () => {
         <span className="zenfit">Zenfit</span><span className="x">X</span>
 
       </div>
-      <div className="lineYellow">
-
-      </div>
       <div className="head2">
       Explore and book any fitness or wellness activity near you anytime! 
       </div>

@@ -60,7 +60,7 @@ background: #E9E9E9;
 .baseTxt{
     color: #05070B;
 font-family: "Plus Jakarta Sans";
-font-size: 12px;
+font-size: 14px;
 font-style: normal;
 font-weight: 400;
 line-height: 135%; /* 16.2px */
@@ -109,7 +109,31 @@ padding: 12px 16px;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-margin:8px 24px;
+margin:0px auto 8px auto;
+align-self: stretch;
+
+color: #FFF;
+font-family: "Plus Jakarta Sans";
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: 135%; /* 21.6px */
+letter-spacing: 0.24px;
+width:85%;
+text-align: center;
+
+}
+
+.bookBtn2{
+    border-radius: 8px 8px 8px 8px;
+background: #05070B;
+color:#fff;
+display: flex;
+padding: 12px 16px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+margin:0px auto 8px auto;
 align-self: stretch;
 
 color: #FFF;
@@ -163,7 +187,7 @@ text-align: center;
 .amenety{
     color: var(--Text-Primary, #05070B);
 font-family: "Plus Jakarta Sans";
-font-size: 12px;
+font-size: 14px;
 font-style: normal;
 font-weight: 400;
 line-height: normal;
@@ -192,7 +216,7 @@ line-height: normal;
 
 .Btn{
     padding:8px;
-    border-radius: 100px;
+    border-radius: 50%;
 background: rgba(0, 0, 0, 0.75);
 backdrop-filter: blur(1.5px);
 margin:8px;
@@ -218,13 +242,13 @@ letter-spacing: 0.18px;
 
 .timeWrap{
     display: flex;
-    align-items: flex-start;
     width:78vw;
+    align-items: flex-end;
 }
 .timeDay{
     color: var(--Text-Primary, #05070B);
 font-family: "Plus Jakarta Sans";
-font-size: 12px;
+font-size: 14px;
 font-style: normal;
 font-weight: 400;
 line-height: 135%; /* 16.2px */
@@ -263,7 +287,6 @@ letter-spacing: 0.18px;
 }
 
 .discountLine1{
-    position: absolute;
     bottom:53px;
     background-color: #1AAC6D;
     color: #FFF;
@@ -276,7 +299,7 @@ letter-spacing: 0.18px;
     width: 85%;
     /* 16.2px */
     letter-spacing: 0.18px;
-    margin:0px 24px;
+    margin:0px auto;
     border-radius: 8px 8px 0px 0px;
 }
 

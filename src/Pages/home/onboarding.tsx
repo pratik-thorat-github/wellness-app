@@ -102,7 +102,7 @@ const medias = images.map(i=>(
         </Carousel>
       </div>
       <div className='exploreBtn'>
-        <div style={{padding:'0px 24px 16px 24px'}}>
+        <div style={{padding:'0px 24px 16px 24px',width:'82vw'}}>
         <div className="fh1">
             ZenfitX
         </div>

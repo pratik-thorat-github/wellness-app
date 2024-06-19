@@ -39,9 +39,12 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
           justify="center"
           align="center"
           style={{
+            borderBottom:'2px dashed',
             borderBottomColor: colors.border,
-            borderBottomStyle: "dashed",
             paddingBottom: "16px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
           <Flex align="flex-start">{activityToSvgMap(booking.activity)}</Flex>

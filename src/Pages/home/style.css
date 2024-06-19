@@ -72,13 +72,6 @@ letter-spacing: 4.16px;
 
 }
 
-.lineYellow{
-    height:2px;
-    width:42%;
-    text-align: center;
-    background: linear-gradient(90deg, #FFF0A4 0%, #FFF8D4 66.5%, #F5D37C 98%);
-    margin:8px 0px
-}
 
 .head3{
     color: #FFF;
@@ -88,7 +81,7 @@ letter-spacing: 4.16px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    margin:-2px 0px
+    margin-top:12px
 
 }
 
@@ -319,7 +312,7 @@ font-size: 12px;
 font-style: normal;
 font-weight: 800;
 line-height: normal;
-padding-left:22px;
+padding-left:16px;
 }
 
 .trendingWrapper{
@@ -395,7 +388,7 @@ letter-spacing: 0.18px;
 
 .Btn{
     padding:8px;
-    border-radius: 100px;
+    border-radius: 50%;
 background: rgba(0, 0, 0, 0.75);
 backdrop-filter: blur(1.5px);
 margin:8px;
