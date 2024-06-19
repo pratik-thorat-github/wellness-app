@@ -420,10 +420,11 @@ text-transform: uppercase;
 
 .obImgWrap{
     background: linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);
-    position: fixed;
+    position: absolute;
     width: 100%;
     overflow: hidden;
     pointer-events: none;
+    height: 100vh;
 }
 
 .obImg{
