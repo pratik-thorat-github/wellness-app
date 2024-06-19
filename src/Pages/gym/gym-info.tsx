@@ -256,6 +256,10 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
       <div className="discountLine1">{discountTxt}</div>
     ) : null;
   };
+
+  const gRate=(val:any)=>{
+    return val.googleRating>0
+  }
   return (
     <>
       <div
@@ -281,7 +285,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
               <span className="price">₹{gymData.minPrice} onwards</span>
             )}
 
-{gymData.googleRating && gymData.googleRating>0 && <><span style={{ margin: "0px 4px" }}>&bull;</span>
+{gRate(gymData) && <><span style={{ margin: "0px 4px" }}>&bull;</span>
              
               <span className="gRating">
                 <span className="gIcon">{Gicon()}</span>

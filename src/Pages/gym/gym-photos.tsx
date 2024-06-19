@@ -110,8 +110,7 @@ const handleToggleMute = () => setMuted((current) => !current);
             playsinline
             volume={1}
             loop
-            width="100%"
-            height={"180px"}
+            height={"200px"}
             config={{
               file: {
                 attributes: {
@@ -130,7 +129,7 @@ const handleToggleMute = () => setMuted((current) => !current);
             key={`${gym.gymId}-${ind}`}
             src={p.url}
             width="100%"
-            height={"180px"}
+            height={"200px"}
           />
         );
     });
