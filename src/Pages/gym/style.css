@@ -300,7 +300,7 @@ letter-spacing: 0.18px;
     width: 85%;
     /* 16.2px */
     letter-spacing: 0.18px;
-    margin:0px auto;
+    margin:-1px auto;
     border-radius: 8px 8px 0px 0px;
 }
 
