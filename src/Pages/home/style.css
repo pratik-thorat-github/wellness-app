@@ -414,11 +414,8 @@ text-transform: uppercase;
 }
 
 .obWrap{
-    background: transparent;
+    background: #fff;
     overflow: hidden;
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
 }
 
 .obImgWrap{
