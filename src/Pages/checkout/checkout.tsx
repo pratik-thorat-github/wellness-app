@@ -76,25 +76,28 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
         batchDetails.offerPercentage
       )
         offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people`;
-      else if (!userDetails || (userDetails && userDetails.noOfBookings < 1))
+      else if (!userDetails || (userDetails && userDetails.noOfBookings < 1)) {
         offerStrip.current = "50% off on your 1st booking on ZenfitX";
+      }
     }
   }, [batchDetails]);
 
-  useEffect(()=>{
-    if((!userDetails || (userDetails && userDetails.noOfBookings<1)) && batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS){
+  useEffect(() => {
+    if (
+      (!userDetails || (userDetails && userDetails.noOfBookings < 1)) &&
+      batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
+    ) {
       const [newTotalAmount, discount] = deductPercentage(
         batchDetails?.price || 0,
         50
       );
 
-    setTotalAmount(newTotalAmount);
-    setTotalSavings(discount);
+      setTotalAmount(newTotalAmount);
+      setTotalSavings(discount);
     }
+  }, [batchDetails]);
 
-  },[batchDetails])
-
-  if  (!gym) return <Loader />;
+  if (!gym) return <Loader />;
 
   //   A function that adds totalAmount
 
@@ -283,9 +286,12 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
             <div className="actLoc">{gym.area}</div>
             <div className="actTime">
               {" "}
-              {batchDetails?.date && formatDate(batchDetails?.date)["date suffix"]} &bull;{" "}
-              {batchDetails?.startTime  && formatTimeIntToAmPm(batchDetails?.startTime)} &bull;{" "}
-              {batchDetails?.DurationMin} min
+              {batchDetails?.date &&
+                formatDate(batchDetails?.date)["date suffix"]}{" "}
+              &bull;{" "}
+              {batchDetails?.startTime &&
+                formatTimeIntToAmPm(batchDetails?.startTime)}{" "}
+              &bull; {batchDetails?.DurationMin} min
             </div>
           </span>
         </div>
@@ -310,31 +316,39 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
               <span className="checkDsc">Session price</span>
               <span className="checkAmt">₹{totalAmount}</span>
             </div>
-            {totalSavings>0 &&<div className="flexy">
-               <span className="saveDsc">Saving ₹{totalSavings}</span>
-              <span className="saveAmt">₹{batchDetails?.price}</span>
-            </div>}
+            {totalSavings > 0 && (
+              <div className="flexy">
+                <span className="saveDsc">Saving ₹{totalSavings}</span>
+                <span className="saveAmt">₹{batchDetails?.price}</span>
+              </div>
+            )}
           </div>
         )}
-        {batchDetails?.guestsAllowed && <div className="guestArea">
-          <div className="priceHead">Total</div>
-          <span className="flexy">
-            <span className="checkDsc">
-              {noOfGuests} {noOfGuests > 1 ? "guests" : "guest"}
-            </span>
-            <span className="checkAmt">₹{totalAmount}</span>
-          </span>
-          {totalSavings ? (
+        {batchDetails?.guestsAllowed && (
+          <div className="guestArea">
+            <div className="priceHead">Total</div>
             <span className="flexy">
-              <span className="saveDsc">Saving ₹{totalSavings}</span>
-              <span className="saveAmt">₹{baseAmount}</span>
+              <span className="checkDsc">
+                {noOfGuests} {noOfGuests > 1 ? "guests" : "guest"}
+              </span>
+              <span className="checkAmt">₹{totalAmount}</span>
             </span>
-          ) : null}
-        </div>}
-        {offerStrip.current && <div className={totalSavings ? "offer offerGreen" : "offer offerGray"}>
-          {totalSavings ? discountIconGreen() : discountIconGray()}
-          {offerStrip.current ? offerStrip.current : null}
-        </div>}
+            {totalSavings ? (
+              <span className="flexy">
+                <span className="saveDsc">Saving ₹{totalSavings}</span>
+                <span className="saveAmt">₹{baseAmount}</span>
+              </span>
+            ) : null}
+          </div>
+        )}
+        {offerStrip.current && (
+          <div
+            className={totalSavings ? "offer offerGreen" : "offer offerGray"}
+          >
+            {totalSavings ? discountIconGreen() : discountIconGray()}
+            {offerStrip.current ? offerStrip.current : null}
+          </div>
+        )}
       </div>
 
       <Flex>
