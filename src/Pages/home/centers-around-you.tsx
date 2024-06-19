@@ -170,10 +170,10 @@ function getListOfCenters(
               {concatAndUpperCaseActivities(activities.slice(0, 8))}
             </div>
             <div className="separator"></div>
-            <div className="location">
+            {area && <div className="location">
               {locationIcon()}
               {area}
-            </div>
+            </div>}
           </div>
 
           {showDiscount && (
