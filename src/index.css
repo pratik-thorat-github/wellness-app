@@ -7,6 +7,10 @@ body {
     overscroll-behavior: none;
 }
 
+html,body{
+  overflow-y:hidden;
+}
+
 code {
   font-family: 'Plus Jakarta Sans';
 }
