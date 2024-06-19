@@ -415,12 +415,10 @@ text-transform: uppercase;
 
 .obWrap{
     background: #fff;
-    height: 100vh;
     overflow: hidden;
 }
 
 .obImgWrap{
-    height: 100vh;
     background: linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);
     position: fixed;
     width: 100%;
@@ -430,7 +428,7 @@ text-transform: uppercase;
 
 .obImg{
     width: 100%;
-    height: 100vh;
+    /* height: 100vh; */
 }
 
 .exploreBtn{
