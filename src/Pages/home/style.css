@@ -74,10 +74,10 @@ letter-spacing: 4.16px;
 
 
 .head3{
-    color: #FFF;
+    color: #FFF0A4;
     text-align: center;
     font-family: "Plus Jakarta Sans";
-    font-size: 10px;
+    font-size: 12.299px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -148,6 +148,7 @@ height:22px;
     display: flex;
     justify-content: space-between;
     min-height:22px;  
+    max-height: 44px;
 
 }
 

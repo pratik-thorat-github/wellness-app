@@ -106,6 +106,8 @@ function createLowerFlexTiles() {
       <span> {classTile("football")} </span>
       <span> {classTile("hiit")} </span>
       <span> {classTile("cricket")} </span>
+      {/* <span> {classTile("gymdaypass")} </span> */}
+
     </Flex>
   );
 }
