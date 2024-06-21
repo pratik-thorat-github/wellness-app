@@ -163,7 +163,7 @@ function getListOfCenters(
           }
         >
           <div className="activityDetail">
-            <div className={name.length > 29 ? "nameInc" : "name"}>
+            <div className={name.length > 27 ? "nameInc" : "name"}>
               <span>{name}</span> {priceCard(minPrice, showDiscount)}
             </div>
             <div className="activity">
