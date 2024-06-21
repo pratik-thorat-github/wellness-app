@@ -83,7 +83,7 @@ function createUpperFlexTiles() {
       <span>{classTile("badminton")}</span>
       <span>{classTile("strength")}</span>
       <span>{classTile("swimming")}</span>
-      <span> {classTile("pt")} </span>
+      <span> {classTile("personal training")} </span>
       <span> {classTile("dance")} </span>
     </Flex>
   );
@@ -107,7 +107,6 @@ function createLowerFlexTiles() {
       <span> {classTile("hiit")} </span>
       <span> {classTile("cricket")} </span>
       {/* <span> {classTile("gymdaypass")} </span> */}
-
     </Flex>
   );
 }
