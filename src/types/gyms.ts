@@ -39,8 +39,11 @@ export interface IBatch {
   offerType?: EOfferType;
   offerPercentage?: number;
   minGuestsForOffer?: number;
-  venue?:string;
-  address?:string;
+  venue?: string;
+  address?: string;
+
+  venueAddressLine1?: string;
+  venueAddressLine2?: string;
 }
 
 export interface IGymDetails extends Omit<IGymCard, "medias"> {

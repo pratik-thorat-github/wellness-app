@@ -15,8 +15,8 @@ interface IUser {
   dob?: Date;
   addressLine1?: string;
   addressLine2?: string;
-  noOfBookings:number;
-  offerType?:string;
+  noOfBookings: number;
+  offerType?: string;
 }
 
 export interface IBookings {
@@ -29,6 +29,9 @@ export interface IBookings {
   date: Date;
   addressLine1: string;
   addressLine2: string;
+
+  venueAddressLine1?: string;
+  venueAddressLine2?: string;
 }
 
 export default IUser;

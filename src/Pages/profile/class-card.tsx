@@ -7,14 +7,22 @@ import { Rs } from "../../constants/symbols";
 import { IBookings } from "../../types/user";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import useWindowDimensions from "../../hooks/getWindowDimensions";
-import { toLetterCase } from "../../utils/string-operation";
+import { createMapsLink, toLetterCase } from "../../utils/string-operation";
 
 interface BookingClassCard {
   booking: IBookings;
 }
 
 const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
-  const mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${booking.addressLine1},${booking.addressLine2}`;
+  let addressLine1: string, addressLine2: string;
+  if (booking.venueAddressLine1 && booking.venueAddressLine2) {
+    addressLine1 = booking.venueAddressLine1;
+    addressLine2 = booking.venueAddressLine2;
+  } else {
+    addressLine1 = booking.addressLine1;
+    addressLine2 = booking.addressLine2;
+  }
+  const mapsLink = createMapsLink(addressLine1, addressLine2);
 
   return (
     <Flex
@@ -39,7 +47,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
           justify="center"
           align="center"
           style={{
-            borderBottom:'2px dashed',
+            borderBottom: "2px dashed",
             borderBottomColor: colors.border,
             paddingBottom: "16px",
             display: "flex",

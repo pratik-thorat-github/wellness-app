@@ -12,6 +12,7 @@ import activityToSvgMap from "../../images/class-images/activity-map";
 import { navigate } from "@reach/router";
 import { applicationIcons } from "../../utils/helper";
 import {
+  createMapsLink,
   toLetterCase,
   toLetterCaseNoUnderscore,
 } from "../../utils/string-operation";
@@ -40,8 +41,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
 
   const [showTimeOptions, setShowTimeOptions] = useState<Boolean>(false);
 
-  // const mapsLink = checkIphone() || checkIpad() ? "maps://0,0?q" : "geo:0,0?q";
-  const mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${gymData.addressLine1},${gymData.addressLine2}`;
+  const mapsLink = createMapsLink(gymData.addressLine1, gymData.addressLine2);
 
   const seeMore = (
     <span>
@@ -257,9 +257,9 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     ) : null;
   };
 
-  const gRate=(val:any)=>{
-    return val.googleRating>0
-  }
+  const gRate = (val: any) => {
+    return val.googleRating > 0;
+  };
   return (
     <>
       <div
@@ -275,7 +275,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           <div style={{ marginBottom: "16px" }}>
             {showDiscount ? (
               <span>
-                  <span className="slashed-price"> ₹{gymData.minPrice} </span>
+                <span className="slashed-price"> ₹{gymData.minPrice} </span>
                 <span className="price">
                   {" "}
                   ₹{Math.floor(gymData.minPrice / 2)}&nbsp;onwards
@@ -285,86 +285,91 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
               <span className="price">₹{gymData.minPrice} onwards</span>
             )}
 
-{gRate(gymData) && <><span style={{ margin: "0px 4px" }}>&bull;</span>
-             
-              <span className="gRating">
-                <span className="gIcon">{Gicon()}</span>
-                <span style={{ marginLeft: "16px", marginRight: "4px" }}>
-                  |
+            {gRate(gymData) && (
+              <>
+                <span style={{ margin: "0px 4px" }}>&bull;</span>
+
+                <span className="gRating">
+                  <span className="gIcon">{Gicon()}</span>
+                  <span style={{ marginLeft: "16px", marginRight: "4px" }}>
+                    |
+                  </span>
+                  <span>{gymData.googleRating}</span>
+                  <span>{starIcon()}&nbsp;</span>
+                  <span>({gymData.googleReviews})</span>
                 </span>
-                <span>{gymData.googleRating}</span>
-                <span>{starIcon()}&nbsp;</span>
-                <span>({gymData.googleReviews})</span>
-              </span>
               </>
-            }
+            )}
           </div>
-          {gymData.area && <>
-          <div className="line"></div>
-          <div className="locWrp">
-            <span className="baseTxt">
-              <LocationLogo style={{ marginRight: "8px" }} /> {gymData.area}
-            </span>
-            <span
-              onClick={() => {
-                Mixpanel.track("clicked_location_on_gym", {
-                  gymId: gymData.gymId,
-                });
-                window.open(mapsLink);
-              }}
-              className="baseTxt"
-              style={{ textDecoration: "underline" }}
-            >
-              View on map
-            </span>
-          </div>
-          <div className="line"></div>
-          <div className="locWrp">
-            <div className="timeWrapper">
-              <span>{clockIcon()}</span>
-              <span>
-                {gymData.operatingHours.map((time: any, idx1) => {
-                  if (idx1 > 0 && !showTimeOptions) {
-                    return;
-                  }
-                  return (
-                    <div className="timeWrap" key={idx1}>
-                      <span className="timeDay">
-                        {toLetterCase(time.day)} :{" "}
-                      </span>
-                      <span className="timeHours">
-                        {time.times.map((t: any, idx2: any) => {
-                          return (
-                            <>
-                              <span key={`${t.startTime}-${t.endTime}`}>
-                                {formatTimeIntToAmPm(t.startTime)} -{" "}
-                                {formatTimeIntToAmPm(t.endTime)}
-                              </span>
-                              <span style={{ margin: "0px 4px" }}>
-                                {idx2 === 0 && time.times.length > 1 && "|"}
-                              </span>
-                            </>
-                          );
-                        })}
-                      </span>
-                      <span
-                        className="info"
-                        onClick={() => {
-                          Mixpanel.track("clicked_operating_hours_on_gym", {
-                            gymId: gymData.gymId,
-                          });
-                          setShowTimeOptions(!showTimeOptions);
-                        }}
-                      >
-                        {idx1 == 0 && infoIcon()}
-                      </span>
-                    </div>
-                  );
-                })}
-              </span>
-            </div>
-          </div>
-          <div className="line"></div></>}
+          {gymData.area && (
+            <>
+              <div className="line"></div>
+              <div className="locWrp">
+                <span className="baseTxt">
+                  <LocationLogo style={{ marginRight: "8px" }} /> {gymData.area}
+                </span>
+                <span
+                  onClick={() => {
+                    Mixpanel.track("clicked_location_on_gym", {
+                      gymId: gymData.gymId,
+                    });
+                    window.open(mapsLink);
+                  }}
+                  className="baseTxt"
+                  style={{ textDecoration: "underline" }}
+                >
+                  View on map
+                </span>
+              </div>
+              <div className="line"></div>
+              <div className="locWrp">
+                <div className="timeWrapper">
+                  <span>{clockIcon()}</span>
+                  <span>
+                    {gymData.operatingHours.map((time: any, idx1) => {
+                      if (idx1 > 0 && !showTimeOptions) {
+                        return;
+                      }
+                      return (
+                        <div className="timeWrap" key={idx1}>
+                          <span className="timeDay">
+                            {toLetterCase(time.day)} :{" "}
+                          </span>
+                          <span className="timeHours">
+                            {time.times.map((t: any, idx2: any) => {
+                              return (
+                                <>
+                                  <span key={`${t.startTime}-${t.endTime}`}>
+                                    {formatTimeIntToAmPm(t.startTime)} -{" "}
+                                    {formatTimeIntToAmPm(t.endTime)}
+                                  </span>
+                                  <span style={{ margin: "0px 4px" }}>
+                                    {idx2 === 0 && time.times.length > 1 && "|"}
+                                  </span>
+                                </>
+                              );
+                            })}
+                          </span>
+                          <span
+                            className="info"
+                            onClick={() => {
+                              Mixpanel.track("clicked_operating_hours_on_gym", {
+                                gymId: gymData.gymId,
+                              });
+                              setShowTimeOptions(!showTimeOptions);
+                            }}
+                          >
+                            {idx1 == 0 && infoIcon()}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </span>
+                </div>
+              </div>
+              <div className="line"></div>
+            </>
+          )}
         </div>
         <div className="gymPageheading">
           <div>Choose Activity</div>
@@ -433,27 +438,34 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             </a>
           </span>
         </div>
-        {gymData.addressLine1 && <><div className="line"></div>
-        <div className="locWrp">
-          <div>
-            <div className="baseTxt">
-              <LocationLogo
-                style={{ marginRight: "8px", marginBottom: "4px" }}
-              />{" "}
-              Address
+        {gymData.addressLine1 && (
+          <>
+            <div className="line"></div>
+            <div className="locWrp">
+              <div>
+                <div className="baseTxt">
+                  <LocationLogo
+                    style={{ marginRight: "8px", marginBottom: "4px" }}
+                  />{" "}
+                  Address
+                </div>
+                <div
+                  className="baseTxt"
+                  style={{ color: "#828081", marginLeft: "16px" }}
+                >
+                  {gymData.addressLine1},{gymData.addressLine2}
+                </div>
+              </div>
             </div>
-            <div
-              className="baseTxt"
-              style={{ color: "#828081", marginLeft: "16px" }}
-            >
-              {gymData.addressLine1},{gymData.addressLine2}
-            </div>
-          </div>
-        </div></>}
+          </>
+        )}
       </div>
       <div className="bookBtnWrap">
         {discountLine()}
-        <button className={showDiscount ? "bookBtn":'bookBtn2' } onClick={() => navigateToBatches("all")}>
+        <button
+          className={showDiscount ? "bookBtn" : "bookBtn2"}
+          onClick={() => navigateToBatches("all")}
+        >
           View Schedule
         </button>
       </div>
