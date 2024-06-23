@@ -133,7 +133,11 @@ letter-spacing: 0.24px;
 margin-bottom:4px;
 display: flex;
 justify-content: space-between;
-height:22px;        
+max-height: 24px;
+}
+
+.name > span{
+    white-space:break-spaces
 }
 
 .nameInc{
@@ -149,7 +153,23 @@ height:22px;
     justify-content: space-between;
     min-height:22px;  
     max-height: 44px;
+}
 
+.nameInc > span{
+    white-space:break-spaces
+}
+
+.nameNoheight{
+    color:  #05070B;
+    font-family: "Plus Jakarta Sans";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 135%; /* 21.6px */
+    letter-spacing: 0.24px;
+    margin-bottom:4px;
+    display: flex;
+    justify-content: space-between;   
 }
 
 .activity{

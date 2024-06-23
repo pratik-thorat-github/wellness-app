@@ -47,6 +47,11 @@ const activityToSvgMap = (activity: string): JSX.Element => {
       <Hiit />
     </span>
   );
+  const personaltraining = (
+    <span>
+      <Pt />
+    </span>
+  );
   const pt = (
     <span>
       <Pt />
@@ -102,7 +107,7 @@ const activityToSvgMap = (activity: string): JSX.Element => {
     strength: strength,
     hiit: hiit,
     swimming: swimming,
-    pt: pt,
+    personaltraining: personaltraining,
     boxing: boxing,
     zumba: zumba,
     "kick boxing": boxing,

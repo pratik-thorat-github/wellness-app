@@ -83,8 +83,8 @@ function createUpperFlexTiles() {
       <span>{classTile("badminton")}</span>
       <span>{classTile("strength")}</span>
       <span>{classTile("swimming")}</span>
-      <span> {classTile("personal training")} </span>
-      <span> {classTile("dance")} </span>
+      <span>{classTile("personaltraining")}</span>
+      <span>{classTile("dance")}</span>
     </Flex>
   );
 }
@@ -106,7 +106,7 @@ function createLowerFlexTiles() {
       <span> {classTile("football")} </span>
       <span> {classTile("hiit")} </span>
       <span> {classTile("cricket")} </span>
-      {/* <span> {classTile("gymdaypass")} </span> */}
+      <span> {classTile("gymming")} </span>
     </Flex>
   );
 }
@@ -123,7 +123,7 @@ const ClassesNearYou: React.FC = () => {
         <Flex flex={1} vertical>
           <div
             style={{
-              width: "100vw",
+              width: "95vw",
               overflow: "auto",
               scrollbarWidth: "none",
               scrollBehavior: "smooth",
