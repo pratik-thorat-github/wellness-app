@@ -159,6 +159,10 @@ max-height: 24px;
     white-space:break-spaces
 }
 
+.nameNoheight > span{
+    white-space:break-spaces
+}
+
 .nameNoheight{
     color:  #05070B;
     font-family: "Plus Jakarta Sans";
