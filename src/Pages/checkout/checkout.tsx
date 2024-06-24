@@ -70,6 +70,11 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       setTotalAmount(batchDetails.price);
       _getGymById(String(batchDetails.gymId));
 
+      Mixpanel.track("open_checkout_page", {
+        batchId,
+        gym,
+      });
+
       // offerStrip.current = "50% off on your 1st booking on ZenfitX";
       if (
         batchDetails.offerType == EOfferType.BATCH_WITH_GUESTS &&
@@ -125,6 +130,14 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
     setTotalAmount(finalAmount);
     setTotalSavings(discount);
+
+    Mixpanel.track(`clicked_change_guest_on_checkout_page`, {
+      add: increment,
+      remove: increment,
+      finalAmount,
+      discount,
+      baseAmount,
+    });
   }
 
   const backBtn = () => (

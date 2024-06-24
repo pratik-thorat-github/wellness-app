@@ -26,7 +26,7 @@ export interface IBookNowFooter {
   comingFrom: EBookNowComingFromPage;
   batchId: number;
   totalGuests?: number;
-  forceBookNowCta?:boolean
+  forceBookNowCta?: boolean;
 }
 
 function loadScript(src: string) {
@@ -54,6 +54,10 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     offerType: props.batchDetails?.offerType as EOfferType,
     noOfGuests: props.totalGuests as number,
   };
+
+  Mixpanel.track("pay_now_button_clicked_on_checkout_page", {
+    ...payload,
+  });
 
   return payload;
 }
@@ -188,8 +192,8 @@ function MixpanelBookNowFooterInit(
 
 const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [userDetails] = useAtom(userDetailsAtom);
-  const [showDiscount,setShowDiscount]=useState(false)
-  const [discountedAmount,setDiscountedAmount]=useState(props.totalAmount)
+  const [showDiscount, setShowDiscount] = useState(false);
+  const [discountedAmount, setDiscountedAmount] = useState(props.totalAmount);
   const [_, setCheckoutSdkRedirectAtom] = useAtom(checkoutSdkRedirectAtom);
 
   let locationStates = useLocation().state;
@@ -198,12 +202,12 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [loading, setLoading] = useState(false);
 
   function processBookNowCta() {
-    if(props.forceBookNowCta){
+    if (props.forceBookNowCta) {
       Mixpanel.track("open_batch_checkout_booking", {
         batchId: props.batchId,
       });
       navigate(`/checkout/batch/${props.batchId}/booking`);
-      return
+      return;
     }
     if (!userDetails) {
       Mixpanel.track("open_batch_checkout_login_with_phone", {
@@ -225,7 +229,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         batchId: props.batchId,
         phone: userDetails.phone,
       });
-      MixpanelBookNowFooterInit(props, props.checkoutType);
+
       displayRazorpay(props, userDetails, setLoading);
       // displayCashfree(props, userDetails, setLoading);
     }
@@ -236,38 +240,39 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   }, []);
 
   useEffect(() => {
-    if(props.batchDetails){
-    if (!userDetails && props.batchDetails?.offerType !== "BATCH_WITH_GUESTS") {
-      setShowDiscount(true);
-    } else {
+    if (props.batchDetails) {
       if (
-        userDetails &&
-        userDetails.noOfBookings < 1 &&
+        !userDetails &&
         props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
       ) {
         setShowDiscount(true);
-      }
-      if (props.batchDetails?.offerType === "BATCH_WITH_GUESTS") {
-        setShowDiscount(false);
+      } else {
+        if (
+          userDetails &&
+          userDetails.noOfBookings < 1 &&
+          props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
+        ) {
+          setShowDiscount(true);
+        }
+        if (props.batchDetails?.offerType === "BATCH_WITH_GUESTS") {
+          setShowDiscount(false);
+        }
       }
     }
-  }
-  if (showCTA()) {
-    setShowDiscount(false);
-  }
+    if (showCTA()) {
+      setShowDiscount(false);
+    }
   }, [props.batchDetails]);
 
-  useEffect(()=>{
-    if(showDiscount){
-
+  useEffect(() => {
+    if (showDiscount) {
       const [newTotalAmount] = deductPercentage(
         props.batchDetails?.price || 0,
         50
       );
-      setDiscountedAmount(newTotalAmount)
+      setDiscountedAmount(newTotalAmount);
     }
-
-  },[showDiscount])
+  }, [showDiscount]);
 
   if (loading) return <Loader />;
   const showCTA = () => {
@@ -351,12 +356,31 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               paddingLeft: "24px",
             }}
           >
-            <Flex flex={2} vertical justify="center" align="left" className={discountedAmount?'discountedAmountWrap':''}>
-            {showDiscount && <span >{Rs}{discountedAmount}</span>}&nbsp;&nbsp;
-              <span style={{ fontWeight: "bold", fontSize: "20px",  textDecorationLine: showDiscount?'line-through':'',marginBottom: showDiscount?'3px':''}} className={showDiscount?'discountedAmount':''}>
+            <Flex
+              flex={2}
+              vertical
+              justify="center"
+              align="left"
+              className={discountedAmount ? "discountedAmountWrap" : ""}
+            >
+              {showDiscount && (
+                <span>
+                  {Rs}
+                  {discountedAmount}
+                </span>
+              )}
+              &nbsp;&nbsp;
+              <span
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "20px",
+                  textDecorationLine: showDiscount ? "line-through" : "",
+                  marginBottom: showDiscount ? "3px" : "",
+                }}
+                className={showDiscount ? "discountedAmount" : ""}
+              >
                 {Rs}
                 {props.totalAmount}
-               
               </span>
             </Flex>
             <div

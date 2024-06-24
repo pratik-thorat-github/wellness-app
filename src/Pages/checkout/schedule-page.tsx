@@ -103,6 +103,10 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   });
 
   useEffect(() => {
+    Mixpanel.track("open_schedule_page", { gymId });
+  }, []);
+
+  useEffect(() => {
     _getGymById(gymId as string);
   }, [gymId]);
 
@@ -179,6 +183,10 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             borderBottomWidth: "0px",
           }}
           onClick={() => {
+            Mixpanel.track("clicked_batch_tile_on_schedule_page", {
+              batchDetails: batch,
+              gym,
+            });
             navigate(`/checkout/batch/${batch.batchId}`, {
               state: {
                 batchId: batch.batchId.toString(),
@@ -215,13 +223,19 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               }}
             >
               <Flex flex={2} vertical>
-                <div style={{
-                  display:'flex',flexDirection:'column'
-                }}>
-                   {batch.venue && <span>{formatDate(batch.date)['date suffix']}</span>}
-                  <span  style={{ fontWeight: "bold" }}>{batch.activityName}</span>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {batch.venue && (
+                    <span>{formatDate(batch.date)["date suffix"]}</span>
+                  )}
+                  <span style={{ fontWeight: "bold" }}>
+                    {batch.activityName}
+                  </span>
                   {batch.venue && <span>{batch.venue}</span>}
-
                 </div>
                 {batch.trainer ? (
                   <Flex flex={1}>By {batch.trainer}</Flex>
@@ -372,7 +386,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
         align="center"
         style={selectedDate == dateString ? selectedStyle : style}
         onClick={() => {
-          Mixpanel.track("clicked_date_gym", {
+          Mixpanel.track("clicked_date_on_schedule_page", {
             gymId: gym?.gymId,
             date: dateString,
             day: `${number}-${day}`,
@@ -433,10 +447,12 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               {backBtn()}
             </div>
             <div className="gymNames">{gym?.name}</div>
-            {gym?.area && <div className="locationName">
-              <span>{locationIcon()}</span>
-              <span>{gym?.area}</span>
-            </div>}
+            {gym?.area && (
+              <div className="locationName">
+                <span>{locationIcon()}</span>
+                <span>{gym?.area}</span>
+              </div>
+            )}
           </div>
           <div style={{ margin: "0px 8px 0px 24px" }}>
             {!gym?.isOnlyWeekend && generateDateTiles()}
