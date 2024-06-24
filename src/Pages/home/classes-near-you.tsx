@@ -22,6 +22,7 @@ async function navigateToHome(activity: string) {
 const classTile = (activity: string) => (
   <Flex
     onClick={async () => {
+      Mixpanel.track("clicked_activity_tile_on_home_page", { activity });
       await navigate(`/${activity}`);
     }}
     justify="center"
@@ -38,6 +39,9 @@ const trendingTile = () => {
     <div
       className="trendingBox"
       onClick={async () => {
+        Mixpanel.track("clicked_activity_tile_on_home_page", {
+          activity: "trending",
+        });
         await navigate(`/trending`);
       }}
     >
