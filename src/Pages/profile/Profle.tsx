@@ -7,7 +7,11 @@ import PlusClassRemaining from "./plus-classes-remaining";
 import PastClasses from "./past-classes";
 import UpcomingClasses from "./upcoming-classes";
 import { useAtom } from "jotai/react";
-import { plusDetailsAtom } from "../../atoms/atom";
+import {
+  afterLoginRedirectAtom,
+  plusDetailsAtom,
+  userDetailsAtom,
+} from "../../atoms/atom";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { getBookingOfUser } from "../../apis/user/bookings";
@@ -25,7 +29,8 @@ function MixpanelProfileInit(noOfBookings: number, plusDetails?: IPlusDetails) {
 }
 
 const Profile: React.FC<IProfile> = () => {
-  // const [plusDetails] = useAtom(plusDetailsAtom);
+  const [userDetails] = useAtom(userDetailsAtom);
+  const [_, setAfterLoginRedirectAtom] = useAtom(afterLoginRedirectAtom);
 
   const [pastBookings, setPastBookings] = useState<IBookings[]>([]);
   const [upcomingBookings, setUpcomingBookings] = useState<IBookings[]>([]);
@@ -46,13 +51,20 @@ const Profile: React.FC<IProfile> = () => {
   });
 
   useEffect(() => {
-    _getBookingOfUser();
-  }, [navigate]);
+    if (!userDetails) {
+      setAfterLoginRedirectAtom({
+        afterLoginUrl: "/profile",
+      });
+      navigate("/login");
+    }
 
-  const shareAndBack=()=>{
+    _getBookingOfUser();
+  }, []);
+
+  const shareAndBack = () => {
     return (
       <div className="shareAndBack">
-        <span className="Btn" onClick={() => navigate('/')}>
+        <span className="Btn" onClick={() => navigate("/")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -71,8 +83,7 @@ const Profile: React.FC<IProfile> = () => {
         </span>
       </div>
     );
-
-  }
+  };
 
   return (
     <Flex

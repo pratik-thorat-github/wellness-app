@@ -11,7 +11,7 @@ import { EOfferType, IBatch, IGymDetails } from "../../types/gyms";
 import colors from "../../constants/colours";
 import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { useAtom } from "jotai/react";
-import { checkoutSdkRedirectAtom, userDetailsAtom } from "../../atoms/atom";
+import { afterLoginRedirectAtom, userDetailsAtom } from "../../atoms/atom";
 import IUser from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import { useEffect, useState } from "react";
@@ -198,26 +198,31 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [showDiscount, setShowDiscount] = useState(false);
   const [discountedAmount, setDiscountedAmount] = useState(props.totalAmount);
-  const [_, setCheckoutSdkRedirectAtom] = useAtom(checkoutSdkRedirectAtom);
+  const [_, setAfterLoginRedirectAtom] = useAtom(afterLoginRedirectAtom);
 
   let locationStates = useLocation().state;
   console.log(locationStates);
 
   const [loading, setLoading] = useState(false);
 
+  const batchBookingUrl = `/checkout/batch/${props.batchId}/booking`;
+
   function processBookNowCta() {
     if (props.forceBookNowCta) {
       Mixpanel.track("open_batch_checkout_booking", {
         batchId: props.batchId,
       });
-      navigate(`/checkout/batch/${props.batchId}/booking`);
+      navigate(batchBookingUrl);
       return;
     }
     if (!userDetails) {
       Mixpanel.track("open_batch_checkout_login_with_phone", {
         batchId: props.batchId,
       });
-      setCheckoutSdkRedirectAtom(props);
+      setAfterLoginRedirectAtom({
+        ...props,
+        afterLoginUrl: batchBookingUrl,
+      });
 
       navigate("/login");
     } else if (
@@ -227,7 +232,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       Mixpanel.track("open_batch_checkout_booking", {
         batchId: props.batchId,
       });
-      navigate(`/checkout/batch/${props.batchId}/booking`);
+      navigate(batchBookingUrl);
     } else {
       Mixpanel.track("open_batch_checkout_pay_now", {
         batchId: props.batchId,
@@ -240,7 +245,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   }
 
   useEffect(() => {
-    setCheckoutSdkRedirectAtom(null);
+    setAfterLoginRedirectAtom(null);
   }, []);
 
   useEffect(() => {

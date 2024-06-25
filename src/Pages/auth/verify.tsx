@@ -14,7 +14,7 @@ import "./style.css";
 
 import {
   accessTokenAtom,
-  checkoutSdkRedirectAtom,
+  afterLoginRedirectAtom,
   userDetailsAtom,
 } from "../../atoms/atom";
 import { useAtom } from "jotai/react";
@@ -57,7 +57,7 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
 
   const [, setAccessTokenAtom] = useAtom(accessTokenAtom);
   const [, setUserDetailsAtom] = useAtom(userDetailsAtom);
-  const [checkoutSdkRedirectProps] = useAtom(checkoutSdkRedirectAtom);
+  const [afterLoginRedirectProps] = useAtom(afterLoginRedirectAtom);
   const [otpLessOrderIdState, setOtpLessOrderIdState] =
     useState(otpLessOrderId);
 
@@ -66,12 +66,11 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
     setUserDetailsAtom(res.user);
     mixpanelEvents(res.user);
 
-    navigate(`/checkout/batch/${checkoutSdkRedirectProps?.batchId}/booking`, {
+    navigate(afterLoginRedirectProps?.afterLoginUrl as string, {
       replace: true,
-      state: { ...checkoutSdkRedirectProps },
+      state: { ...afterLoginRedirectProps },
     });
   }
-
 
   const { mutate: _verifyOtplessMagicLink } = useMutation({
     mutationFn: verifyOtplessMagicLink,
@@ -147,7 +146,7 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
             onChange={setOtp}
             numInputs={4}
             renderSeparator={<span>{`    `}</span>}
-            renderInput={(props:any) => <input {...props} />}
+            renderInput={(props: any) => <input {...props} />}
             inputType="number"
             inputStyle={{
               height: "48px",

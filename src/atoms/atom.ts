@@ -25,11 +25,15 @@ export const plusDetailsAtom = atomWithStorage<IPlusDetails | null>(
   plusDetailsStorage
 );
 
-const checkoutSdkRedirectStorage = createJSONStorage<IBookNowFooter | null>(
-  () => localStorage
-);
-export const checkoutSdkRedirectAtom = atomWithStorage<IBookNowFooter | null>(
-  "zenfitx-batch-checkout-details",
-  null,
-  checkoutSdkRedirectStorage
-);
+export interface IAfterLoginRedirect {
+  afterLoginUrl: string;
+}
+
+const checkoutSdkRedirectStorage =
+  createJSONStorage<IAfterLoginRedirect | null>(() => localStorage);
+export const afterLoginRedirectAtom =
+  atomWithStorage<IAfterLoginRedirect | null>(
+    "zenfitx-batch-checkout-details",
+    null,
+    checkoutSdkRedirectStorage
+  );
