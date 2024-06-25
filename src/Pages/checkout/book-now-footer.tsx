@@ -50,7 +50,11 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     userId: userDetails.id as number,
     batchPrice: props.batchDetails?.price as number,
 
-    offerPercentage: props.batchDetails?.offerPercentage as number,
+    offerPercentage:
+      (props.totalGuests as number) >=
+      (props.batchDetails?.minGuestsForOffer as number)
+        ? (props.batchDetails?.offerPercentage as number)
+        : 0,
     offerType: props.batchDetails?.offerType as EOfferType,
     noOfGuests: props.totalGuests as number,
   };
