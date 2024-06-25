@@ -22,7 +22,7 @@ const Login: React.FC<ILoginProps> = () => {
     name: "",
   });
 
-  useAuthRedirect();
+  // useAuthRedirect();
 
   function setValue(e: React.ChangeEvent<HTMLInputElement>) {
     var toSet = { ...input };
@@ -102,7 +102,7 @@ const Login: React.FC<ILoginProps> = () => {
   function submitButton() {
     submitClicked.current = true;
 
-    _createUser({ name: input.name, phone: input.phone , noOfBookings:0 });
+    _createUser({ name: input.name, phone: input.phone, noOfBookings: 0 });
   }
 
   const buttonDisabled = () => {
@@ -110,7 +110,6 @@ const Login: React.FC<ILoginProps> = () => {
 
     return Boolean(input.phone.length !== 10 || !input.name);
   };
-
 
   const shareAndBack = () => {
     return (
@@ -136,8 +135,6 @@ const Login: React.FC<ILoginProps> = () => {
     );
   };
 
-  
-
   return (
     <Flex flex={1} style={{ minHeight: "40vh" }} vertical justify="center">
       <Flex
@@ -152,9 +149,11 @@ const Login: React.FC<ILoginProps> = () => {
         }}
         className="login-banner"
       >
-              {shareAndBack()}
+        {shareAndBack()}
 
-        <span style={{ fontSize: "24px", fontWeight: "bold",textAlign:'center' }}>
+        <span
+          style={{ fontSize: "24px", fontWeight: "bold", textAlign: "center" }}
+        >
           {" "}
           {/* Welcome To ZenfitX!{" "} */}
           One step to go!
@@ -233,14 +232,13 @@ const Login: React.FC<ILoginProps> = () => {
                   height: "30px",
                   borderRadius: "5px",
                   padding: "10px",
-                  
                 }}
                 type="tel"
                 onChange={setValue}
                 name="phone"
                 value={input.phone}
-                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required
-
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                required
               />{" "}
             </span>
           </Flex>
