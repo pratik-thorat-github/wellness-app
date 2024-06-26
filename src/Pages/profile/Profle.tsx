@@ -29,7 +29,6 @@ function MixpanelProfileInit(noOfBookings: number, plusDetails?: IPlusDetails) {
 }
 
 const Profile: React.FC<IProfile> = () => {
-  const [userDetails] = useAtom(userDetailsAtom);
   const [_, setAfterLoginRedirectAtom] = useAtom(afterLoginRedirectAtom);
 
   const [pastBookings, setPastBookings] = useState<IBookings[]>([]);
@@ -51,7 +50,10 @@ const Profile: React.FC<IProfile> = () => {
   });
 
   useEffect(() => {
-    if (!userDetails) {
+    let userDetailsInLocalStorage = localStorage.getItem(
+      "zenfitx-user-details"
+    );
+    if (!userDetailsInLocalStorage) {
       setAfterLoginRedirectAtom({
         afterLoginUrl: "/profile",
       });
