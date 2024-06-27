@@ -373,6 +373,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
           totalAmount={totalAmount || batchDetails?.price || 0}
           comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
           totalGuests={noOfGuests}
+          totalSavings={totalSavings}
         />
       </Flex>
     </>
