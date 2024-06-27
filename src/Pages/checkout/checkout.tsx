@@ -89,6 +89,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
   useEffect(() => {
     if (
+      batchDetails &&
       (!userDetails || (userDetails && userDetails.noOfBookings < 1)) &&
       batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
     ) {
@@ -99,6 +100,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
       setTotalAmount(newTotalAmount);
       setTotalSavings(discount);
+
+      batchDetails.offerPercentage = 50;
+      batchDetails.offerType = EOfferType.PLATFORM;
     }
   }, [batchDetails]);
 
