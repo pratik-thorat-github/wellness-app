@@ -19,7 +19,7 @@ export enum EOfferType {
 export interface IBatch {
   id?: number;
   batchId: number;
-  date: Date;
+  date: Date | string;
   duration: number;
   price: number;
   startTime: number;
@@ -34,6 +34,7 @@ export interface IBatch {
   moreInfo?: string;
   gymId: number;
   image?: string;
+  description?:string
 
   guestsAllowed?: boolean;
   offerType?: EOfferType;
@@ -44,6 +45,7 @@ export interface IBatch {
 
   venueAddressLine1?: string;
   venueAddressLine2?: string;
+  updatedAt?:string
 }
 
 export interface IGymDetails extends Omit<IGymCard, "medias"> {

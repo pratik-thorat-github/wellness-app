@@ -19,6 +19,8 @@ import { getActivityById, getGymById } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
+import { createMapsLink } from "../../utils/string-operation";
+import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
 
 interface IClassCheckout extends RouteComponentProps {
   // batchDetails?: IBatch;
@@ -253,6 +255,8 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
       </svg>
     );
   };
+  const mapsLink = createMapsLink(batchDetails?.venueAddressLine1 || '', batchDetails?.venueAddressLine1 || '');
+
 
   return (
     <Flex
@@ -362,20 +366,24 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
               </div>
             </div>
           )}
-          {batchDetails?.address && (
+          {batchDetails?.venue &&(
             <div className="sectionAct">
             <div className="sectionActHeading">
               {leftDivider()}
               <span style={{ margin: "0px 12px" }}>Address</span>
               {rightDivider()}
             </div>
-             <div className="locWrp">
+             <div className="locWrp locWrpCol">
                <div
-                 className="baseTxt"
+                 className="baseTxt baseTxt1"
                  style={{ color: "#828081", marginLeft: "16px" }}
-                 
                >
-                Location : <span style={{textDecoration:'underline',color:"#000"}} onClick={()=>window.open(batchDetails?.address)}>View on map</span>
+                <span className="baseTxt"  style={{ color: "#828081",alignItems:'flex-start'}}>
+                  <LocationLogo style={{ marginRight: "8px",marginTop:'4px' }} /> <span  style={{ color: "#828081" ,maxWidth:'80%' }}>{batchDetails?.venue}</span>
+                </span>
+                 <span style={{textDecoration:'underline',color:"#000",minWidth:'30%'}}  onClick={() => {
+                    window.open(mapsLink);
+                  }}>View on map</span>
                </div>
            </div>
            </div>

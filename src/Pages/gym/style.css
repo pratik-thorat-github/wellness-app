@@ -70,11 +70,22 @@ display: flex;
 align-items: center;
 }
 
+.baseTxt1{
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 .locWrp{
     padding:12px 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.locWrpCol{
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .gymPageheading{

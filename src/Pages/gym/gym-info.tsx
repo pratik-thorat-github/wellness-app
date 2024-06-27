@@ -381,7 +381,6 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
                 style={{
                   marginRight: "16px",
                   height: "90px",
-                  width: "90px",
                   display: "inline-block",
                 }}
                 onClick={() => {
