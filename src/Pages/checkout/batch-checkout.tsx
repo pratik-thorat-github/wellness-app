@@ -292,10 +292,14 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
               ? formatDate(batchDetails.date)["date suffix"]
               : "Date not available"}
           </span>
-          <span className="dot"></span>
-          {formatTimeIntToAmPm(batchDetails?.startTime || 0)}
+          {batchDetails?.isDayPass ? "" : (
+            <>
+              <span className="dot"></span>
+              {formatTimeIntToAmPm(batchDetails?.startTime || 0)}
+            </>
+          )}
           <span className="dot"></span>{" "}
-          {batchDetails?.DurationMin || "Duration not available"} min
+          {batchDetails?.isDayPass ? "All Day" : batchDetails?.DurationMin + " min" || "Duration not available"}
         </div>
         <div className="activityLoc">
           <span className="locIcon">{locationIcon()}</span>
