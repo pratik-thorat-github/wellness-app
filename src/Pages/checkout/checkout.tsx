@@ -306,9 +306,19 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
               {batchDetails?.date &&
                 formatDate(batchDetails?.date)["date suffix"]}{" "}
               &bull;{" "}
-              {batchDetails?.startTime &&
-                formatTimeIntToAmPm(batchDetails?.startTime)}{" "}
-              &bull; {batchDetails?.DurationMin} min
+              {batchDetails?.isDayPass ? (
+                <>
+                  All Day
+                </>
+              ) : (
+                <>
+                  {batchDetails?.startTime &&
+                    <>
+                      {formatTimeIntToAmPm(batchDetails?.startTime)} &bull; {batchDetails?.DurationMin} min
+                    </>
+                  }
+                </>
+              )}
             </div>
           </span>
         </div>
