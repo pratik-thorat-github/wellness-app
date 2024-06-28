@@ -137,7 +137,8 @@ max-height: 24px;
 }
 
 .name > span{
-    white-space:break-spaces
+    white-space:break-spaces;
+    max-width:214px;
 }
 
 .nameInc{
@@ -156,11 +157,13 @@ max-height: 24px;
 }
 
 .nameInc > span{
-    white-space:break-spaces
+    white-space:break-spaces;
+    max-width:214px;
 }
 
 .nameNoheight > span{
-    white-space:break-spaces
+    white-space:break-spaces;
+    max-width:214px;
 }
 
 .nameNoheight{
