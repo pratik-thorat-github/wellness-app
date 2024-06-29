@@ -81,10 +81,12 @@ const HomeBanner: React.FC = () => {
 
       </div>
       <div className="head2">
-      Explore and book any fitness or wellness activity near you anytime! 
+      Book any fitness activity near you! 
+      <br></br>
+      Just pay for sessions not memberships!
       </div>
       <div className="head3">
-      Just pay for activities not memberships.
+      50% off on your first booking.
 
       </div>
     </div>}
