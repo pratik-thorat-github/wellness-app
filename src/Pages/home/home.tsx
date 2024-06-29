@@ -59,7 +59,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
 
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
   const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
-  const [onboarding,setOnboarding] = useState<boolean>(false);
+  const [onboarding, setOnboarding] = useState<boolean>(false);
   const showClassesNearYouRef = useRef(true);
 
   const mixpanelSet = useRef(false);
@@ -133,11 +133,11 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     },
   });
 
-  useEffect(()=>{
-    if(onboarding){
-      setCookie('onboarding', 'done', 1);
+  useEffect(() => {
+    if (onboarding) {
+      setCookie("onboarding", "done", 1);
     }
-  },[onboarding])
+  }, [onboarding]);
 
   useEffect(() => {
     const userDetails =
@@ -161,64 +161,70 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     }
   }, [userDetails]);
 
-  function setCookie(name:string, value:string, days:number) {
+  function setCookie(name: string, value: string, days: number) {
     const date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Convert days to milliseconds
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Convert days to milliseconds
     const expires = "expires=" + date.toUTCString();
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
   }
-  
-  // Set the 'onboarding' cookie to 'done' and expire it after 1 day
-  const showOnBoarding =()=>{
-    return !onboarding && !userDetails?.id  && getCookie('onboarding')!=='done'
-  }
 
-  function getCookie(name:string) {
+  // Set the 'onboarding' cookie to 'done' and expire it after 1 day
+  const showOnBoarding = () => {
+    return (
+      !onboarding && !userDetails?.id && getCookie("onboarding") !== "done"
+    );
+  };
+
+  function getCookie(name: string) {
     const nameEQ = name + "=";
-    const ca = document.cookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
+    const ca = document.cookie.split(";");
+    for (let i = 0; i < ca.length; i++) {
       let c = ca[i];
-      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      while (c.charAt(0) === " ") c = c.substring(1, c.length);
       if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
     }
     return null;
   }
+<<<<<<< Updated upstream
   
   
   // if(showOnBoarding()) return <Onboarding setOnboarding={setOnboarding}/>
+=======
+
+  // if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
+>>>>>>> Stashed changes
   if (!activities.length || !gymCardsData.length) return <Loader />;
 
   return (
     <>
-    <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
-      <div>
-        <Space></Space>
+      <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
+        <div>
+          <Space></Space>
 
-        {/* {userDetails?.phone && <Flex flex={1}>
+          {/* {userDetails?.phone && <Flex flex={1}>
             <ProfileBanner />
           </Flex>} */}
 
-        <Flex flex={3}>
-          <HomeBanner />
-        </Flex>
-
-        {showClassesNearYou ? (
-          <Flex style={{ marginLeft: "16px" }} flex={3}>
-            <ClassesNearYou />
+          <Flex flex={3}>
+            <HomeBanner />
           </Flex>
-        ) : null}
-      </div>
 
-      <Flex flex={3} style={{ margin: "0 5%" }}>
-        <CentersAroundYou
-          activities={activities}
-          activitySelected={activitySelected}
-          gymCardsData={gymCardsData}
-          showClassesNearYou={showClassesNearYou}
-        />
+          {showClassesNearYou ? (
+            <Flex style={{ marginLeft: "16px" }} flex={3}>
+              <ClassesNearYou />
+            </Flex>
+          ) : null}
+        </div>
+
+        <Flex flex={3} style={{ margin: "0 5%" }}>
+          <CentersAroundYou
+            activities={activities}
+            activitySelected={activitySelected}
+            gymCardsData={gymCardsData}
+            showClassesNearYou={showClassesNearYou}
+          />
+        </Flex>
       </Flex>
-    </Flex>
-
     </>
   );
 };
