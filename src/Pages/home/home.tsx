@@ -185,14 +185,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     }
     return null;
   }
-<<<<<<< Updated upstream
-  
-  
-  // if(showOnBoarding()) return <Onboarding setOnboarding={setOnboarding}/>
-=======
 
   // if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
->>>>>>> Stashed changes
   if (!activities.length || !gymCardsData.length) return <Loader />;
 
   return (
