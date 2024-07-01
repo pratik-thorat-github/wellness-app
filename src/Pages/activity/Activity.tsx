@@ -186,7 +186,7 @@ const exclusiveIcon = () => {
               <span>{name}</span> {priceCard(minPrice, showDiscount)}
             </div>
             <div className="activity">
-              {concatAndUpperCaseActivities(activities.slice(0, 8))}
+              {concatAndUpperCaseActivities(activities?.slice(0, 8))}
             </div>
             <div className="separator"></div>
             {area && <div className="location">
