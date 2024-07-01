@@ -375,7 +375,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           <div>Choose Activity</div>
         </div>
         <div className="activities">
-          {gymData?.activities.map((activity: string) => {
+          {gymData?.activities?.map((activity: string) => {
             return (
               <span
                 style={{

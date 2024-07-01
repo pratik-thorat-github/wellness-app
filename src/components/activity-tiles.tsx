@@ -22,12 +22,12 @@ const ActivityTiles: React.FC<IActivityTiles> = ({
   const tempActivities= reposition ? repositionActivity(activities,activitySelected):activities
 
 function repositionActivity(arr: string[], str: string) {
-  const index = arr.indexOf(str.toUpperCase());
+  const index = arr?.indexOf(str.toUpperCase());
   if (index !== -1 && index !== 1) {
     // Remove the string from its current position
-    arr.splice(index, 1);
+    arr?.splice(index, 1);
     // Insert the number at the second position
-    arr.splice(1, 0, str);
+    arr?.splice(1, 0, str);
   }
   return arr;
 }
@@ -95,7 +95,7 @@ function repositionActivity(arr: string[], str: string) {
         <span key={"ALL"}>{cardTile("all")}</span>
         {window.location.pathname.length<2 && <span key={"TRENDING"}>{cardTile("trending")}</span>}
 
-        {tempActivities.map((activity) => (
+        {tempActivities?.map((activity) => (
           <span key={activity}>{cardTile(activity.toLowerCase())}</span>
         ))}
       </Flex>
