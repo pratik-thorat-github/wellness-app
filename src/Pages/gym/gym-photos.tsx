@@ -18,40 +18,40 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
   const [isClicked, setIsClicked] = useState<Boolean>(false);
   const [muted, setMuted] = useState(true);
 
-  const shareUrl = window.location.href;
-  const shareTitle = `Check out ${gym?.name} on ZenfitX`;
-  const shareDescription = `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉`;
-  const shareImage = gym?.medias?.[0]?.url || ''; // Use the first media item as the share image, or provide a default
+  // const shareUrl = window.location.href;
+  // const shareTitle = `Check out ${gym?.name} on ZenfitX`;
+  // const shareDescription = `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉`;
+  // const shareImage = gym?.medias?.[0]?.url || ''; // Use the first media item as the share image, or provide a default
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(shareUrl).then(() => {
-      message.success("Link copied to clipboard! You can now paste it to share.");
-    }).catch(err => {
-      console.error('Failed to copy: ', err);
-      message.error("Failed to copy link. Please try again.");
+  // const handleShare = () => {
+  //   navigator.clipboard.writeText(shareUrl).then(() => {
+  //     message.success("Link copied to clipboard! You can now paste it to share.");
+  //   }).catch(err => {
+  //     console.error('Failed to copy: ', err);
+  //     message.error("Failed to copy link. Please try again.");
+  //   });
+  // };
+
+  useEffect(() => {
+    const shareButton = document.getElementById("share-button");
+    shareButton?.addEventListener("click", () => {
+      if (navigator.share) {
+        navigator
+          .share({
+            title: "ZenfitX",
+            text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉 `,
+            url: window.location.href,
+          })
+          .then(() => console.log("Successful share"))
+          .catch((error) => console.log("Error sharing", error));
+      } else {
+        console.log("error");
+      }
     });
-  };
-
-  // useEffect(() => {
-  //   const shareButton = document.getElementById("share-button");
-  //   shareButton?.addEventListener("click", () => {
-  //     if (navigator.share) {
-  //       navigator
-  //         .share({
-  //           title: "ZenfitX",
-  //           text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉 `,
-  //           url: window.location.href,
-  //         })
-  //         .then(() => console.log("Successful share"))
-  //         .catch((error) => console.log("Error sharing", error));
-  //     } else {
-  //       console.log("error");
-  //     }
-  //   });
-  //   shareButton?.removeEventListener("click", () => {
-  //     setIsClicked(false);
-  //   });
-  // }, [isClicked]);
+    shareButton?.removeEventListener("click", () => {
+      setIsClicked(false);
+    });
+  }, [isClicked]);
 
   const onSlideChange = (args: any) => {
     console.log(args);
@@ -85,7 +85,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
         <span
           className="Btn"
           id="share-button"
-          onClick= {handleShare}
+          onClick={() => setIsClicked(true)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -150,14 +150,6 @@ const handleToggleMute = () => setMuted((current) => !current);
         );
     });
     return (
-      <>
-      <ShareMetadata 
-        title={shareTitle}
-        description={shareDescription}
-        image={shareImage}
-        url={shareUrl}
-      />
-      
       <div className="carouselWrap">
         {shareAndBack()}
         <Carousel
@@ -202,7 +194,6 @@ const handleToggleMute = () => setMuted((current) => !current);
           {medias}
         </Carousel>
       </div>
-      </>
     );
   } else return null;
 };
