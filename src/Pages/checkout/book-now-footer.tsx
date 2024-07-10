@@ -393,6 +393,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
             </Flex>
             <button
               id={
+                //! Pratik to check
                 props.forceBookNowCta ||
                 props.comingFrom ==
                   EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE
