@@ -405,7 +405,6 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               }}
               onClick={() => {
                 processBookNowCta();
-                console.log("coming from =>> ", props.comingFrom);
               }}
             >
               <span>Book Now</span>
