@@ -42,8 +42,7 @@ function App() {
         <BatchCheckoutBooking path="/checkout/batch/:batchId/booking" />
         <PlusCheckout path="/checkout/plus" />
         <BatchPaymentSuccess path="/checkout/success" />
-        <PlusPaymentSuccess path="/plus/success" />
-        <PlusPaymentSuccess path="/plus/success" />
+        {/* <PlusPaymentSuccess path="/plus/success" /> */}
       </Router>
     </QueryClientProvider>
   );
