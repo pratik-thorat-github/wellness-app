@@ -39,7 +39,7 @@ const BatchPaymentSuccess: React.FC<IPaymentSuccess> = ({
     </Flex>
   );
   
-  const refreshInterval = 10000;
+  const refreshInterval = 120000;
   useEffect(() => {
     setTimeout(() => {
       navigate("/");
