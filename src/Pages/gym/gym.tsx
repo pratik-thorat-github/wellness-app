@@ -11,6 +11,7 @@ import { errorToast } from "../../components/Toast";
 import Loader from "../../components/Loader";
 import { IGymDetails } from "../../types/gyms";
 import { Mixpanel } from "../../mixpanel/init";
+import ShareMetada from "../../components/share-metadata";
 
 interface IGYmPage extends RouteComponentProps {
   gymId?: string;
@@ -48,6 +49,13 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   if (!gym) return <Loader />;
 
   return (
+    <>
+    < ShareMetada 
+      title={"ZenFitX"}
+      description={`Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉`}
+      url={window.location.href}
+      image={gym.medias[0].url}
+    />
     <div className="gymWrap">
       <Flex flex={1}>
         <GymPhotos gym={gym} />
@@ -67,6 +75,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
         </Flex> */}
       </Flex>
     </div>
+    </>
   );
 };
 
