@@ -38,11 +38,12 @@ const BatchPaymentSuccess: React.FC<IPaymentSuccess> = ({
       </span>
     </Flex>
   );
-
+  
+  const refreshInterval = 10000;
   useEffect(() => {
     setTimeout(() => {
       navigate("/");
-    }, 3000);
+    }, refreshInterval);
   }, []);
 
   return (
