@@ -391,7 +391,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                 {props.totalAmount}
               </span>
             </Flex>
-            <div
+            <button
+              id = { (props.comingFrom === EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) ? 'conversion-book-now' : 'book-now'}
               style={{
                 color: "white",
                 fontWeight: "700",
@@ -404,10 +405,11 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               }}
               onClick={() => {
                 processBookNowCta();
+                console.log("coming from =>> ", props.comingFrom);
               }}
             >
               <span>Book Now</span>
-            </div>
+            </button>
           </div>
         )}
       </Flex>
