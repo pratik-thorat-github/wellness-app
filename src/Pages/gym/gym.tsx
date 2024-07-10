@@ -11,6 +11,7 @@ import { errorToast } from "../../components/Toast";
 import Loader from "../../components/Loader";
 import { IGymDetails } from "../../types/gyms";
 import { Mixpanel } from "../../mixpanel/init";
+import ShareMetadata from "../../components/share-metadata";
 
 interface IGYmPage extends RouteComponentProps {
   gymId?: string;
@@ -38,8 +39,8 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   });
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     _getGymById(gymId as string);
@@ -48,25 +49,31 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   if (!gym) return <Loader />;
 
   return (
-    <div className="gymWrap">
-      <Flex flex={1}>
-        <GymPhotos gym={gym} />
-      </Flex>
+    <>
+      <ShareMetadata
+        title={gym.name}
+        description={gym.description}
+        image={gym.medias[0].url}
+        url={window.location.href}
+      />
+      <div className="gymWrap">
+        <Flex flex={1}>
+          <GymPhotos gym={gym} />
+        </Flex>
 
-      <Flex flex={2} vertical justify="center">
-      
+        <Flex flex={2} vertical justify="center">
           <GymInfo gymData={gym} />
-       
 
-        {/* <Flex flex={2}>
+          {/* <Flex flex={2}>
           <BookClassBanner />
         </Flex>
 
         <Flex flex={4}>
           <BatchSchedule gymData={gym} />
         </Flex> */}
-      </Flex>
-    </div>
+        </Flex>
+      </div>
+    </>
   );
 };
 

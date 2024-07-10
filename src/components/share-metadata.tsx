@@ -1,5 +1,5 @@
-import React from 'react';
-import { Helmet } from 'react-helmet';
+import React from "react";
+import { Helmet } from "react-helmet";
 
 interface ShareMetadataProps {
   title: string;
@@ -8,7 +8,12 @@ interface ShareMetadataProps {
   url: string;
 }
 
-const ShareMetadata: React.FC<ShareMetadataProps> = ({ title, description, image, url }) => {
+const ShareMetadata: React.FC<ShareMetadataProps> = ({
+  title,
+  description,
+  image,
+  url,
+}) => {
   return (
     <Helmet>
       {/* Open Graph / Facebook */}
@@ -16,6 +21,7 @@ const ShareMetadata: React.FC<ShareMetadataProps> = ({ title, description, image
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
+      <meta property="og:image:secure_url" content={image} />
       <meta property="og:url" content={url} />
 
       {/* Twitter */}
