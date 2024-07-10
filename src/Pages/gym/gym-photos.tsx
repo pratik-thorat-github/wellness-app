@@ -6,8 +6,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { navigate } from "@reach/router";
 import ReactPlayer from "react-player";
 import { MutedOutlined, SoundOutlined } from "@ant-design/icons";
-import ShareMetadata  from "../../components/share-metadata"; 
-import { message } from "antd"; 
+import ShareMetadata from "../../components/share-metadata";
+import { message } from "antd";
 
 interface IGymPhotos {
   gym?: IGymDetails;
@@ -34,23 +34,31 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
 
   useEffect(() => {
     const shareButton = document.getElementById("share-button");
-    shareButton?.addEventListener("click", () => {
-      if (navigator.share) {
-        navigator
-          .share({
-            title: "ZenfitX",
-            text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉 `,
-            url: window.location.href,
-          })
-          .then(() => console.log("Successful share"))
-          .catch((error) => console.log("Error sharing", error));
-      } else {
-        console.log("error");
-      }
-    });
-    shareButton?.removeEventListener("click", () => {
-      setIsClicked(false);
-    });
+    if (gym) {
+      shareButton?.addEventListener("click", async () => {
+        const blob = await (await fetch(gym?.medias[0].url)).blob();
+        if (navigator.share) {
+          navigator
+            .share({
+              files: [
+                new File([blob], "image.png", {
+                  type: "image/jpg",
+                }),
+              ],
+              title: "ZenfitX",
+              text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉 `,
+              url: window.location.href,
+            })
+            .then(() => console.log("Successful share"))
+            .catch((error) => console.log("Error sharing", error));
+        } else {
+          console.log("error");
+        }
+      });
+      shareButton?.removeEventListener("click", () => {
+        setIsClicked(false);
+      });
+    }
   }, [isClicked]);
 
   const onSlideChange = (args: any) => {
@@ -107,37 +115,38 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
     );
   };
 
-const handleToggleMute = () => setMuted((current) => !current);
+  const handleToggleMute = () => setMuted((current) => !current);
 
-                
   if (gym?.medias?.length) {
     const medias = gym?.medias.map((p: { type: string; url: string }, ind) => {
       if (p.type === "VIDEO") {
         return (
           <>
-           <span className='muteIcon' style={{zIndex:1000}}onClick={handleToggleMute}>{
-            muted ? <MutedOutlined /> :<SoundOutlined />
-           }</span>
-          <ReactPlayer
-            className="player"
-            url={p.url}
-            playing
-            muted={muted}
-            playsinline
-            volume={1}
-            loop
-            height={"200px"}
-            config={{
-              file: {
-                attributes: {
-                  controlsList: "nofullscreen",
+            <span
+              className="muteIcon"
+              style={{ zIndex: 1000 }}
+              onClick={handleToggleMute}
+            >
+              {muted ? <MutedOutlined /> : <SoundOutlined />}
+            </span>
+            <ReactPlayer
+              className="player"
+              url={p.url}
+              playing
+              muted={muted}
+              playsinline
+              volume={1}
+              loop
+              height={"200px"}
+              config={{
+                file: {
+                  attributes: {
+                    controlsList: "nofullscreen",
+                  },
                 },
-              },
-            }}
-          />
-         
+              }}
+            />
           </>
-
         );
       } else
         return (
