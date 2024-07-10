@@ -36,15 +36,17 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
     const shareButton = document.getElementById("share-button");
     if (gym) {
       shareButton?.addEventListener("click", async () => {
-        const blob = await (await fetch(gym?.medias[0].url)).blob();
+        // const blob = await (await fetch(gym?.medias[0].url)).blob();
         if (navigator.share) {
           navigator
             .share({
-              files: [
-                new File([blob], "image.png", {
-                  type: "image/jpg",
-                }),
-              ],
+              // files: [
+              //   new File([blob], "image.png",
+              //     {
+              //     type: "image/jpg",
+              //   }
+              // ),
+              // ],
               title: "ZenfitX",
               text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉 `,
               url: window.location.href,
