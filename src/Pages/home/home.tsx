@@ -23,6 +23,7 @@ import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
 import { getUserDeatils } from "../../apis/user/userDetails";
 import Onboarding from "./onboarding";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IHome extends RouteComponentProps {
   activitySelected?: string;
@@ -191,6 +192,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
 
   return (
     <>
+      <MetaPixel />
       <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
         <div>
           <Space></Space>

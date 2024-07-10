@@ -10,6 +10,7 @@ import PlusMembershipPrice from "./plus-membership-price";
 import { Mixpanel } from "../../mixpanel/init";
 import { useEffect, useRef } from "react";
 import { IPlusDetails } from "../../types/user";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IPlusCheckout extends RouteComponentProps {}
 
@@ -45,6 +46,8 @@ const PlusCheckout: React.FC<IPlusCheckout> = ({}) => {
     );
 
   return (
+    <>
+    <MetaPixel />
     <Flex
       flex={1}
       vertical
@@ -117,6 +120,7 @@ const PlusCheckout: React.FC<IPlusCheckout> = ({}) => {
         />
       </Flex>
     </Flex>
+    </>
   );
 };
 

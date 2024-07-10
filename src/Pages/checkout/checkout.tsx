@@ -19,6 +19,7 @@ import { userDetailsAtom } from "../../atoms/atom";
 import BookNowFooter from "./book-now-footer";
 import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { deductPercentage } from "../../utils/offers";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -288,6 +289,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
   return (
     <>
+      <MetaPixel />
       <div className="checkWrapper">
         <div className="backBtn2">{backBtn()}</div>
         <div className="checkoutDetail">

@@ -18,6 +18,7 @@ import { getBookingOfUser } from "../../apis/user/bookings";
 import { IBookings, IPlusDetails } from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IProfile extends RouteComponentProps {}
 
@@ -88,6 +89,8 @@ const Profile: React.FC<IProfile> = () => {
   };
 
   return (
+    <>
+      <MetaPixel />
     <Flex
       flex={1}
       vertical
@@ -135,6 +138,7 @@ const Profile: React.FC<IProfile> = () => {
         </Flex>
       </Flex> */}
     </Flex>
+    </>
   );
 };
 

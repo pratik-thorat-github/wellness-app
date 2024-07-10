@@ -4,6 +4,7 @@ import { ReactComponent as PaymentSuccessLogo } from "../../images/checkout/paym
 import { useAtom } from "jotai/react";
 import { plusDetailsAtom } from "../../atoms/atom";
 import { useEffect } from "react";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IPlusPaymentSuccess extends RouteComponentProps {}
 
@@ -28,6 +29,8 @@ const PlusPaymentSuccess: React.FC<IPlusPaymentSuccess> = ({}) => {
   );
 
   return (
+    <>
+    <MetaPixel />
     <Flex
       flex={1}
       vertical
@@ -71,6 +74,7 @@ const PlusPaymentSuccess: React.FC<IPlusPaymentSuccess> = ({}) => {
         </Flex>
       </Flex>
     </Flex>
+    </>
   );
 };
 

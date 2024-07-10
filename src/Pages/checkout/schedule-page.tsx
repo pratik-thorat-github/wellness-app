@@ -37,6 +37,7 @@ import Loader from "../../components/Loader";
 import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
 import { showDiscountText } from "../../utils/offers";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -437,6 +438,8 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   }
 
   return (
+    <>
+    <MetaPixel />
     <div>
       <div className="stickyWrap">
         {" "}
@@ -488,6 +491,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           : noBatchComponent()}
       </Flex>
     </div>
+    </>
   );
 };
 

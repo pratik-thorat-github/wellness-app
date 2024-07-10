@@ -21,6 +21,8 @@ import { errorToast } from "../../components/Toast";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import { createMapsLink } from "../../utils/string-operation";
 import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
+import MetaPixel from "../../components/meta-pixel";
+import ShareMetadata from "../../components/share-metadata";
 
 interface IClassCheckout extends RouteComponentProps {
   // batchDetails?: IBatch;
@@ -259,6 +261,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
 
 
   return (
+    <>
     <Flex
       flex={1}
       vertical
@@ -405,6 +408,8 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         forceBookNowCta={true}
       />
     </Flex>
+    <MetaPixel />
+    </>
   );
 };
 

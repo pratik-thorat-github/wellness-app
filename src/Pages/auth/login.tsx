@@ -12,6 +12,7 @@ import useAuthRedirect from "./redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
 
 import "./style.css";
+import MetaPixel from "../../components/meta-pixel";
 
 interface ILoginProps extends RouteComponentProps {}
 const Login: React.FC<ILoginProps> = () => {
@@ -136,6 +137,8 @@ const Login: React.FC<ILoginProps> = () => {
   };
 
   return (
+    <>
+      <MetaPixel />
     <Flex flex={1} style={{ minHeight: "40vh" }} vertical justify="center">
       <Flex
         flex={1}
@@ -292,6 +295,7 @@ const Login: React.FC<ILoginProps> = () => {
         </Flex>
       </Flex>
     </Flex>
+    </>
   );
 };
 
