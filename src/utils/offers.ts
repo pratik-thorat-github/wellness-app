@@ -20,7 +20,8 @@ export function showDiscountText(
   userDetails: IUser | null
 ) {
   let showDiscount = false;
-  if (gym.offerType == EOfferType.BATCH_WITH_GUESTS) showDiscount = false;
+  if(gym.gymId == 6) showDiscount = false;
+  else if (gym.offerType == EOfferType.BATCH_WITH_GUESTS) showDiscount = false;
   else if (!userDetails) showDiscount = true;
   else if (userDetails && userDetails.noOfBookings < 1) showDiscount = true;
 

@@ -82,7 +82,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
         batchDetails.offerPercentage
       )
         offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people`;
-      else if (!userDetails || (userDetails && userDetails.noOfBookings < 1)) {
+      else if ((!userDetails || (userDetails && userDetails.noOfBookings < 1)) && batchDetails.gymId != 6) {
         offerStrip.current = "50% off on your 1st booking on ZenfitX";
       }
     }
@@ -91,7 +91,8 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   useEffect(() => {
     if (
       batchDetails &&
-      (!userDetails || (userDetails && userDetails.noOfBookings < 1)) &&
+      (!userDetails || (userDetails && userDetails.noOfBookings < 1)) && 
+      batchDetails.gymId != 6 && 
       batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
     ) {
       const [newTotalAmount, discount] = deductPercentage(
