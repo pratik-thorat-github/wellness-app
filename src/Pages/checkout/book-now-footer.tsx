@@ -251,6 +251,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     if (props.batchDetails) {
       if (
         !userDetails &&
+        props.batchDetails?.gymId != 6 && 
         props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
       ) {
         setShowDiscount(true);
