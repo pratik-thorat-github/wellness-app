@@ -21,7 +21,7 @@ const PastClasses: React.FC<IPastBookings> = ({ bookings }) => {
   return (
     <Flex vertical style={{ padding: "16px" }}>
       <Flex style={{ fontWeight: "bold", fontSize: "16px" }}>
-        Past Classes{" "}
+        Past Bookings{" "}
       </Flex>
 
       <Flex
