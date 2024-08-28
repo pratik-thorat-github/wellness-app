@@ -394,7 +394,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             );
           })}
         </div>
-        <div className="gymPageheading">About Studio</div>
+        <div className="gymPageheading">About Center</div>
         <div
           className="gPageDesc"
           onClick={() => {

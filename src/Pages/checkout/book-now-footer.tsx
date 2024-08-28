@@ -333,7 +333,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                 color: colors.secondary,
               }}
             >
-              Login quickly to finish the class booking
+              Login quickly to finish the booking
             </Flex>
             <Flex
               onClick={() => {
