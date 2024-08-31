@@ -116,6 +116,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
     if (noOfGuests === 1 && !increment) {
       return;
     }
+    if(noOfGuests + (batchDetails?.slotsBooked || 0) >= (batchDetails?.slots || 0 ) && increment){
+      return ;
+    }
     let noOfGuestIncremented = increment ? noOfGuests + 1 : noOfGuests - 1;
     noOfGuests = noOfGuests || 1;
     let baseAmountAfterIncrement =
@@ -184,6 +187,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
   const incIcon = () => (
     <svg
+      className={(noOfGuests + (batchDetails?.slotsBooked || 0) >= (batchDetails?.slots || 0)) ? "disabled" : ""}
       xmlns="http://www.w3.org/2000/svg"
       width="16"
       height="16"

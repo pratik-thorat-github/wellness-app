@@ -35,6 +35,8 @@ export interface IBatch {
   gymId: number;
   image?: string;
   description?:string
+  slots: number
+  slotsBooked: number
 
   guestsAllowed?: boolean;
   offerType?: EOfferType;

@@ -249,6 +249,22 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                     {batch.duration} min
                   </Flex>
                 ) : null}
+                {gym.gymId == 6 ? (
+                  <Flex 
+                    style={{
+                      color: "#ff0000",
+                      fontSize: "14px",
+                      fontWeight: "400",
+                      margin: "-4px 0px",
+                      marginTop: "2px",
+                      fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif"
+                    }}
+                    flex={1}
+                  >
+                    {batch.slots - batch.slotsBooked} spot(s) left out of {batch.slots}
+                  </Flex>
+                )
+                : null}
               </Flex>
               <Flex flex={1}>
                 {showDiscountText(gym, userDetails) ? (
