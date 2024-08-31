@@ -85,10 +85,9 @@ const HomeBanner: React.FC = () => {
       <br></br>
       Just pay for sessions not memberships!
       </div>
-      <div className="head3">
+      {/* <div className="head3">
       50% off on your first booking.
-
-      </div>
+      </div> */}
     </div>}
     {userDetails && <div className="loginWrapper">
       <div className="loginHead1">
