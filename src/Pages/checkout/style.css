@@ -314,6 +314,11 @@ text-transform: capitalize;
 
 }
 
+.disabledSoldOut{
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .counter >span>svg{
     border:1px solid #000;
     border-radius: 50%;

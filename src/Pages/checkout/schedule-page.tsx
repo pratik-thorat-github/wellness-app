@@ -174,7 +174,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   function generateBatchTile(gym: IGymDetails, batches: IBatch[]) {
     const batchTile = (batch: IBatch) => {
       return (
-        <Card
+        <Card className={gym.gymId == 6 && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
           style={{
             // paddingTop: "16px",
             // paddingBottom: "16px",
@@ -249,7 +249,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                     {batch.duration} min
                   </Flex>
                 ) : null}
-                {gym.gymId == 6 ? (
+                {gym.gymId == 6 && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
                   <Flex 
                     style={{
                       color: "#C15700",
@@ -262,6 +262,22 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                     flex={1}
                   >
                     {batch.slots - batch.slotsBooked} spot(s) left out of {batch.slots}
+                  </Flex>
+                )
+                :
+                gym.gymId == 6 && batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
+                  <Flex 
+                    style={{
+                      color: "#C15700",
+                      fontSize: "14px",
+                      fontWeight: "400",
+                      margin: "-4px 0px",
+                      marginTop: "2px",
+                      fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif"
+                    }}
+                    flex={1}
+                  >
+                    Sold Out!
                   </Flex>
                 )
                 : null}
