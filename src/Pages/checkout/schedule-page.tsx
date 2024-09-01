@@ -252,7 +252,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 {gym.gymId == 6 ? (
                   <Flex 
                     style={{
-                      color: "#ff0000",
+                      color: "#C15700",
                       fontSize: "14px",
                       fontWeight: "400",
                       margin: "-4px 0px",
