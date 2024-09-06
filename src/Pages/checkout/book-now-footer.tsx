@@ -206,7 +206,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
 
   const batchBookingUrl = `/checkout/batch/${props.batchId}/booking`;
 
-  function processBookNowCta() {
+async function processBookNowCta() {
     if (props.forceBookNowCta) {
       Mixpanel.track("open_batch_checkout_booking", {
         batchId: props.batchId,
@@ -238,7 +238,20 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         phone: userDetails.phone,
       });
 
-      displayRazorpay(props, userDetails, setLoading);
+      const batchDetailsResp = await fetch(`https://be.zenfitx.link/gyms/batch/byBatchId?batchId=${props.batchId}`);
+      
+      const r = await batchDetailsResp?.json();
+      console.log({r});
+      console.log(r.batch.slotsBooked, props.batchDetails?.slotsBooked);
+      if(r?.batch?.slotsBooked + props.totalGuests > r.batch.slots){
+        if(r?.batch?.slotsBooked == r?.batch?.slots){
+          alert(`Sorry, all spots are booked for this slot. Please choose the next available slot.`);
+        } else
+          alert(`Sorry, only ${r.batch.slots - r.batch.slotsBooked} spots are available for this slot. Please choose the next available slot!`);
+        window.location.reload();
+      } else {
+        displayRazorpay(props, userDetails, setLoading);
+      }
       // displayCashfree(props, userDetails, setLoading);
     }
   }
@@ -336,8 +349,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               Login quickly to finish the booking
             </Flex>
             <Flex
-              onClick={() => {
-                processBookNowCta();
+              onClick={async () => {
+                await processBookNowCta();
               }}
               flex={1}
               justify="center"
@@ -405,8 +418,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                 display: "flex",
                 alignItems: "center",
               }}
-              onClick={() => {
-                processBookNowCta();
+              onClick={async () => {
+                await processBookNowCta();
               }}
             >
               <span>Book Now</span>
