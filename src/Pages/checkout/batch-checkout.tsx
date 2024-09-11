@@ -99,7 +99,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         navigator
           .share({
             title: "ZenfitX",
-            text: `Hey, I'm signing up for this awesome activity on ZenfitX. Join me now using this link! 💪`,
+            text: `Hey, Join me for ${batchDetails?.activityName} at ${batchDetails?.startTime.toString().substring(0, 2)}:00 on ${new Date(`${batchDetails?.date}`).toDateString()} at the ${gym?.name}. Let's sweat it out together! 😬`,
             url: window.location.href,
           })
           .then(() => console.log("Successful share"))
@@ -111,7 +111,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     shareButton?.removeEventListener("click", () => {
       setIsClicked(false);
     });
-  }, [isClicked]);
+  }, [isClicked && gym && batchDetails]);
 
   const logoTsx = (
     <Flex flex={1}>
