@@ -52,6 +52,8 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const mixpanelSet = useRef(false);
 
   const [isClicked, setIsClicked] = useState<Boolean>(false);
+  const [gotBatchDetails, setBatchDetailsCheck] = useState<Boolean>(false);
+  const [gotGymDetails, setGymDetailsCheck] = useState<Boolean>(false);
 
   const gymId = batchDetails?.gymId;
 
@@ -76,6 +78,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     mutationFn: getGymById,
     onSuccess: (result) => {
       setGym(result.gym);
+      setGymDetailsCheck(true);
       //   MixpanelGymInit(result.gym);
     },
     onError: (error) => {
@@ -89,13 +92,14 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   useEffect(() => {
     if (batchDetails?.gymId) {
       _getGymById(String(batchDetails.gymId));
+      setBatchDetailsCheck(true);
     }
   }, [batchDetails]);
 
   useEffect(() => {
     const shareButton = document.getElementById("share-button");
     shareButton?.addEventListener("click", () => {
-      if (navigator.share) {
+      if (navigator.share && gotGymDetails && gotBatchDetails) {
         navigator
           .share({
             title: "ZenfitX",
@@ -111,7 +115,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     shareButton?.removeEventListener("click", () => {
       setIsClicked(false);
     });
-  }, [isClicked && gym && batchDetails]);
+  }, [isClicked && gotBatchDetails && gotGymDetails]);
 
   const logoTsx = (
     <Flex flex={1}>
