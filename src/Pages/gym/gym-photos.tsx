@@ -39,7 +39,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
         navigator
           .share({
             title: "ZenfitX",
-            text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! 😉 `,
+            text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan some awesome activities together! 😉 `,
             url: window.location.href,
           })
           .then(() => console.log("Successful share"))
