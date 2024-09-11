@@ -99,7 +99,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         navigator
           .share({
             title: "ZenfitX",
-            text: `Hey, I'm signing up for this awesome activity on ZenfitX. Wanna join me? Let's sweat it out together and grab those first-booking discounts! 💪`,
+            text: `Hey, I'm signing up for this awesome activity on ZenfitX. Join me now using this link! 💪`,
             url: window.location.href,
           })
           .then(() => console.log("Successful share"))
