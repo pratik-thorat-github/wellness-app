@@ -103,7 +103,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         navigator
           .share({
             title: "ZenfitX",
-            text: `Hey, Join me for ${batchDetails?.activityName} at ${batchDetails?.startTime.toString().substring(0, 2)}:00 on ${new Date(`${batchDetails?.date}`).toDateString()} at the ${gym?.name}. Let's sweat it out together! 😬`,
+            text: `Hey, Join me for ${batchDetails?.activityName} at ${("0"+batchDetails?.startTime.toString()).slice(-2)}:00 on ${new Date(`${batchDetails?.date}`).toDateString()} at the ${gym?.name}. Let's sweat it out together! 😬`,
             url: window.location.href,
           })
           .then(() => console.log("Successful share"))
