@@ -12,6 +12,10 @@ export interface ICreateRzpOrder {
   offerPercentage: number;
   offerType: EOfferType;
   noOfGuests: number;
+  batchName: string;
+  batchTime: number;
+  batchDate: Date | string;
+  username: string;
 }
 
 export async function createRzpOrder(data: ICreateRzpOrder) {
