@@ -2,6 +2,7 @@ import { RouteComponentProps, navigate } from "@reach/router";
 import { Flex } from "antd";
 import UserDetails from "./user-details";
 import NeedHelpBanner from "./need-help";
+import DeleteAccountButton from "./delete-account";
 import colors from "../../constants/colours";
 import PlusClassRemaining from "./plus-classes-remaining";
 import PastClasses from "./past-classes";
@@ -123,6 +124,10 @@ const Profile: React.FC<IProfile> = () => {
 
       <Flex flex={1} align="flex-end">
         <NeedHelpBanner />
+      </Flex>
+      
+      <Flex flex={1} align="flex-end">
+        <DeleteAccountButton />
       </Flex>
 
       <Flex flex={1} vertical align="flex-end">
