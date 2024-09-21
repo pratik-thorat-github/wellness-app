@@ -27,7 +27,7 @@ const DeleteAccountButton = () => {
       // Refresh page after 5 seconds
       setTimeout(() => {
           window.location.href = '/';
-          window.location.reload();
+        //   window.location.reload();
       }, 5000);
     }, 1000); // Simulating a brief delay for the deletion process
   };
