@@ -86,6 +86,7 @@ async function displayRazorpay(
   }
 
   if (!res) {
+    setLoading(false);
     alert("Razorpay SDK failed to load. Are you online?");
     return;
   }
