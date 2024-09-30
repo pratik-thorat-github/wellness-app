@@ -78,7 +78,14 @@ async function displayRazorpay(
   const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
 
   let payload = createOrderPayload(props, userDetails as IUser);
-  const orderResult = await createRzpOrder(payload);
+  let orderResult;
+
+  try {
+    orderResult = await createRzpOrder(payload);
+  } catch (error) {
+    console.log({error});
+  }
+  
   console.log({orderResult});
   setLoading(false);
 
