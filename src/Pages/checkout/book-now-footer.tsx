@@ -261,7 +261,7 @@ async function processBookNowCta() {
           alert(`Sorry, only ${r.batch.slots - r.batch.slotsBooked} spots are available for this slot. Please choose the next available slot!`);
         window.location.reload();
       } else {
-        displayRazorpay(props, userDetails, setLoading);
+        await displayRazorpay(props, userDetails, setLoading);
       }
       // displayCashfree(props, userDetails, setLoading);
     }
