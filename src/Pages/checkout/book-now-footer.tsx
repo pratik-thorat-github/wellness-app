@@ -90,7 +90,7 @@ async function displayRazorpay(
   setLoading(false);
 
   if(!orderResult && !orderResult?.orderId){
-    alert(`Could not place order!, ${orderResult.error}`);
+    alert(`Could not place order!`);
     return ;
   }
 
