@@ -20,7 +20,7 @@ export interface ICreateRzpOrder {
 
 export async function createRzpOrder(data: ICreateRzpOrder) {
   const result = await networkAdapter.post("/payments/rzp/order", data);
-
+  console.log({resultData: result.data});
   return result.data;
 }
 

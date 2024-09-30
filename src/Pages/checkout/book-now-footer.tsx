@@ -79,9 +79,9 @@ async function displayRazorpay(
 
   let payload = createOrderPayload(props, userDetails as IUser);
   const orderResult = await createRzpOrder(payload);
-
+  console.log({orderResult});
   setLoading(false);
-  
+
   if(!orderResult.orderId){
     alert(`Could not place order!, ${orderResult.error}`);
     return ;
