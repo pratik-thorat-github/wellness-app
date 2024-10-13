@@ -122,11 +122,11 @@ const handleToggleMute = () => setMuted((current) => !current);
           <ReactPlayer
             className="player"
             url={p.url}
-            playing
+            playing={false}
             muted={muted}
             playsinline
             volume={1}
-            loop
+            loop={false}
             height={"200px"}
             config={{
               file: {
