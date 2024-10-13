@@ -189,7 +189,7 @@ const handleToggleMute = () => setMuted((current) => !current);
               </span>
             );
           }}
-          autoPlay={true}
+          autoPlay={false}
           interval={7000}
         >
           {medias}
