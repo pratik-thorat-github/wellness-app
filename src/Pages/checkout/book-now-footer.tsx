@@ -130,7 +130,27 @@ async function displayRazorpay(
     prefill: {
       name: userDetails?.name as string,
       email: `${userDetails?.name as string}@example.com`,
-      contact: userDetails?.phone as string,
+      contact: `+91${userDetails?.phone}` as string,
+    },
+    config: {
+      display: {
+        blocks: {
+          utib: { //name for UPI block
+            name: "Recommended",
+            instruments: [
+              {
+                method: "upi",
+                flows: ["intent"],
+                apps: ["phonepe"]
+              }
+            ]
+          }
+        },
+        sequence: ["block.utib"],
+        preferences: {
+          show_default_blocks: true // Should Checkout show its default blocks?
+        }
+      }
     },
     theme: {
       color: "#61dafb",
