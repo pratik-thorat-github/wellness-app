@@ -156,8 +156,9 @@ const handleToggleMute = () => setMuted((current) => !current);
         <Carousel
           swipeable={showArray}
           showArrows={false}
+          axis={'horizontal'}
           showIndicators={showArray}
-          swipeScrollTolerance={100}
+          swipeScrollTolerance={50}
           showThumbs={false}
           onChange={onSlideChange}
           renderIndicator={(onClickHandler, isSelected, index, label) => {
