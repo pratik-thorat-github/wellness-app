@@ -207,6 +207,7 @@ line-height: normal;
 .carouselWrap{
     max-height: 200px;
     width: 100%;
+    overflow-y: hidden !important;
 }
 
 .gymWrap{
