@@ -111,6 +111,9 @@ async function displayRazorpay(
     description,
     image: { logo },
     order_id: orderResult.orderId,
+    method: {
+      upi: true
+    },
     handler: (response: any) => {
       if (response.razorpay_payment_id) {
         if (props.checkoutType == ECheckoutType.BATCH)
