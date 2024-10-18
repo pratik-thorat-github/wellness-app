@@ -23,6 +23,7 @@ import { createMapsLink } from "../../utils/string-operation";
 import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
 import MetaPixel from "../../components/meta-pixel";
 import ShareMetadata from "../../components/share-metadata";
+import Loader from "../../components/Loader";
 
 interface IClassCheckout extends RouteComponentProps {
   // batchDetails?: IBatch;
@@ -54,6 +55,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [isClicked, setIsClicked] = useState<Boolean>(false);
   const [gotBatchDetails, setBatchDetailsCheck] = useState<Boolean>(false);
   const [gotGymDetails, setGymDetailsCheck] = useState<Boolean>(false);
+  const [loading, setLoading] = useState(true);
 
   const gymId = batchDetails?.gymId;
 
@@ -68,6 +70,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     onSuccess: (result) => {
       console.log(result.batch);
       setBatchDetails(result.batch);
+      setLoading(false);
     },
     onError: (error) => {
       errorToast("Error in getting gym data");
@@ -264,6 +267,10 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const mapsLink = createMapsLink(batchDetails?.venueAddressLine1 || '', batchDetails?.venueAddressLine1 || '');
 
 
+  if(loading){
+    return <Loader/>
+  }
+  
   return (
     <>
     <Flex
