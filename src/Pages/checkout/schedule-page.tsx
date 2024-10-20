@@ -179,7 +179,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             // paddingTop: "16px",
             // paddingBottom: "16px",
             // paddingLeft: "8px",
-            paddingRight: "16px",
+            // paddingRight: "16px",
             borderTopWidth: "0px",
             borderBottomWidth: "0px",
           }}
@@ -198,7 +198,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           }}
         >
           <Flex flex={1}>
-            <Flex flex={2}>
+            <Flex flex={1}>
               <span>
                 <span
                   style={{
@@ -214,16 +214,16 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               </span>
             </Flex>
             <Flex
-              flex={4}
+              flex={6}
               style={{
                 borderBottomWidth: "1px",
                 borderBottomColor: colors.border,
                 borderBottomStyle: "solid",
-
+                marginLeft: '16px',
                 paddingBottom: "8px",
               }}
             >
-              <Flex flex={2} vertical>
+              <Flex flex={4} vertical >
                 <div
                   style={{
                     display: "flex",
@@ -282,18 +282,34 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 )
                 : null}
               </Flex>
-              <Flex flex={1}>
+              <Flex flex={2} vertical>
+                <Flex style={{
+                  justifyContent: 'space-evenly'
+                }}>
                 {showDiscountText(gym, userDetails) ? (
                   discountedPrice(batch.price)
                 ) : (
-                  <span>
+                  <span style={{
+                    marginRight: '-14px'
+                  }}>
                     {Rs}
                     {batch.price}
                   </span>
                 )}
-                <span style={{ marginLeft: "auto" }}>
+                <span>
                   <RightOutlined />
                 </span>
+                </Flex>
+                <Flex style={{
+                  justifyContent: 'start'
+                }}>
+                  <div style={{
+                    fontSize: '12px',
+                    color: '#828081'
+                  }}>
+                  per person
+                  </div>
+                </Flex>
               </Flex>
             </Flex>
           </Flex>
