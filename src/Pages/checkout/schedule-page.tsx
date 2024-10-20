@@ -204,7 +204,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   style={{
                     backgroundColor: colors.border,
                     borderRadius: "4px",
-                    padding: "5px",
+                    padding: "3px",
                   }}
                 >
                   {batch.isDayPass
