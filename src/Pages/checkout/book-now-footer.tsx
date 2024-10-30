@@ -18,6 +18,10 @@ import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
 import { deductPercentage, discountTxt } from "../../utils/offers";
 
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
+
 export interface IBookNowFooter {
   batchDetails?: IBatch;
   totalAmount: number;
@@ -28,6 +32,8 @@ export interface IBookNowFooter {
   totalGuests?: number;
   forceBookNowCta?: boolean;
   totalSavings?: number;
+  isFromApp?: boolean;
+  pastAppBookings?: PastAppBookingObject
 }
 
 function loadScript(src: string) {
@@ -50,7 +56,7 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     totalAmount: props.totalAmount,
     userId: userDetails.id as number,
     batchPrice: props.batchDetails?.price as number,
-
+    platform: props.isFromApp ? "APP" : "WEB",
     offerPercentage: (props.totalSavings as number)
       ? (props.batchDetails?.offerPercentage as number)
       : 0,
@@ -225,8 +231,22 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   console.log(locationStates);
 
   const [loading, setLoading] = useState(false);
-
   const batchBookingUrl = `/checkout/batch/${props.batchId}/booking`;
+  const maxDiscount = props.batchDetails?.maxDiscount || 0;
+  const offerPercentage = props.batchDetails?.offerPercentage || 0;
+  const price  =  props.batchDetails?.price || 0;
+  let noOfGuests = 1;
+  if(props.totalGuests){
+    noOfGuests = props.totalGuests
+  }
+  let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
+                      ?  price * noOfGuests  - maxDiscount
+                      : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+  if(props.gymData?.discountType == 'FLAT'){
+    finalPrice = (price * (100 - offerPercentage) / 100)
+  }  
+  const discountText = props.gymData?.discountType == 'FLAT' ? `FLAT ${offerPercentage}%` : 
+                       props.gymData?.discountType == 'PERCENTAGE' ? `${Rs}${price * noOfGuests - finalPrice} OFF` : `dfds`;
 
 async function processBookNowCta() {
     if (props.forceBookNowCta) {
@@ -260,7 +280,7 @@ async function processBookNowCta() {
         phone: userDetails.phone,
       });
 
-      const batchDetailsResp = await fetch(`https://be.zenfitx.link/gyms/batch/byBatchId?batchId=${props.batchId}`);
+      const batchDetailsResp = await fetch(`https://stag-be.zenfitx.link/gyms/batch/byBatchId?batchId=${props.batchId}`);
       
       const r = await batchDetailsResp?.json();
       console.log({r});
@@ -284,24 +304,14 @@ async function processBookNowCta() {
 
   useEffect(() => {
     if (props.batchDetails) {
-      if (
-        !userDetails &&
-        ![6, 21].includes(props.batchDetails?.gymId) &&
-        props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
-      ) {
+      if(!userDetails){
         setShowDiscount(true);
+      } else if(!props.isFromApp){
+        setShowDiscount(false);
+      } else if(props.pastAppBookings?.[props.batchDetails.gymId]){
+        setShowDiscount(false);
       } else {
-        if (
-          userDetails &&
-          ![6, 21].includes(props.batchDetails?.gymId) &&
-          userDetails.noOfBookings < 1 &&
-          props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
-        ) {
-          setShowDiscount(true);
-        }
-        if (props.batchDetails?.offerType === "BATCH_WITH_GUESTS") {
-          setShowDiscount(false);
-        }
+        setShowDiscount(true);
       }
     }
     if (showCTA()) {
@@ -310,14 +320,40 @@ async function processBookNowCta() {
   }, [props.batchDetails]);
 
   useEffect(() => {
-    if (showDiscount) {
+    if (showDiscount && props.batchDetails) {
       const [newTotalAmount] = deductPercentage(
         props.batchDetails?.price || 0,
         50
       );
-      setDiscountedAmount(newTotalAmount);
+      
+      let noOfGuests = 1;
+      if(props.totalGuests){
+        noOfGuests = props.totalGuests;
+      }
+      let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
+                      ?  price * noOfGuests  - maxDiscount
+                      : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+      setDiscountedAmount(finalPrice);
     }
   }, [showDiscount]);
+
+  useEffect(() => {
+    if (showDiscount && props.batchDetails) {
+      const [newTotalAmount] = deductPercentage(
+        props.batchDetails?.price || 0,
+        50
+      );
+      
+      let noOfGuests = 1;
+      if(props.totalGuests){
+        noOfGuests = props.totalGuests;
+      }
+      let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
+                      ?  price * noOfGuests  - maxDiscount
+                      : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+      setDiscountedAmount(finalPrice);
+    }
+  }, [props.totalAmount]);
 
   if (loading) return <Loader />;
   const showCTA = () => {
@@ -327,7 +363,8 @@ async function processBookNowCta() {
     }
   };
 
-  const discountLine = () => <div className="discountLine">{discountTxt}</div>;
+  // const discountLine = () => <div className="discountLine">{discountTxt}</div>;
+  const discountLine = () => <div className="discountLine">{discountText}</div>;
 
   return (
     <>

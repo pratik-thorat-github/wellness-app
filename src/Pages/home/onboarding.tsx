@@ -10,6 +10,7 @@ import Swim from "../../images/home/Swim.png";
 
 import { Carousel } from "react-responsive-carousel";
 import { Mixpanel } from "../../mixpanel/init";
+import { Cookies } from 'react-cookie';
 
 interface Onboarding {
   setOnboarding: (val: boolean) => void;
@@ -135,6 +136,8 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
           className="obBtn"
           onClick={() => {
             setOnboarding(true);
+            const cookies = new Cookies();
+            cookies.set('onboarding', "done", { path: '/' });      
             Mixpanel.track("clicked_explore_now_on_onboarding_page");
           }}
         >

@@ -21,23 +21,55 @@ import { Mixpanel } from "../../mixpanel/init";
 import { discountTxt, showDiscountText } from "../../utils/offers";
 import { useAtom } from "jotai";
 import { userDetailsAtom } from "../../atoms/atom";
+import { BookType } from "xlsx";
+import { getPastAppBookings } from "../../apis/gym/activities";
+import { useMutation } from "@tanstack/react-query";
+import { errorToast } from "../../components/Toast";
 
 const maxChar = 250;
 
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
+
 interface IGymInfo {
-  gymData: IGymDetails;
+  gymData: IGymDetails
 }
 
 const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   const description = `${gymData.description}`;
 
+  const { maxDiscount, offerPercentage, discountType} = gymData;
+  console.log({maxDiscount, offerPercentage, discountType});
   let [isTruncated, setIsTruncated] = useState(description.length > maxChar);
   let shortDescription = useRef(description.substring(0, maxChar));
   shortDescription.current.replace(/<br>/, "");
 
   const [userDetails] = useAtom(userDetailsAtom);
+  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  const [isFromApp, setIsFromApp] = useState(false);
 
-  let showDiscount = showDiscountText(gymData, userDetails);
+  const { mutate: _getPastAppBookings } = useMutation({
+    mutationFn: getPastAppBookings,
+    onError: () => {
+      errorToast("Error in getting past app bookings");
+    },
+    onSuccess: (result) => {
+      console.log("past app bookings - ", result);
+      setPastAppBookings(result.bookings);
+    },
+  });
+
+
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+    const userId = userDetails?.id?.toString() || '0';
+    _getPastAppBookings(userId);
+  }, [])
+
+  let showDiscount = showDiscountText(gymData, userDetails, isFromApp, pastAppBookings);
 
   const [showTimeOptions, setShowTimeOptions] = useState<Boolean>(false);
 
@@ -250,16 +282,25 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
       </defs>
     </svg>
   );
-
+  
+  const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${maxDiscount} on your first booking on ZenfitX App` :
+                       discountType == 'FLAT' ? `FLAT ${offerPercentage} off!` : ``
   const discountLine = () => {
+    console.log({discountText});
     return showDiscount ? (
-      <div className="discountLine1">{discountTxt}</div>
+      // <div className="discountLine1">{discountTxt}</div>
+      <div className="discountLine1">{discountText}</div>
     ) : null;
   };
 
   const gRate = (val: any) => {
     return val.googleRating > 0;
   };
+
+  let finalPrice = (gymData.minPrice - maxDiscount) >  (gymData.minPrice *  (100 - offerPercentage) / 100) ? (gymData.minPrice - maxDiscount) : (gymData.minPrice * (100 - offerPercentage) / 100)
+  if(discountType == 'FLAT'){
+    finalPrice = gymData.minPrice * (100 - offerPercentage) / 100;
+  }
   return (
     <>
       <div
@@ -278,7 +319,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
                 <span className="slashed-price"> ₹{gymData.minPrice} </span>
                 <span className="price">
                   {" "}
-                  ₹{Math.floor(gymData.minPrice / 2)}&nbsp;onwards
+                  ₹{Math.floor(finalPrice)}&nbsp;onwards
                 </span>
               </span>
             ) : (
@@ -460,7 +501,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         )}
       </div>
       <div className="bookBtnWrap">
-        {/* {discountLine()} */}
+        {discountLine()}
         <button
           className={showDiscount ? "bookBtn" : "bookBtn2"}
           onClick={() => navigateToBatches("all")}

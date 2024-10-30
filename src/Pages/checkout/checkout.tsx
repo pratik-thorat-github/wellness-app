@@ -11,7 +11,7 @@ import { errorToast } from "../../components/Toast";
 
 import { Rs } from "../../constants/symbols";
 import { toLetterCase } from "../../utils/string-operation";
-import { getActivityById, getGymById } from "../../apis/gym/activities";
+import { getActivityById, getGymById, getPastAppBookings } from "../../apis/gym/activities";
 import Loader from "../../components/Loader";
 import "./style.css";
 import { useAtom } from "jotai";
@@ -25,11 +25,16 @@ interface IClassCheckout extends RouteComponentProps {}
 
 interface IClassCheckout {}
 
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
+
 const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalSavings, setTotalSavings] = useState(0);
   let [baseAmount, setBaseAmount] = useState(0);
   let [noOfGuests, setNoOfGuests] = useState(1);
+  const [showDiscount, setShowDiscount] = useState(false);
 
   const [batchDetails, setBatchDetails] = useState<IBatch>();
 
@@ -39,6 +44,26 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   const offerStrip = useRef("");
 
   const [userDetails] = useAtom(userDetailsAtom);
+  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  const [isFromApp, setIsFromApp] = useState(false);
+
+  const { mutate: _getPastAppBookings } = useMutation({
+    mutationFn: getPastAppBookings,
+    onError: () => {
+      errorToast("Error in getting past app bookings");
+    },
+    onSuccess: (result) => {
+      console.log("past app bookings - ", result);
+      setPastAppBookings(result.bookings);
+    },
+  });
+
+
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+  }, [])
 
   const { mutate: _getActivityById } = useMutation({
     mutationFn: getActivityById,
@@ -65,6 +90,22 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   useEffect(() => {
     _getActivityById(batchId);
   }, []);
+
+  useEffect(() => {
+    if (batchDetails) {
+      console.log("dfwfwf");
+      if(!userDetails){
+        setShowDiscount(true);
+      } else if(!isFromApp){
+        setShowDiscount(false);
+      } else if(pastAppBookings?.[batchDetails.gymId]){
+        setShowDiscount(false);
+      } else {
+        setShowDiscount(true);
+      }
+    }
+  }, [batchDetails])
+
   useEffect(() => {
     if (batchDetails?.gymId) {
       setBaseAmount(batchDetails.price);
@@ -82,33 +123,42 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
         batchDetails.offerPercentage
       )
         offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people (full court)`;
-      else if ((!userDetails || (userDetails && userDetails.noOfBookings < 1)) && ![6, 21].includes(batchDetails.gymId)) {
-        offerStrip.current = "50% off on your 1st booking on ZenfitX";
-      }
+      // else if ((!userDetails || (userDetails && userDetails.noOfBookings < 1)) && ![6, 21].includes(batchDetails.gymId)) {
+      //   offerStrip.current = "50% off on your 1st booking on ZenfitX";
+      // }
     }
   }, [batchDetails]);
 
   useEffect(() => {
+    console.log("heyyyyy joew ", showDiscount, batchDetails);
     if (
       batchDetails &&
-      (!userDetails || (userDetails && userDetails.noOfBookings < 1)) && 
-      ![6, 21].includes(batchDetails.gymId) &&
-      batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
+      // (!userDetails || (userDetails && userDetails.noOfBookings < 1)) && 
+      // ![6, 21].includes(batchDetails.gymId) &&
+      // batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
+      showDiscount
     ) {
-      const [newTotalAmount, discount] = deductPercentage(
-        batchDetails?.price || 0,
-        50
-      );
-
+      // let [newTotalAmount, discount] = deductPercentage(
+      //   batchDetails?.price || 0,
+      //   batchDetails?.offerPercentage || 0
+      // );
+      let price = batchDetails?.price;
+      let maxDiscount = batchDetails?.maxDiscount;
+      let offerPercentage = batchDetails?.offerPercentage;
+      let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
+                      ?  price * noOfGuests  - maxDiscount
+                      : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+      let newTotalAmount = finalPrice;
+      let discount = price * noOfGuests - finalPrice;
       setTotalAmount(newTotalAmount);
       setTotalSavings(discount);
 
-      batchDetails.offerPercentage = 50;
-      batchDetails.offerType = EOfferType.PLATFORM;
+      // batchDetails.offerPercentage = 50;
+      batchDetails.offerType = EOfferType.APP;
     }
   }, [batchDetails]);
 
-  if (!gym) return <Loader />;
+  if (!gym || !batchDetails) return <Loader />;
 
   //   A function that adds totalAmount
 
@@ -127,15 +177,25 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
     setNoOfGuests(noOfGuestIncremented);
     setBaseAmount(baseAmountAfterIncrement);
 
-    let [finalAmount, discount] = [baseAmountAfterIncrement, 0];
-    if (
-      batchDetails?.offerType == EOfferType.BATCH_WITH_GUESTS &&
-      noOfGuestIncremented >= (batchDetails?.minGuestsForOffer || 0)
-    )
-      [finalAmount, discount] = deductPercentage(
-        baseAmountAfterIncrement,
-        batchDetails?.offerPercentage || 0
-      );
+    // let [finalAmount, discount] = [baseAmountAfterIncrement, 0];
+    // if (
+    //   batchDetails?.offerType == EOfferType.BATCH_WITH_GUESTS &&
+    //   noOfGuestIncremented >= (batchDetails?.minGuestsForOffer || 0)
+    // )
+    //   [finalAmount, discount] = deductPercentage(
+    //     baseAmountAfterIncrement,
+    //     batchDetails?.offerPercentage || 0
+    //   );
+    let finalAmount = baseAmountAfterIncrement;
+    let discount = 0;
+    let offerPercentage = batchDetails?.offerPercentage || 0;
+    let maxDiscount = batchDetails?.maxDiscount || 0;
+    if(showDiscount){
+      finalAmount = (baseAmountAfterIncrement - maxDiscount) > (baseAmountAfterIncrement - baseAmountAfterIncrement * offerPercentage / 100) 
+                    ? (baseAmountAfterIncrement - maxDiscount) 
+                    : (baseAmountAfterIncrement - baseAmountAfterIncrement * offerPercentage / 100);
+      discount = baseAmountAfterIncrement - finalAmount;
+    }
 
     setTotalAmount(finalAmount);
     setTotalSavings(discount);
@@ -402,6 +462,8 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
           comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
           totalGuests={noOfGuests}
           totalSavings={totalSavings}
+          isFromApp={isFromApp}
+          pastAppBookings={pastAppBookings}
         />
       </Flex>
     </>

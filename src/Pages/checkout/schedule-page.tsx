@@ -32,12 +32,17 @@ import { ReactComponent as NoBatchImage } from "../../images/gym/no-batch.svg";
 import colors from "../../constants/colours";
 import { Rs } from "../../constants/symbols";
 import { toLetterCase } from "../../utils/string-operation";
-import { getGymById } from "../../apis/gym/activities";
+import { getGymById, getPastAppBookings } from "../../apis/gym/activities";
 import Loader from "../../components/Loader";
 import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
 import { showDiscountText } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
+
+
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -58,6 +63,26 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
   const [userDetails] = useAtom(userDetailsAtom);
+  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  const [isFromApp, setIsFromApp] = useState(false);
+
+  const { mutate: _getPastAppBookings } = useMutation({
+    mutationFn: getPastAppBookings,
+    onError: () => {
+      errorToast("Error in getting past app bookings");
+    },
+    onSuccess: (result) => {
+      console.log("past app bookings - ", result);
+      setPastAppBookings(result.bookings);
+    },
+  });
+
+
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+  }, [])
 
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");
@@ -128,7 +153,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     }
   }, [gym]);
 
-  const discountedPrice = (price: number) => (
+  const discountedPrice = (price: number, finalPrice: number, discountText: string) => (
     <span
       style={{
         display: "flex",
@@ -155,7 +180,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
         }}
       >
         {Rs}
-        {Math.floor(price / 2)}
+        {Math.floor(finalPrice)}
       </span>
       <span
         style={{
@@ -164,7 +189,17 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           fontWeight: "400",
         }}
       >
-        50% off
+        per person
+      </span>
+      <span
+        style={{
+          color: "#008B4F",
+          fontSize: "12px",
+          fontWeight: "400",
+        }}
+      >
+        {/* 50% off */}
+        {discountText}
       </span>
     </span>
   );
@@ -173,6 +208,15 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   function generateBatchTile(gym: IGymDetails, batches: IBatch[]) {
     const batchTile = (batch: IBatch) => {
+      const { maxDiscount, offerPercentage, discountType} = gym;
+      const { price } = batch;
+      let finalPrice = (price - maxDiscount) >  (price *  (100 - offerPercentage) / 100) ? (price - maxDiscount) : (price * (100 - offerPercentage) / 100)
+      if(discountType == 'FLAT'){
+        finalPrice = (price * (100 - offerPercentage) / 100);
+      }
+      const discountText = discountType == 'FLAT' ? `FLAT ${offerPercentage}%` : 
+                           discountType == 'PERCENTAGE' ? 
+                           `${Rs}${price - finalPrice} OFF` : ``;
       return (
         <Card className={gym.gymId == 6 && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
           style={{
@@ -286,21 +330,32 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 <Flex style={{
                   justifyContent: 'space-evenly'
                 }}>
-                {showDiscountText(gym, userDetails) ? (
-                  discountedPrice(batch.price)
+                {showDiscountText(gym, userDetails, isFromApp, pastAppBookings) ? (
+                  discountedPrice(batch.price, finalPrice, discountText)
                 ) : (
+                  <>
                   <span style={{
                     marginRight: '-14px'
                   }}>
                     {Rs}
                     {batch.price}
                   </span>
+                  <span
+                    style={{
+                      color: "#828081",
+                      fontSize: "12px",
+                      fontWeight: "400",
+                    }}
+                  >
+                  per person
+                  </span>
+                  </>
                 )}
                 <span>
                   <RightOutlined />
                 </span>
                 </Flex>
-                <Flex style={{
+                {/* <Flex style={{
                   justifyContent: 'start'
                 }}>
                   <div style={{
@@ -309,7 +364,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   }}>
                   per person
                   </div>
-                </Flex>
+                </Flex> */}
               </Flex>
             </Flex>
           </Flex>

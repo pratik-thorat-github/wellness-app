@@ -10,6 +10,7 @@ import {
   getAllActivities,
   getExclusiveGyms,
   getGymsByActivity,
+  getPastAppBookings
 } from "../../apis/gym/activities";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../../components/Loader";
@@ -40,6 +41,10 @@ function MixpanelHomeInit(user: IUser | null) {
   Mixpanel.track("open_home_page");
 }
 
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
+
 const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   // useAuthRedirect();
 
@@ -57,6 +62,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   showClassesNearYou = showClassesNearYouFilters == false ? false : true;
   const [activities, setActivities] = useState<string[]>([]);
   const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
+  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  const [isFromApp, setIsFromApp] = useState(false);
 
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
   const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
@@ -84,6 +91,17 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     onSuccess: (result) => {
       console.log("deatils - ", result);
       setUserDetailsAtom(result.user);
+    },
+  });
+
+  const { mutate: _getPastAppBookings } = useMutation({
+    mutationFn: getPastAppBookings,
+    onError: () => {
+      errorToast("Error in getting past app bookings");
+    },
+    onSuccess: (result) => {
+      console.log("past app bookings - ", result);
+      setPastAppBookings(result.bookings);
     },
   });
 
@@ -126,6 +144,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   const { mutate: _getPlusDetailsOfUser } = useMutation({
     mutationFn: getPlusDetailsOfUser,
     onSuccess: (data) => {
+      console.log("HELLO => ")
       console.log(data);
       setPlusDetailsAtom(data.plus as unknown as IPlusDetails);
     },
@@ -133,6 +152,13 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
       errorToast("Error in getting plus details");
     },
   });
+
+
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+  }, [])
 
   useEffect(() => {
     if (onboarding) {
@@ -149,7 +175,12 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
       _getUserDeatils();
     }
     _getAllActivities();
-
+    
+    if(userDetails){
+      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+      _getPastAppBookings(userId)
+    }
+    
     _getGymsByActivities(activitySelected);
 
     // _getPlusDetailsOfUser(userDetails?.phone as string);
@@ -172,7 +203,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   // Set the 'onboarding' cookie to 'done' and expire it after 1 day
   const showOnBoarding = () => {
     return (
-      !onboarding && !userDetails?.id && getCookie("onboarding") !== "done"
+      // !onboarding && !userDetails?.id && getCookie("onboarding") !== "done"
+      !userDetails?.id && getCookie("onboarding") !== "done"
     );
   };
 
@@ -218,6 +250,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             activitySelected={activitySelected}
             gymCardsData={gymCardsData}
             showClassesNearYou={showClassesNearYou}
+            isFromApp={isFromApp}
+            pastAppBookings={pastAppBookings}
           />
         </Flex>
       </Flex>
