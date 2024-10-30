@@ -15,7 +15,7 @@ import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import { useAtom } from "jotai/react";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import { Mixpanel } from "../../mixpanel/init";
-import { getActivityById, getGymById } from "../../apis/gym/activities";
+import { getActivityById, getGymById, getPastAppBookings } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
@@ -25,6 +25,9 @@ import MetaPixel from "../../components/meta-pixel";
 import ShareMetadata from "../../components/share-metadata";
 import Loader from "../../components/Loader";
 
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
 interface IClassCheckout extends RouteComponentProps {
   // batchDetails?: IBatch;
   // gymData?: IGymDetails;
@@ -56,6 +59,34 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [gotBatchDetails, setBatchDetailsCheck] = useState<Boolean>(false);
   const [gotGymDetails, setGymDetailsCheck] = useState<Boolean>(false);
   const [loading, setLoading] = useState(true);
+
+  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  const [isFromApp, setIsFromApp] = useState(false);
+  const [gotPastAppBookings, setGotPastAppBookings] = useState(false);
+
+  const { mutate: _getPastAppBookings } = useMutation({
+    mutationFn: getPastAppBookings,
+    onError: () => {
+      errorToast("Error in getting past app bookings");
+    },
+    onSuccess: (result) => {
+      console.log("past app bookings - ", result);
+      setPastAppBookings(result.bookings);
+    },
+  });
+
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+    if(userDetails){
+      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+      _getPastAppBookings(userId)
+      setGotPastAppBookings(true);
+    } else {
+      setGotPastAppBookings(true);
+    }
+  }, [])
 
   const gymId = batchDetails?.gymId;
 
@@ -267,7 +298,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const mapsLink = createMapsLink(batchDetails?.venueAddressLine1 || '', batchDetails?.venueAddressLine1 || '');
 
 
-  if(loading){
+  if(loading || !gotPastAppBookings){
     return <Loader/>
   }
   
@@ -424,6 +455,8 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         totalAmount={batchDetails?.price as number}
         comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
         forceBookNowCta={true}
+        isFromApp={isFromApp}
+        pastAppBookings={pastAppBookings}
       />
     </Flex>
     <MetaPixel />

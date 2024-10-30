@@ -28,3 +28,8 @@ export async function getActivityById(id: string) {
   const result = await networkAdapter.get(`gyms/batch/byBatchId?batchId=${id}`);
   return result.data;
 }
+
+export async function getPastAppBookings(id: string){
+  const result = await networkAdapter.get(`bookings/pastAppBookings?id=${id}`);
+  return result.data;
+}

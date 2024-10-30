@@ -17,11 +17,16 @@ import { Mixpanel } from "../../mixpanel/init";
 import GymPhotos from "../gym/gym-photos";
 import { min } from "moment";
 import { discountTxt, showDiscountText } from "../../utils/offers";
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
 
 function getListOfCenters(
   gymCardsData: IGymCard[],
   plusDetails: IPlusDetails | null,
-  userDetails: IUser | null
+  userDetails: IUser | null,
+  isFromApp: boolean,
+  pastAppBookings: PastAppBookingObject 
 ) {
   const locationIcon = () => {
     return (
@@ -117,10 +122,19 @@ function getListOfCenters(
     );
   };
 
-  const priceCard = (price: number, showDiscount: boolean) => {
+  const priceCard = (price: number, showDiscount: boolean, maxDiscount: number, offerPercentage: number, discountType: string) => {
+    let finalPrice = (price - maxDiscount) >  (price *  (100 - offerPercentage) / 100) ? (price - maxDiscount) : (price * (100 - offerPercentage) / 100)
+    if(discountType == 'FLAT'){
+      finalPrice = price - price * offerPercentage / 100;
+    }
+    if(!showDiscount){
+      finalPrice = price;
+    }
+    console.log({price, showDiscount, finalPrice, maxDiscount, offerPercentage});
+
     return showDiscount ? (
       <div className="dCard">
-        <div className="dPrice">₹{Math.floor(price / 2)}</div>
+        <div className="dPrice">₹{finalPrice}</div>
         <div className="sPrice slash">₹{price}</div>
         <div className="sPrice">onwards</div>
       </div>
@@ -135,12 +149,14 @@ function getListOfCenters(
     );
   };
 
-  const cardWidget = (gymCard: IGymCard) => {
+  const cardWidget = (gymCard: IGymCard, isFromApp: boolean, pastAppBookings: PastAppBookingObject) => {
     console.log(gymCard);
-    const { medias, name, activities, area, minPrice, isExclusive } = gymCard;
+    const { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage, discountType } = gymCard;
     console.log(medias, "media");
 
-    let showDiscount = showDiscountText(gymCard, userDetails);
+    let showDiscount = showDiscountText(gymCard, userDetails, isFromApp, pastAppBookings);
+    const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on your 1st booking on App` :
+                         discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on your 1st booking on App` : ``;
 
     return (
       <div
@@ -164,7 +180,7 @@ function getListOfCenters(
         >
           <div className="activityDetail">
             <div className={name.length<44 ? name.length > 22 ? "nameInc" : "name":'nameNoheight'}>
-              <span>{name}</span> {priceCard(minPrice, showDiscount)}
+              <span>{name}</span> {priceCard(minPrice, showDiscount, maxDiscount, offerPercentage, discountType)}
             </div>
             <div className="activity">
               {concatAndUpperCaseActivities(activities?.slice(0, 8))}
@@ -180,7 +196,10 @@ function getListOfCenters(
             <div className="discount">
               <div>
                 {discountIcon()}
-                <span className="dTxt">{discountTxt}</span>
+                {/* <span className="dTxt">{discountTxt}</span> */}
+                <span className="dTxt">{
+                discountText
+                }</span>
               </div>
             </div>
           )}
@@ -193,7 +212,7 @@ function getListOfCenters(
     <Flex flex={1} vertical justify="space-evenly" style={{ width: "100%" }}>
       {/* {generateCards} */}
       {gymCardsData.map((gymCard) => {
-        return cardWidget(gymCard);
+        return cardWidget(gymCard, isFromApp, pastAppBookings);
       })}
     </Flex>
   );
@@ -204,6 +223,8 @@ interface ICentersNearYou {
   activitySelected?: string;
   gymCardsData: IGymCard[];
   showClassesNearYou: boolean;
+  isFromApp: boolean;
+  pastAppBookings: PastAppBookingObject;
 }
 
 const CentersAroundYou: React.FC<ICentersNearYou> = ({
@@ -211,6 +232,8 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
   activitySelected,
   gymCardsData,
   showClassesNearYou,
+  isFromApp,
+  pastAppBookings
 }) => {
   const navigate = useNavigate();
   const [plusDetails] = useAtom(plusDetailsAtom);
@@ -261,7 +284,7 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
       </Flex>
 
       <Flex flex={4} style={{}} id="scrollThis">
-        {getListOfCenters(gymCardsData, plusDetails, userDetails)}
+        {getListOfCenters(gymCardsData, plusDetails, userDetails, isFromApp, pastAppBookings)}
       </Flex>
     </Flex>
   );

@@ -10,6 +10,7 @@ import {
   getAllActivities,
   getExclusiveGyms,
   getGymsByActivity,
+  getPastAppBookings
 } from "../../apis/gym/activities";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../../components/Loader";
@@ -24,6 +25,10 @@ import LandingFooter from "../landing/Footer";
 import { getUserDeatils } from "../../apis/user/userDetails";
 import Onboarding from "./onboarding";
 import MetaPixel from "../../components/meta-pixel";
+
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
 
 interface IHome extends RouteComponentProps {
   activitySelected?: string;
@@ -57,6 +62,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   showClassesNearYou = showClassesNearYouFilters == false ? false : true;
   const [activities, setActivities] = useState<string[]>([]);
   const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
+  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  const [isFromApp, setIsFromApp] = useState(false);
 
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
   const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
@@ -109,6 +116,17 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     },
   });
 
+  const { mutate: _getPastAppBookings } = useMutation({
+    mutationFn: getPastAppBookings,
+    onError: () => {
+      errorToast("Error in getting past app bookings");
+    },
+    onSuccess: (result) => {
+      console.log("past app bookings - ", result);
+      setPastAppBookings(result.bookings);
+    },
+  });
+
   // useEffect(()=>{
   //   const { mutate: _getGymsByActivities } = useMutation({
   //     mutationFn: getGymsByActivity,
@@ -135,6 +153,12 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   });
 
   useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+  }, [])
+
+  useEffect(() => {
     if (onboarding) {
       setCookie("onboarding", "done", 1);
     }
@@ -149,6 +173,11 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
       _getUserDeatils();
     }
     _getAllActivities();
+
+    if(userDetails){
+      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+      _getPastAppBookings(userId)
+    }
 
     _getGymsByActivities(activitySelected);
 
@@ -218,6 +247,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             activitySelected={activitySelected}
             gymCardsData={gymCardsData}
             showClassesNearYou={showClassesNearYou}
+            isFromApp={isFromApp}
+            pastAppBookings={pastAppBookings}
           />
         </Flex>
       </Flex>

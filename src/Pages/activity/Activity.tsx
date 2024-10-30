@@ -2,7 +2,7 @@ import { RouteComponentProps, navigate, useLocation, useNavigate } from "@reach/
 import React, { useEffect, useState } from 'react'
 import { IGymCard } from "../../types/gyms";
 import { useMutation } from "@tanstack/react-query";
-import { getAllActivities, getExclusiveGyms, getGymsByActivity } from "../../apis/gym/activities";
+import { getAllActivities, getExclusiveGyms, getGymsByActivity, getPastAppBookings } from "../../apis/gym/activities";
 import { errorToast } from "../../components/Toast";
 import ClassesNearYou from "../home/classes-near-you";
 import CentersAroundYou from "../home/centers-around-you";
@@ -14,6 +14,9 @@ import { discountTxt, showDiscountText } from "../../utils/offers";
 import { Rs } from "../../constants/symbols";
 import MetaPixel from "../../components/meta-pixel";
 
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
 
 interface IActivity extends RouteComponentProps {}
 
@@ -23,6 +26,8 @@ const [activities, setActivities] = useState<string[]>([]);
 const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
 const [selectedActivity,setSelectedActivity]=useState<string>(activity);
 const [userDetails] = useAtom(userDetailsAtom);
+const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+const [isFromApp, setIsFromApp] = useState(false);
 
 
 
@@ -58,6 +63,22 @@ const { mutate: _getAllActivities } = useMutation({
       setGymCardsData(result.gyms);
     },
   });
+
+  const { mutate: _getPastAppBookings } = useMutation({
+    mutationFn: getPastAppBookings,
+    onError: () => {
+      errorToast("Error in getting past app bookings");
+    },
+    onSuccess: (result) => {
+      console.log("past app bookings - ", result);
+      setPastAppBookings(result.bookings);
+    },
+  });
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+  }, [])
 
 useEffect(()=>{
     _getAllActivities();
@@ -157,10 +178,10 @@ const exclusiveIcon = () => {
 
   const cardWidget = (gymCard: IGymCard) => {
     console.log(gymCard);
-    const { medias, name, activities, area, minPrice, isExclusive } = gymCard;
+    const { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage } = gymCard;
     console.log(medias, "media");
-
-    let showDiscount = showDiscountText(gymCard, userDetails);
+    const finalPrice = (minPrice - maxDiscount) >  (minPrice *  (100 - offerPercentage) / 100) ? (minPrice - maxDiscount) : (minPrice * (100 - offerPercentage) / 100)
+    let showDiscount = showDiscountText(gymCard, userDetails, isFromApp, pastAppBookings);
 
     return (
       <div
@@ -184,7 +205,7 @@ const exclusiveIcon = () => {
         >
           <div className="activityDetail">
           <div className={name.length<38 ? name.length > 23 ? "nameInc" : "name":'nameNoheight'}>
-              <span>{name}</span> {priceCard(minPrice, showDiscount)}
+              <span>{name}</span> {priceCard(minPrice, showDiscount, finalPrice)}
             </div>
             <div className="activity">
               {concatAndUpperCaseActivities(activities?.slice(0, 8))}
@@ -209,7 +230,7 @@ const exclusiveIcon = () => {
     );
   };
 
-  const priceCard = (price: number, showDiscount: boolean) => {
+  const priceCard = (price: number, showDiscount: boolean, finalPrice: number) => {
     return showDiscount ? (
       <div className="dCard">
         <div className="dPrice">₹{Math.floor(price / 2)}</div>

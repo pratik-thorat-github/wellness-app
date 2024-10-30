@@ -18,6 +18,7 @@ import SchedulePage from "./Pages/checkout/schedule-page";
 import Activity from "./Pages/activity/Activity";
 import BatchCheckoutBooking from "./Pages/checkout/checkout";
 import PrivacyPolicy from "./Pages/privacy/privacy";
+import { useEffect, useState } from "react";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -25,6 +26,13 @@ const queryClient = new QueryClient();
 function App() {
   const [accessToken] = useAtom(accessTokenAtom);
   const [userDetails] = useAtom(userDetailsAtom);
+  const [isFromApp, setIsFromApp] = useState(false);
+  
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+  }, [])
 
   return (
     <QueryClientProvider client={queryClient}>

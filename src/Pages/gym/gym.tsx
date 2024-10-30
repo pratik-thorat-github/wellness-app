@@ -6,7 +6,7 @@ import BookClassBanner from "./book-class-banner";
 import BatchSchedule from "./batch-schedule";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { getGymById } from "../../apis/gym/activities";
+import { getGymById, getPastAppBookings } from "../../apis/gym/activities";
 import { errorToast } from "../../components/Toast";
 import Loader from "../../components/Loader";
 import { IGymDetails } from "../../types/gyms";
@@ -18,6 +18,10 @@ interface IGYmPage extends RouteComponentProps {
   gymId?: string;
 }
 
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
+
 function MixpanelGymInit(gym: IGymDetails) {
   Mixpanel.track("open_gym_page", {
     gymName: gym.name,
@@ -27,6 +31,8 @@ function MixpanelGymInit(gym: IGymDetails) {
 
 const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   const [gym, setGym] = useState<IGymDetails | null>(null);
+  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  const [isFromApp, setIsFromApp] = useState(false);
 
   const { mutate: _getGymById } = useMutation({
     mutationFn: getGymById,
@@ -39,8 +45,25 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
     },
   });
 
+  const { mutate: _getPastAppBookings } = useMutation({
+    mutationFn: getPastAppBookings,
+    onError: () => {
+      errorToast("Error in getting past app bookings");
+    },
+    onSuccess: (result) => {
+      console.log("past app bookings - ", result);
+      setPastAppBookings(result.bookings);
+    },
+  });
+
   useEffect(() => {
     window.scrollTo(0, 0)
+  }, [])
+
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
   }, [])
 
   useEffect(() => {
