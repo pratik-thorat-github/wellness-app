@@ -19,9 +19,6 @@ export function deductPercentage(
 
 export const discountTxt = "50% off on your first booking on ZenfitX";
 
-interface PastAppBookingObject {
-  [key: string]: any; // Or use a more specific type
-}
 
 export function showDiscountText(
   gym: IGymCard | IGymDetails,

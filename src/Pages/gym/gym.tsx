@@ -29,10 +29,6 @@ function MixpanelGymInit(gym: IGymDetails) {
   });
 }
 
-interface PastAppBookingObject {
-  [key: string]: any; // Or use a more specific type
-}
-
 const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   const [gym, setGym] = useState<IGymDetails | null>(null);
   const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
