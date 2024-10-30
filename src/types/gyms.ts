@@ -8,9 +8,9 @@ export interface IGymCard {
   medias: string[];
   offerType: EOfferType;
   isExclusive: boolean;
-  maxDiscount: number,
-  offerPercentage: number,
-  discountType: string
+  maxDiscount: number;
+  offerPercentage: number;
+  discountType: string;
 }
 
 export enum EOfferType {

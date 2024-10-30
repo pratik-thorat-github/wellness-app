@@ -26,6 +26,10 @@ import { getUserDeatils } from "../../apis/user/userDetails";
 import Onboarding from "./onboarding";
 import MetaPixel from "../../components/meta-pixel";
 
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
+
 interface IHome extends RouteComponentProps {
   activitySelected?: string;
   showClassesNearYou?: boolean;
@@ -39,10 +43,6 @@ function MixpanelHomeInit(user: IUser | null) {
     $id: user?.id as number,
   });
   Mixpanel.track("open_home_page");
-}
-
-interface PastAppBookingObject {
-  [key: string]: any; // Or use a more specific type
 }
 
 const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
@@ -161,6 +161,12 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   }, [])
 
   useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+  }, [])
+
+  useEffect(() => {
     if (onboarding) {
       setCookie("onboarding", "done", 1);
     }
@@ -175,12 +181,10 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
       _getUserDeatils();
     }
     _getAllActivities();
-    
     if(userDetails){
       const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
       _getPastAppBookings(userId)
     }
-    
     _getGymsByActivities(activitySelected);
 
     // _getPlusDetailsOfUser(userDetails?.phone as string);

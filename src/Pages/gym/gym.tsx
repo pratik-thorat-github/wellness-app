@@ -18,6 +18,10 @@ interface IGYmPage extends RouteComponentProps {
   gymId?: string
 }
 
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
+
 function MixpanelGymInit(gym: IGymDetails) {
   Mixpanel.track("open_gym_page", {
     gymName: gym.name,
@@ -60,6 +64,12 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
     window.scrollTo(0, 0);
   }, []);
 
+
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+  }, [])
 
   useEffect(() => {
     const userSource = window?.platformInfo?.platform  || 'web';

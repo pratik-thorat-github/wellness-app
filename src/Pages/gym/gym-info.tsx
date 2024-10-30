@@ -24,6 +24,7 @@ import { userDetailsAtom } from "../../atoms/atom";
 import { getPastAppBookings } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
+import { Rs } from "../../constants/symbols";
 
 const maxChar = 250;
 
@@ -37,9 +38,8 @@ interface IGymInfo {
 
 const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   const description = `${gymData.description}`;
-
   const { maxDiscount, offerPercentage, discountType} = gymData;
-  console.log({maxDiscount, offerPercentage, discountType});
+
   let [isTruncated, setIsTruncated] = useState(description.length > maxChar);
   let shortDescription = useRef(description.substring(0, maxChar));
   shortDescription.current.replace(/<br>/, "");
@@ -59,7 +59,6 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     },
   });
 
-
   useEffect(() => {
     const userSource = window?.platformInfo?.platform  || 'web';
     const appFlag = userSource != 'web' ? true : false;
@@ -67,7 +66,6 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     const userId = userDetails?.id?.toString() || '0';
     _getPastAppBookings(userId);
   }, [])
-
   let showDiscount = showDiscountText(gymData, userDetails, isFromApp, pastAppBookings);
 
   const [showTimeOptions, setShowTimeOptions] = useState<Boolean>(false);
@@ -281,9 +279,9 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
       </defs>
     </svg>
   );
-  
-  const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${maxDiscount} on your first booking on ZenfitX App` :
-                       discountType == 'FLAT' ? `FLAT ${offerPercentage} off!` : ``
+
+  const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` :
+                        discountType == 'FLAT' ? `FLAT ${offerPercentage} off on 1st booking on App` : ``
   const discountLine = () => {
     console.log({discountText});
     return showDiscount ? (

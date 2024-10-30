@@ -1,6 +1,10 @@
 import { EOfferType, IGymCard, IGymDetails } from "../types/gyms";
 import IUser from "../types/user";
 
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
+
 export function deductPercentage(
   basePrice: number,
   discountPercentage: number

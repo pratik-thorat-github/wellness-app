@@ -21,7 +21,6 @@ import { deductPercentage, discountTxt } from "../../utils/offers";
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
 }
-
 export interface IBookNowFooter {
   batchDetails?: IBatch;
   totalAmount: number;
@@ -33,7 +32,7 @@ export interface IBookNowFooter {
   forceBookNowCta?: boolean;
   totalSavings?: number;
   isFromApp?: boolean;
-  pastAppBookings?: PastAppBookingObject
+  pastAppBookings?: PastAppBookingObject;
 }
 
 function loadScript(src: string) {
@@ -236,7 +235,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const offerPercentage = props.batchDetails?.offerPercentage || 0;
   const price  =  props.batchDetails?.price || 0;
   let noOfGuests = 1;
-  if(props.totalGuests){
+  if(props.totalGuests && props.totalGuests > 1){
     noOfGuests = props.totalGuests
   }
   let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
@@ -245,9 +244,9 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   if(props.gymData?.discountType == 'FLAT'){
     finalPrice = (price * (100 - offerPercentage) / 100)
   }  
-  const discountText = props.gymData?.discountType == 'FLAT' ? `FLAT ${offerPercentage}%` : 
-                       props.gymData?.discountType == 'PERCENTAGE' ? `${Rs}${price * noOfGuests - finalPrice} OFF` : `dfds`;
-
+  const discountText = props.gymData?.discountType == 'FLAT' ? `${offerPercentage}% off` : 
+                       props.gymData?.discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : ``;
+  
 async function processBookNowCta() {
     if (props.forceBookNowCta) {
       Mixpanel.track("open_batch_checkout_booking", {
@@ -310,6 +309,8 @@ async function processBookNowCta() {
         setShowDiscount(false);
       } else if(props.pastAppBookings?.[props.batchDetails.gymId]){
         setShowDiscount(false);
+      } else if(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) {
+        setShowDiscount(false);
       } else {
         setShowDiscount(true);
       }
@@ -325,7 +326,6 @@ async function processBookNowCta() {
         props.batchDetails?.price || 0,
         50
       );
-      
       let noOfGuests = 1;
       if(props.totalGuests){
         noOfGuests = props.totalGuests;

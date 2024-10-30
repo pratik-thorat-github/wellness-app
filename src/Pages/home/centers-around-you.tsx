@@ -17,7 +17,6 @@ import { Mixpanel } from "../../mixpanel/init";
 import GymPhotos from "../gym/gym-photos";
 import { min } from "moment";
 import { discountTxt, showDiscountText } from "../../utils/offers";
-
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
 }
@@ -151,12 +150,12 @@ function getListOfCenters(
 
   const cardWidget = (gymCard: IGymCard, isFromApp: boolean, pastAppBookings: PastAppBookingObject) => {
     console.log(gymCard);
-    let { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage, discountType} = gymCard;
+    const { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage, discountType } = gymCard;
     console.log(medias, "media");
 
     let showDiscount = showDiscountText(gymCard, userDetails, isFromApp, pastAppBookings);
-    const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${maxDiscount} on your first booking on ZenfitX App` :
-                         discountType == 'FLAT' ? `FLAT ${offerPercentage}% off!` : ``;
+    const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on your 1st booking on App` :
+                         discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on your 1st booking on App` : ``;
 
     console.log({minPrice});
     return (
@@ -225,8 +224,8 @@ interface ICentersNearYou {
   activitySelected?: string;
   gymCardsData: IGymCard[];
   showClassesNearYou: boolean;
-  isFromApp: boolean,
-  pastAppBookings: PastAppBookingObject
+  isFromApp: boolean;
+  pastAppBookings: PastAppBookingObject;
 }
 
 

@@ -27,7 +27,7 @@ function App() {
   const [accessToken] = useAtom(accessTokenAtom);
   const [userDetails] = useAtom(userDetailsAtom);
   const [isFromApp, setIsFromApp] = useState(false);
-
+  
   useEffect(() => {
     const userSource = window?.platformInfo?.platform  || 'web';
     const appFlag = userSource != 'web' ? true : false;

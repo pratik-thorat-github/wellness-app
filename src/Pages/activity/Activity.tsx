@@ -18,7 +18,6 @@ interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
 }
 
-
 interface IActivity extends RouteComponentProps {}
 
 const Activity: React.FC<IActivity> = ({}) => {
@@ -74,7 +73,6 @@ const { mutate: _getAllActivities } = useMutation({
       setPastAppBookings(result.bookings);
     },
   });
-
   useEffect(() => {
     const userSource = window?.platformInfo?.platform  || 'web';
     const appFlag = userSource != 'web' ? true : false;
@@ -179,7 +177,7 @@ const exclusiveIcon = () => {
 
   const cardWidget = (gymCard: IGymCard) => {
     console.log(gymCard);
-    const { medias, name, activities, area, minPrice, isExclusive, maxDiscount = 80, offerPercentage = 20 } = gymCard;
+    const { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage } = gymCard;
     console.log(medias, "media");
     const finalPrice = (minPrice - maxDiscount) >  (minPrice *  (100 - offerPercentage) / 100) ? (minPrice - maxDiscount) : (minPrice * (100 - offerPercentage) / 100)
     let showDiscount = showDiscountText(gymCard, userDetails, isFromApp, pastAppBookings);

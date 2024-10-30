@@ -58,11 +58,14 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
     },
   });
 
-
   useEffect(() => {
     const userSource = window?.platformInfo?.platform  || 'web';
     const appFlag = userSource != 'web' ? true : false;
     setIsFromApp(appFlag);
+    if(userDetails){
+      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+      _getPastAppBookings(userId)
+    }
   }, [])
 
   const { mutate: _getActivityById } = useMutation({
@@ -86,6 +89,22 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       errorToast("Error in getting gym data");
     },
   });
+
+  useEffect(() => {
+    if (batchDetails) {
+      console.log("dfwfwf");
+      if(!userDetails){
+        setShowDiscount(true);
+      } else if(!isFromApp){
+        setShowDiscount(false);
+      } else if(pastAppBookings?.[batchDetails.gymId]){
+        setShowDiscount(false);
+      } else {
+        setShowDiscount(true);
+      }
+    }
+  }, [batchDetails])
+
 
   useEffect(() => {
     _getActivityById(batchId);
@@ -138,25 +157,32 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       // batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
       showDiscount
     ) {
-      // let [newTotalAmount, discount] = deductPercentage(
+      // const [newTotalAmount, discount] = deductPercentage(
       //   batchDetails?.price || 0,
-      //   batchDetails?.offerPercentage || 0
+      //   50
       // );
       let price = batchDetails?.price;
       let maxDiscount = batchDetails?.maxDiscount;
       let offerPercentage = batchDetails?.offerPercentage;
-      let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
+      let finalPrice = 0;
+      if(batchDetails.discountType == "PERCENTAGE"){
+        finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
                       ?  price * noOfGuests  - maxDiscount
                       : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+      }
+      else if(batchDetails.discountType == "FLAT"){
+        finalPrice = (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+      }
       let newTotalAmount = finalPrice;
       let discount = price * noOfGuests - finalPrice;
+
       setTotalAmount(newTotalAmount);
       setTotalSavings(discount);
 
       // batchDetails.offerPercentage = 50;
       batchDetails.offerType = EOfferType.APP;
     }
-  }, [batchDetails]);
+  }, [batchDetails && showDiscount]);
 
   if (!gym || !batchDetails) return <Loader />;
 
@@ -194,6 +220,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       finalAmount = (baseAmountAfterIncrement - maxDiscount) > (baseAmountAfterIncrement - baseAmountAfterIncrement * offerPercentage / 100) 
                     ? (baseAmountAfterIncrement - maxDiscount) 
                     : (baseAmountAfterIncrement - baseAmountAfterIncrement * offerPercentage / 100);
+      if(batchDetails?.discountType == "FLAT"){
+        finalAmount = (baseAmountAfterIncrement - baseAmountAfterIncrement * offerPercentage / 100);
+      }
       discount = baseAmountAfterIncrement - finalAmount;
     }
 

@@ -38,6 +38,7 @@ import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
 import { showDiscountText } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
+import { cp } from "fs";
 
 
 interface PastAppBookingObject {
@@ -77,11 +78,14 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     },
   });
 
-
   useEffect(() => {
     const userSource = window?.platformInfo?.platform  || 'web';
     const appFlag = userSource != 'web' ? true : false;
     setIsFromApp(appFlag);
+    if(userDetails){
+      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+      _getPastAppBookings(userId)
+    }
   }, [])
 
   useEffect(() => {
@@ -153,7 +157,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     }
   }, [gym]);
 
-  const discountedPrice = (price: number, finalPrice: number, discountText: string) => (
+  const discountedPrice = (price: number, finalPrice: number, discountText: string, discountType: string) => (
     <span
       style={{
         display: "flex",
@@ -197,9 +201,9 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           fontSize: "12px",
           fontWeight: "400",
         }}
-      >
+        >
         {/* 50% off */}
-        {discountText}
+        {discountType == "FLAT" ? discountText : ``}
       </span>
     </span>
   );
@@ -214,9 +218,9 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       if(discountType == 'FLAT'){
         finalPrice = (price * (100 - offerPercentage) / 100);
       }
-      const discountText = discountType == 'FLAT' ? `FLAT ${offerPercentage}%` : 
+      const discountText = discountType == 'FLAT' ? `${offerPercentage}% off` : 
                            discountType == 'PERCENTAGE' ? 
-                           `${Rs}${price - finalPrice} OFF` : ``;
+                           `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : ``;
       return (
         <Card className={gym.gymId == 6 && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
           style={{
@@ -241,131 +245,130 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             });
           }}
         >
-          <Flex flex={1}>
+          <Flex flex={2} vertical>
             <Flex flex={1}>
-              <span>
-                <span
-                  style={{
-                    backgroundColor: colors.border,
-                    borderRadius: "4px",
-                    padding: "3px",
-                  }}
-                >
-                  {batch.isDayPass
-                    ? "All Day"
-                    : formatTimeIntToAmPm(batch.startTime)}
-                </span>
-              </span>
-            </Flex>
-            <Flex
-              flex={6}
-              style={{
-                borderBottomWidth: "1px",
-                borderBottomColor: colors.border,
-                borderBottomStyle: "solid",
-                marginLeft: '16px',
-                paddingBottom: "8px",
-              }}
-            >
-              <Flex flex={4} vertical >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  {batch.venue && (
-                    <span>{formatDate(batch.date)["date suffix"]}</span>
-                  )}
-                  <span style={{ fontWeight: "bold" }}>
-                    {batch.activityName}
-                  </span>
-                  {batch.venue && <span>{batch.venue}</span>}
-                </div>
-                {batch.trainer ? (
-                  <Flex flex={1}>By {batch.trainer}</Flex>
-                ) : null}
-                {!batch.isDayPass ? (
-                  <Flex
-                    style={{ color: colors.secondary, marginTop: "4px" }}
-                    flex={1}
-                  >
-                    {batch.duration} min
-                  </Flex>
-                ) : null}
-                {gym.gymId == 6 && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
-                  <Flex 
-                    style={{
-                      color: "#C15700",
-                      fontSize: "14px",
-                      fontWeight: "400",
-                      margin: "-4px 0px",
-                      marginTop: "2px",
-                      fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif"
-                    }}
-                    flex={1}
-                  >
-                    {batch.slots - batch.slotsBooked} spot(s) left out of {batch.slots}
-                  </Flex>
-                )
-                :
-                gym.gymId == 6 && batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
-                  <Flex 
-                    style={{
-                      color: "#C15700",
-                      fontSize: "14px",
-                      fontWeight: "400",
-                      margin: "-4px 0px",
-                      marginTop: "2px",
-                      fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif"
-                    }}
-                    flex={1}
-                  >
-                    Sold Out!
-                  </Flex>
-                )
-                : null}
-              </Flex>
-              <Flex flex={2} vertical>
-                <Flex style={{
-                  justifyContent: 'space-evenly'
-                }}>
-                {showDiscountText(gym, userDetails, isFromApp, pastAppBookings) ? (
-                  discountedPrice(batch.price, finalPrice, discountText)
-                ) : (
-                  <>
-                  <span style={{
-                    marginRight: '-14px'
-                  }}>
-                    {Rs}
-                    {batch.price}
-                  </span>
+              <Flex flex={1}>
+                <span>
                   <span
                     style={{
-                      color: "#828081",
-                      fontSize: "12px",
-                      fontWeight: "400",
+                      backgroundColor: colors.border,
+                      borderRadius: "4px",
+                      padding: "3px",
                     }}
                   >
-                  per person
+                    {batch.isDayPass
+                      ? "All Day"
+                      : formatTimeIntToAmPm(batch.startTime)}
                   </span>
-                  </>
-                )}
-                <span>
-                  <RightOutlined />
                 </span>
-                </Flex>
-                {/* <Flex style={{
-                  justifyContent: 'start'
-                }}>
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#828081'
-                  }}>
-                  per person
-                  </div>
-                </Flex> */}
               </Flex>
+              <Flex
+                flex={6}
+                style={{
+                  borderBottomWidth: "1px",
+                  borderBottomColor: colors.border,
+                  borderBottomStyle: "solid",
+                  marginLeft: '16px',
+                  paddingBottom: "8px",
+                }}
+              >
+                <Flex flex={4} vertical >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    {batch.venue && (
+                      <span>{formatDate(batch.date)["date suffix"]}</span>
+                    )}
+                    <span style={{ fontWeight: "bold" }}>
+                      {batch.activityName}
+                    </span>
+                    {batch.venue && <span>{batch.venue}</span>}
+                  </div>
+                  {batch.trainer ? (
+                    <Flex flex={1}>By {batch.trainer}</Flex>
+                  ) : null}
+                  {!batch.isDayPass ? (
+                    <Flex
+                      style={{ color: colors.secondary, marginTop: "4px" }}
+                      flex={1}
+                    >
+                      {batch.duration} min
+                    </Flex>
+                  ) : null}
+                  {gym.gymId == 6 && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
+                    <Flex 
+                      style={{
+                        color: "#C15700",
+                        fontSize: "14px",
+                        fontWeight: "400",
+                        margin: "-4px 0px",
+                        marginTop: "2px",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif"
+                      }}
+                      flex={1}
+                    >
+                      {batch.slots - batch.slotsBooked} spot(s) left out of {batch.slots}
+                    </Flex>
+                  )
+                  :
+                  gym.gymId == 6 && batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
+                    <Flex 
+                      style={{
+                        color: "#C15700",
+                        fontSize: "14px",
+                        fontWeight: "400",
+                        margin: "-4px 0px",
+                        marginTop: "2px",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif"
+                      }}
+                      flex={1}
+                    >
+                      Sold Out!
+                    </Flex>
+                  )
+                  : null}
+                </Flex>
+                <Flex flex={2} vertical>
+                  <Flex style={{
+                    justifyContent: 'space-evenly'
+                  }}>
+                  {showDiscountText(gym, userDetails, isFromApp, pastAppBookings) ? (
+                    discountedPrice(batch.price, finalPrice, discountText, discountType)
+                  ) : (
+                    <span style={{
+                      marginRight: '-14px'
+                    }}>
+                      {Rs}
+                      {batch.price}
+                    </span>
+                  )}
+                  <span>
+                    
+                  </span>
+                  <span>
+                    <RightOutlined />
+                  </span>
+                  </Flex>
+                  <Flex style={{
+                    justifyContent: 'start'
+                  }}>
+                    <div style={{
+                      fontSize: '12px',
+                      color: '#828081'
+                    }}>
+                    {!showDiscountText(gym, userDetails, isFromApp, pastAppBookings) ?  `per person` : ``}
+                    </div>
+                  </Flex>
+                </Flex>
+              </Flex>
+            </Flex>
+            <Flex style={{justifyContent: 'center', color:'#828081', fontSize: '11px'}}>
+              {showDiscountText(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ?
+                `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : ``
+              }
             </Flex>
           </Flex>
         </Card>
@@ -590,7 +593,8 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
       <Flex flex={3} style={{ marginTop: "10px" }}>
         {batches && batches.length
-          ? generateBatchTile(gym, batches)
+          ? 
+            generateBatchTile(gym, batches) 
           : noBatchComponent()}
       </Flex>
     </div>
