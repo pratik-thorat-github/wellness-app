@@ -17,6 +17,7 @@ import LandingPage from "./Pages/landing/Landing";
 import SchedulePage from "./Pages/checkout/schedule-page";
 import Activity from "./Pages/activity/Activity";
 import BatchCheckoutBooking from "./Pages/checkout/checkout";
+import PrivacyPolicy from "./Pages/privacy/privacy";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -42,7 +43,9 @@ function App() {
         <BatchCheckoutBooking path="/checkout/batch/:batchId/booking" />
         <PlusCheckout path="/checkout/plus" />
         <BatchPaymentSuccess path="/checkout/success" />
-        {/* <PlusPaymentSuccess path="/plus/success" /> */}
+        <PlusPaymentSuccess path="/plus/success" />
+        <PlusPaymentSuccess path="/plus/success" />
+        <PrivacyPolicy path="/privacy" />
       </Router>
     </QueryClientProvider>
   );

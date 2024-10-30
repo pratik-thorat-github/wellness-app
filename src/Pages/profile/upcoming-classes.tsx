@@ -22,7 +22,7 @@ const UpcomingClasses: React.FC<IUpcomingBookings> = ({ bookings }) => {
     <Flex vertical style={{ padding: "16px" }}>
       <Flex vertical>
         <span style={{ fontWeight: "bold", fontSize: "16px" }}>
-          Upcoming Classes
+          Upcoming Bookings
         </span>
         <span
           style={{

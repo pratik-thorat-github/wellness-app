@@ -75,6 +75,19 @@ margin-top:12px;
     margin:4px 0px
 }
 
+.remainingSlots{
+    color: #C15700;
+    font-family: "Plus Jakarta Sans";
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 135%; /* 27px */
+    letter-spacing: 0.3px;
+    margin-top:4px;
+    margin-bottom: 32px;
+}
+
 .dot{
     display: inline-block;
     height: 4px;
@@ -93,7 +106,7 @@ line-height: 135%; /* 16.2px */
 letter-spacing: 0.18px;
 text-transform: capitalize;
 margin-top:8px;
-margin-bottom:32px;
+margin-bottom:0px;
 
 }
 
@@ -299,6 +312,11 @@ text-transform: capitalize;
     border:1px solid #828081 !important;
     opacity: 0.5;
 
+}
+
+.disabledSoldOut{
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 .counter >span>svg{

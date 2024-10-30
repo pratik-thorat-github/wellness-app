@@ -24,6 +24,7 @@ export interface IBookings {
   bookingPrice: number;
   name: string;
   activity: string;
+  activityName: string;
   startTime: number;
   durationMin: number;
   date: Date;

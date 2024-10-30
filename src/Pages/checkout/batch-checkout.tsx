@@ -21,6 +21,9 @@ import { errorToast } from "../../components/Toast";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import { createMapsLink } from "../../utils/string-operation";
 import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
+import MetaPixel from "../../components/meta-pixel";
+import ShareMetadata from "../../components/share-metadata";
+import Loader from "../../components/Loader";
 
 interface IClassCheckout extends RouteComponentProps {
   // batchDetails?: IBatch;
@@ -50,6 +53,9 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const mixpanelSet = useRef(false);
 
   const [isClicked, setIsClicked] = useState<Boolean>(false);
+  const [gotBatchDetails, setBatchDetailsCheck] = useState<Boolean>(false);
+  const [gotGymDetails, setGymDetailsCheck] = useState<Boolean>(false);
+  const [loading, setLoading] = useState(true);
 
   const gymId = batchDetails?.gymId;
 
@@ -64,6 +70,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     onSuccess: (result) => {
       console.log(result.batch);
       setBatchDetails(result.batch);
+      setLoading(false);
     },
     onError: (error) => {
       errorToast("Error in getting gym data");
@@ -74,6 +81,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     mutationFn: getGymById,
     onSuccess: (result) => {
       setGym(result.gym);
+      setGymDetailsCheck(true);
       //   MixpanelGymInit(result.gym);
     },
     onError: (error) => {
@@ -87,17 +95,18 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   useEffect(() => {
     if (batchDetails?.gymId) {
       _getGymById(String(batchDetails.gymId));
+      setBatchDetailsCheck(true);
     }
   }, [batchDetails]);
 
   useEffect(() => {
     const shareButton = document.getElementById("share-button");
     shareButton?.addEventListener("click", () => {
-      if (navigator.share) {
+      if (navigator.share && gotGymDetails && gotBatchDetails) {
         navigator
           .share({
             title: "ZenfitX",
-            text: `Hey, I'm signing up for this awesome activity on ZenfitX. Wanna join me? Let's sweat it out together and grab those first-booking discounts! 💪`,
+            text: `Hey, Join me for ${batchDetails?.activityName} at ${("0"+batchDetails?.startTime.toString()).slice(-4).substring(0, 2)}:00 on ${new Date(`${batchDetails?.date}`).toDateString()} at the ${gym?.name}. Let's sweat it out together! 😬`,
             url: window.location.href,
           })
           .then(() => console.log("Successful share"))
@@ -109,7 +118,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     shareButton?.removeEventListener("click", () => {
       setIsClicked(false);
     });
-  }, [isClicked]);
+  }, [isClicked && gotBatchDetails && gotGymDetails]);
 
   const logoTsx = (
     <Flex flex={1}>
@@ -258,7 +267,12 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const mapsLink = createMapsLink(batchDetails?.venueAddressLine1 || '', batchDetails?.venueAddressLine1 || '');
 
 
+  if(loading){
+    return <Loader/>
+  }
+  
   return (
+    <>
     <Flex
       flex={1}
       vertical
@@ -305,6 +319,13 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
           <span className="locIcon">{locationIcon()}</span>
           {gym?.name},{gym?.area}
         </div>
+        {gym?.gymId == 6 && batchDetails?.slots && batchDetails?.slotsBooked >= 0 ?
+        <div className="remainingSlots">
+        <span>
+            {batchDetails.slots-batchDetails.slotsBooked} spot(s) left out of {batchDetails?.slots}
+        </span>
+        </div>
+        : ""}
         <div className="desc">
           {batchDetails?.aboutTheActivity && (
             <div className="sectionAct">
@@ -405,6 +426,8 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         forceBookNowCta={true}
       />
     </Flex>
+    <MetaPixel />
+    </>
   );
 };
 

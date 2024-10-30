@@ -18,49 +18,40 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
   const [isClicked, setIsClicked] = useState<Boolean>(false);
   const [muted, setMuted] = useState(true);
 
-  // const shareUrl = window.location.href;
-  // const shareTitle = `Check out ${gym?.name} on ZenfitX`;
-  // const shareDescription = `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉`;
-  // const shareImage = gym?.medias?.[0]?.url || ''; // Use the first media item as the share image, or provide a default
+  const shareUrl = window.location.href;
+  const shareTitle = `Check out ${gym?.name} on ZenfitX`;
+  const shareDescription = `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉`;
+  const shareImage = gym?.medias?.[0]?.url || ''; // Use the first media item as the share image, or provide a default
 
-  // const handleShare = () => {
-  //   navigator.clipboard.writeText(shareUrl).then(() => {
-  //     message.success("Link copied to clipboard! You can now paste it to share.");
-  //   }).catch(err => {
-  //     console.error('Failed to copy: ', err);
-  //     message.error("Failed to copy link. Please try again.");
-  //   });
-  // };
+  const handleShare = () => {
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      message.success("Link copied to clipboard! You can now paste it to share.");
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+      message.error("Failed to copy link. Please try again.");
+    });
+  };
 
   useEffect(() => {
     const shareButton = document.getElementById("share-button");
-    if (gym) {
-      shareButton?.addEventListener("click", async () => {
-        // const blob = await (await fetch(gym?.medias[0].url)).blob();
-        if (navigator.share) {
-          navigator
-            .share({
-              // files: [
-              //   new File([blob], "image.png",
-              //     {
-              //     type: "image/jpg",
-              //   }
-              // ),
-              // ],
-              title: "ZenfitX",
-              text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉 `,
-              url: window.location.href,
-            })
-            .then(() => console.log("Successful share"))
-            .catch((error) => console.log("Error sharing", error));
-        } else {
-          console.log("error");
-        }
-      });
-      shareButton?.removeEventListener("click", () => {
-        setIsClicked(false);
-      });
-    }
+    shareButton?.addEventListener("click", () => {
+      if (navigator.share) {
+        navigator
+          .share({
+            title: "ZenfitX",
+            text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan some awesome activities together! 😉 `,
+            url: window.location.href,
+          })
+          .then(() => console.log("Successful share"))
+          .catch((error) => console.log("Error sharing", error));
+      } else {
+        handleShare();
+        console.log("error");
+      }
+    });
+    shareButton?.removeEventListener("click", () => {
+      setIsClicked(false);
+    });
   }, [isClicked]);
 
   const onSlideChange = (args: any) => {
@@ -199,7 +190,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
               </span>
             );
           }}
-          autoPlay={true}
+          autoPlay={false}
           interval={7000}
         >
           {medias}

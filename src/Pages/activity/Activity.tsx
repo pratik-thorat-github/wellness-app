@@ -12,6 +12,7 @@ import { userDetailsAtom } from "../../atoms/atom";
 import { concatAndUpperCaseActivities } from "../../utils/activities";
 import { discountTxt, showDiscountText } from "../../utils/offers";
 import { Rs } from "../../constants/symbols";
+import MetaPixel from "../../components/meta-pixel";
 
 
 interface IActivity extends RouteComponentProps {}
@@ -252,6 +253,8 @@ const exclusiveIcon = () => {
 
 
   return (
+    <>
+    <MetaPixel />
     <div>
       {" "}
       {shareAndBack()}
@@ -271,6 +274,7 @@ const exclusiveIcon = () => {
         </div>
       </div>
     </div>
+    </>
   ); 
 };
 

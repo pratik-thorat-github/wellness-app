@@ -2,6 +2,7 @@ import { RouteComponentProps, navigate } from "@reach/router";
 import { Flex } from "antd";
 import UserDetails from "./user-details";
 import NeedHelpBanner from "./need-help";
+import DeleteAccountButton from "./delete-account";
 import colors from "../../constants/colours";
 import PlusClassRemaining from "./plus-classes-remaining";
 import PastClasses from "./past-classes";
@@ -18,6 +19,7 @@ import { getBookingOfUser } from "../../apis/user/bookings";
 import { IBookings, IPlusDetails } from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IProfile extends RouteComponentProps {}
 
@@ -88,6 +90,8 @@ const Profile: React.FC<IProfile> = () => {
   };
 
   return (
+    <>
+      <MetaPixel />
     <Flex
       flex={1}
       vertical
@@ -121,6 +125,10 @@ const Profile: React.FC<IProfile> = () => {
       <Flex flex={1} align="flex-end">
         <NeedHelpBanner />
       </Flex>
+      
+      <Flex flex={1} align="flex-end">
+        <DeleteAccountButton />
+      </Flex>
 
       <Flex flex={1} vertical align="flex-end">
         <LandingFooter />
@@ -135,6 +143,7 @@ const Profile: React.FC<IProfile> = () => {
         </Flex>
       </Flex> */}
     </Flex>
+    </>
   );
 };
 

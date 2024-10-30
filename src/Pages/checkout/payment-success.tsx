@@ -5,6 +5,7 @@ import BatchInfoOnCheckout from "./batch-info";
 import { ReactComponent as PaymentSuccessLogo } from "../../images/checkout/payment-success.svg";
 import colors from "../../constants/colours";
 import { useEffect } from "react";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IPaymentSuccess extends RouteComponentProps {
   batchDetails?: IBatch;
@@ -38,15 +39,17 @@ const BatchPaymentSuccess: React.FC<IPaymentSuccess> = ({
       </span>
     </Flex>
   );
-
-  const redirectTime = 3000;
+  
+  const refreshInterval = 3000;
   useEffect(() => {
     setTimeout(() => {
       navigate("/");
-    }, redirectTime);
+    }, refreshInterval);
   }, []);
 
   return (
+    <>
+    <MetaPixel />
     <div
       style={{
         display: "flex",
@@ -106,6 +109,7 @@ const BatchPaymentSuccess: React.FC<IPaymentSuccess> = ({
         </div>
       </div>
     </div>
+    </>
   );
 };
 

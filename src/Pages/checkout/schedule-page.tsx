@@ -37,6 +37,7 @@ import Loader from "../../components/Loader";
 import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
 import { showDiscountText } from "../../utils/offers";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -173,12 +174,12 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   function generateBatchTile(gym: IGymDetails, batches: IBatch[]) {
     const batchTile = (batch: IBatch) => {
       return (
-        <Card
+        <Card className={gym.gymId == 6 && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
           style={{
             // paddingTop: "16px",
             // paddingBottom: "16px",
             // paddingLeft: "8px",
-            paddingRight: "16px",
+            // paddingRight: "16px",
             borderTopWidth: "0px",
             borderBottomWidth: "0px",
           }}
@@ -197,13 +198,13 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           }}
         >
           <Flex flex={1}>
-            <Flex flex={2}>
+            <Flex flex={1}>
               <span>
                 <span
                   style={{
                     backgroundColor: colors.border,
                     borderRadius: "4px",
-                    padding: "5px",
+                    padding: "3px",
                   }}
                 >
                   {batch.isDayPass
@@ -213,16 +214,16 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               </span>
             </Flex>
             <Flex
-              flex={4}
+              flex={6}
               style={{
                 borderBottomWidth: "1px",
                 borderBottomColor: colors.border,
                 borderBottomStyle: "solid",
-
+                marginLeft: '16px',
                 paddingBottom: "8px",
               }}
             >
-              <Flex flex={2} vertical>
+              <Flex flex={4} vertical >
                 <div
                   style={{
                     display: "flex",
@@ -248,19 +249,67 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                     {batch.duration} min
                   </Flex>
                 ) : null}
+                {gym.gymId == 6 && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
+                  <Flex 
+                    style={{
+                      color: "#C15700",
+                      fontSize: "14px",
+                      fontWeight: "400",
+                      margin: "-4px 0px",
+                      marginTop: "2px",
+                      fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif"
+                    }}
+                    flex={1}
+                  >
+                    {batch.slots - batch.slotsBooked} spot(s) left out of {batch.slots}
+                  </Flex>
+                )
+                :
+                gym.gymId == 6 && batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
+                  <Flex 
+                    style={{
+                      color: "#C15700",
+                      fontSize: "14px",
+                      fontWeight: "400",
+                      margin: "-4px 0px",
+                      marginTop: "2px",
+                      fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif"
+                    }}
+                    flex={1}
+                  >
+                    Sold Out!
+                  </Flex>
+                )
+                : null}
               </Flex>
-              <Flex flex={1}>
+              <Flex flex={2} vertical>
+                <Flex style={{
+                  justifyContent: 'space-evenly'
+                }}>
                 {showDiscountText(gym, userDetails) ? (
                   discountedPrice(batch.price)
                 ) : (
-                  <span>
+                  <span style={{
+                    marginRight: '-14px'
+                  }}>
                     {Rs}
                     {batch.price}
                   </span>
                 )}
-                <span style={{ marginLeft: "auto" }}>
+                <span>
                   <RightOutlined />
                 </span>
+                </Flex>
+                <Flex style={{
+                  justifyContent: 'start'
+                }}>
+                  <div style={{
+                    fontSize: '12px',
+                    color: '#828081'
+                  }}>
+                  per person
+                  </div>
+                </Flex>
               </Flex>
             </Flex>
           </Flex>
@@ -437,6 +486,8 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   }
 
   return (
+    <>
+    <MetaPixel />
     <div>
       <div className="stickyWrap">
         {" "}
@@ -488,6 +539,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           : noBatchComponent()}
       </Flex>
     </div>
+    </>
   );
 };
 

@@ -11,7 +11,8 @@ import { errorToast } from "../../components/Toast";
 import Loader from "../../components/Loader";
 import { IGymDetails } from "../../types/gyms";
 import { Mixpanel } from "../../mixpanel/init";
-import ShareMetadata from "../../components/share-metadata";
+import ShareMetada from "../../components/share-metadata";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IGYmPage extends RouteComponentProps {
   gymId?: string;
@@ -50,16 +51,17 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
 
   return (
     <>
-      <ShareMetadata
-        title={gym.name}
-        description={gym.description}
-        image={gym.medias[0].url}
-        url={window.location.href}
-      />
-      <div className="gymWrap">
-        <Flex flex={1}>
-          <GymPhotos gym={gym} />
-        </Flex>
+    < ShareMetada 
+      title={"ZenfitX"}
+      description={`Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan this together! Plus, you can score sweet discounts on your first booking.😉`}
+      url={window.location.href}
+      image={gym.medias[0].url}
+    />
+    <MetaPixel />
+    <div className="gymWrap">
+      <Flex flex={1}>
+        <GymPhotos gym={gym} />
+      </Flex>
 
         <Flex flex={2} vertical justify="center">
           <GymInfo gymData={gym} />
@@ -71,8 +73,8 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
         <Flex flex={4}>
           <BatchSchedule gymData={gym} />
         </Flex> */}
-        </Flex>
-      </div>
+      </Flex>
+    </div>
     </>
   );
 };

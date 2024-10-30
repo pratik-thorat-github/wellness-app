@@ -56,6 +56,10 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
       : 0,
     offerType: props.batchDetails?.offerType as EOfferType,
     noOfGuests: props.totalGuests as number,
+    username: userDetails.name,
+    batchName: props?.batchDetails?.activityName || "",
+    batchDate: props?.batchDetails?.date || "",
+    batchTime: props?.batchDetails?.startTime || 0
   };
 
   Mixpanel.track("pay_now_button_clicked_on_checkout_page", {
@@ -74,7 +78,21 @@ async function displayRazorpay(
   const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
 
   let payload = createOrderPayload(props, userDetails as IUser);
-  const orderResult = await createRzpOrder(payload);
+  let orderResult;
+
+  try {
+    orderResult = await createRzpOrder(payload);
+  } catch (error) {
+    console.log({error});
+  }
+  
+  console.log({orderResult});
+  setLoading(false);
+
+  if(!orderResult && !orderResult?.orderId){
+    alert(`Could not place order!`);
+    return ;
+  }
 
   if (!res) {
     alert("Razorpay SDK failed to load. Are you online?");
@@ -93,6 +111,10 @@ async function displayRazorpay(
     description,
     image: { logo },
     order_id: orderResult.orderId,
+    method: {
+      upi: true
+    },
+    webview_intent: true,
     handler: (response: any) => {
       if (response.razorpay_payment_id) {
         if (props.checkoutType == ECheckoutType.BATCH)
@@ -206,7 +228,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
 
   const batchBookingUrl = `/checkout/batch/${props.batchId}/booking`;
 
-  function processBookNowCta() {
+async function processBookNowCta() {
     if (props.forceBookNowCta) {
       Mixpanel.track("open_batch_checkout_booking", {
         batchId: props.batchId,
@@ -238,7 +260,20 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         phone: userDetails.phone,
       });
 
-      displayRazorpay(props, userDetails, setLoading);
+      const batchDetailsResp = await fetch(`https://be.zenfitx.link/gyms/batch/byBatchId?batchId=${props.batchId}`);
+      
+      const r = await batchDetailsResp?.json();
+      console.log({r});
+      console.log(r.batch.slotsBooked, props.batchDetails?.slotsBooked);
+      if(r?.batch?.slotsBooked + props.totalGuests > r.batch.slots){
+        if(r?.batch?.slotsBooked == r?.batch?.slots){
+          alert(`Sorry, all spots are booked for this slot. Please choose the next available slot.`);
+        } else
+          alert(`Sorry, only ${r.batch.slots - r.batch.slotsBooked} spots are available for this slot. Please choose the next available slot!`);
+        window.location.reload();
+      } else {
+        await displayRazorpay(props, userDetails, setLoading);
+      }
       // displayCashfree(props, userDetails, setLoading);
     }
   }
@@ -251,12 +286,14 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     if (props.batchDetails) {
       if (
         !userDetails &&
+        ![6, 21].includes(props.batchDetails?.gymId) &&
         props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
       ) {
         setShowDiscount(true);
       } else {
         if (
           userDetails &&
+          ![6, 21].includes(props.batchDetails?.gymId) &&
           userDetails.noOfBookings < 1 &&
           props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
         ) {
@@ -331,11 +368,11 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                 color: colors.secondary,
               }}
             >
-              Login quickly to finish the class booking
+              Login quickly to finish the booking
             </Flex>
             <Flex
-              onClick={() => {
-                processBookNowCta();
+              onClick={async () => {
+                await processBookNowCta();
               }}
               flex={1}
               justify="center"
@@ -392,14 +429,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               </span>
             </Flex>
             <button
-              id={
-                //! Pratik to check
-                props.forceBookNowCta ||
-                props.comingFrom ==
-                  EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE
-                  ? ""
-                  : ""
-              }
+              id = { (props.comingFrom === EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) ? 'conversion-book-now' : 'book-now'}
               style={{
                 color: "white",
                 fontWeight: "700",
@@ -410,8 +440,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                 display: "flex",
                 alignItems: "center",
               }}
-              onClick={() => {
-                processBookNowCta();
+              onClick={async () => {
+                await processBookNowCta();
               }}
             >
               <span>Book Now</span>

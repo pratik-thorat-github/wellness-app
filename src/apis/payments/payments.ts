@@ -12,11 +12,15 @@ export interface ICreateRzpOrder {
   offerPercentage: number;
   offerType: EOfferType;
   noOfGuests: number;
+  batchName: string;
+  batchTime: number;
+  batchDate: Date | string;
+  username: string;
 }
 
 export async function createRzpOrder(data: ICreateRzpOrder) {
   const result = await networkAdapter.post("/payments/rzp/order", data);
-
+  console.log({resultData: result.data});
   return result.data;
 }
 

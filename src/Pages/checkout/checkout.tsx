@@ -19,6 +19,7 @@ import { userDetailsAtom } from "../../atoms/atom";
 import BookNowFooter from "./book-now-footer";
 import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { deductPercentage } from "../../utils/offers";
+import MetaPixel from "../../components/meta-pixel";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -80,8 +81,8 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
         batchDetails.offerType == EOfferType.BATCH_WITH_GUESTS &&
         batchDetails.offerPercentage
       )
-        offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people`;
-      else if (!userDetails || (userDetails && userDetails.noOfBookings < 1)) {
+        offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people (full court)`;
+      else if ((!userDetails || (userDetails && userDetails.noOfBookings < 1)) && ![6, 21].includes(batchDetails.gymId)) {
         offerStrip.current = "50% off on your 1st booking on ZenfitX";
       }
     }
@@ -90,7 +91,8 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   useEffect(() => {
     if (
       batchDetails &&
-      (!userDetails || (userDetails && userDetails.noOfBookings < 1)) &&
+      (!userDetails || (userDetails && userDetails.noOfBookings < 1)) && 
+      ![6, 21].includes(batchDetails.gymId) &&
       batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
     ) {
       const [newTotalAmount, discount] = deductPercentage(
@@ -113,6 +115,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   function manageGuests(increment: boolean) {
     if (noOfGuests === 1 && !increment) {
       return;
+    }
+    if(noOfGuests + (batchDetails?.slotsBooked || 0) >= (batchDetails?.slots || 0 ) && increment){
+      return ;
     }
     let noOfGuestIncremented = increment ? noOfGuests + 1 : noOfGuests - 1;
     noOfGuests = noOfGuests || 1;
@@ -182,6 +187,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
   const incIcon = () => (
     <svg
+      className={(noOfGuests + (batchDetails?.slotsBooked || 0) >= (batchDetails?.slots || 0)) ? "disabled" : ""}
       xmlns="http://www.w3.org/2000/svg"
       width="16"
       height="16"
@@ -288,6 +294,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
   return (
     <>
+      <MetaPixel />
       <div className="checkWrapper">
         <div className="backBtn2">{backBtn()}</div>
         <div className="checkoutDetail">
@@ -320,6 +327,13 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
                 </>
               )}
             </div>
+              {gym.gymId == 6 && batchDetails?.slots && batchDetails.slotsBooked >= 0 ?
+                <div className="actTime">
+                    <span style={{color: "#C15700"}}>
+                      {batchDetails.slots - batchDetails.slotsBooked} spot(s) left out of {batchDetails.slots}
+                    </span>
+                </div>
+                : null}
           </span>
         </div>
         <div className="actLine"></div>

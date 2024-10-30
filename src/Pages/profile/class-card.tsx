@@ -62,13 +62,13 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
               style={{ color: colors.secondary, fontSize: "14px" }}
             >
               {" "}
-              {toLetterCase(booking.activity)} . {booking.durationMin}min{" "}
+              {toLetterCase(booking.activityName)} . {booking.durationMin}min{" "}
             </Flex>
 
             <Flex flex={1} style={{ fontSize: "16px", marginTop: "4px" }}>
               {" "}
               {formatTimeIntToAmPm(booking.startTime)},{" "}
-              {formatDate(booking.date)["date suffix - Day"]}
+              {formatDate(booking.date)["date suffix"]}
             </Flex>
 
             <Flex
