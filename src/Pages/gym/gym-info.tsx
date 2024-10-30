@@ -21,7 +21,6 @@ import { Mixpanel } from "../../mixpanel/init";
 import { discountTxt, showDiscountText } from "../../utils/offers";
 import { useAtom } from "jotai";
 import { userDetailsAtom } from "../../atoms/atom";
-import { BookType } from "xlsx";
 import { getPastAppBookings } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
