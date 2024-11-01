@@ -38,7 +38,6 @@ import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
 import { showDiscountText } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
-import { cp } from "fs";
 
 
 interface PastAppBookingObject {
@@ -89,7 +88,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       setGotPastAppBookings(true);
     }
     setGotPastAppBookings(true);
-  }, [])
+  })
 
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");
