@@ -48,6 +48,8 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
   const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
   const [isFromApp, setIsFromApp] = useState(false);
+  const [gotPastBookings, setGotPastAppBookings] = useState(false);
+
   const { mutate: _getPastAppBookings } = useMutation({
     mutationFn: getPastAppBookings,
     onError: () => {
@@ -57,15 +59,6 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       console.log("past app bookings - ", result);
       setPastAppBookings(result.bookings);
     },
-  });
-
-  window.addEventListener('message', (event) => {
-    alert(event.data.type);
-    if (event.data.type === 'TOKEN') {
-      const token = event.data.token;
-      alert(token);
-      // Now send this token to your server or use it as needed
-    }
   });
 
   const { mutate: _saveNotificationToken } = useMutation({
@@ -84,10 +77,12 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
     if(userDetails){
       const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
       _getPastAppBookings(userId)
+      setGotPastAppBookings(true);
       const firebaseToken = window.localStorage["token"];
-      if(firebaseToken.length)
+      if(firebaseToken)
         _saveNotificationToken({userId, token: firebaseToken});
     }
+    setGotPastAppBookings(true);
   }, [])
 
   const { mutate: _getActivityById } = useMutation({
@@ -385,6 +380,8 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       />
     </svg>
   );
+
+  if(!gotPastBookings) return <Loader />
 
   return (
     <>

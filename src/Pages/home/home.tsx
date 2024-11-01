@@ -68,6 +68,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
   const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
   const [onboarding, setOnboarding] = useState<boolean>(false);
+  const [gotPastBookings, setGotPastAppBookings] = useState(false);
   const showClassesNearYouRef = useRef(true);
 
   const mixpanelSet = useRef(false);
@@ -177,8 +178,9 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     if(userDetails){
       const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
       _getPastAppBookings(userId)
+      setGotPastAppBookings(true);
     }
-
+    setGotPastAppBookings(true);
     _getGymsByActivities(activitySelected);
 
     // _getPlusDetailsOfUser(userDetails?.phone as string);
@@ -217,7 +219,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   }
 
   if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
-  if (!activities.length || !gymCardsData.length) return <Loader />;
+  if (!activities.length || !gymCardsData.length || !gotPastBookings) return <Loader />;
 
   return (
     <>
