@@ -223,7 +223,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     return null;
   }
 
-  // if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
+  if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
   if (!activities.length || !gymCardsData.length) return <Loader />;
 
   return (
