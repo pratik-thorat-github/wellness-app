@@ -163,7 +163,7 @@ function getListOfCenters(
         className="cardWrapper"
         onClick={() => {
           navigate(`/gym/${gymCard.gymId}`, {
-            state: { gymId: gymCard.gymId.toString() },
+            state: { gymId: gymCard.gymId.toString(), isFromApp: isFromApp, pastAppBookings: pastAppBookings }
           });
         }}
         key={gymCard.gymId}

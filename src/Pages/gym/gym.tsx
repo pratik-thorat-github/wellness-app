@@ -1,4 +1,4 @@
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, useLocation } from "@reach/router";
 import { Flex } from "antd";
 import GymPhotos from "./gym-photos";
 import GymInfo from "./gym-info";
@@ -15,7 +15,7 @@ import ShareMetada from "../../components/share-metadata";
 import MetaPixel from "../../components/meta-pixel";
 
 interface IGYmPage extends RouteComponentProps {
-  gymId?: string
+  gymId?: string;
 }
 
 interface PastAppBookingObject {
@@ -29,11 +29,12 @@ function MixpanelGymInit(gym: IGymDetails) {
   });
 }
 
-const Gym: React.FC<IGYmPage> = ({ gymId }) => {
+const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
+  const location = useLocation();
+  const data = JSON.stringify(location?.state);
+  const isFromApp = JSON.parse(data)?.isFromApp;
+  const pastAppBookings = JSON.parse(data)?.pastAppBookings;
   const [gym, setGym] = useState<IGymDetails | null>(null);
-  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
-  const [isFromApp, setIsFromApp] = useState(false);
-
   const { mutate: _getGymById } = useMutation({
     mutationFn: getGymById,
     onSuccess: (result) => {
@@ -45,27 +46,9 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
     },
   });
 
-  const { mutate: _getPastAppBookings } = useMutation({
-    mutationFn: getPastAppBookings,
-    onError: () => {
-      errorToast("Error in getting past app bookings");
-    },
-    onSuccess: (result) => {
-      console.log("past app bookings - ", result);
-      setPastAppBookings(result.bookings);
-    },
-  });
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-
-  useEffect(() => {
-    const userSource = window?.platformInfo?.platform  || 'web';
-    const appFlag = userSource != 'web' ? true : false;
-    setIsFromApp(appFlag);
-  }, [])
 
   useEffect(() => {
     _getGymById(gymId as string);
@@ -89,7 +72,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
 
       <Flex flex={2} vertical justify="center">
       
-          <GymInfo gymData={gym}/>
+          <GymInfo gymData={gym} isFromApp={isFromApp} pastAppBookings = {pastAppBookings}/>
        
 
           {/* <Flex flex={2}>

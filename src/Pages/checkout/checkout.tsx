@@ -1,4 +1,4 @@
-import { RouteComponentProps, navigate } from "@reach/router";
+import { RouteComponentProps, navigate, useLocation } from "@reach/router";
 import { useEffect, useRef } from "react";
 import { Mixpanel } from "../../mixpanel/init";
 import { Flex } from "antd";
@@ -30,7 +30,7 @@ interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
 }
 
-const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
+const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalSavings, setTotalSavings] = useState(0);
   let [baseAmount, setBaseAmount] = useState(0);
@@ -43,22 +43,26 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
   const offerStrip = useRef("");
+  const location = useLocation();
+  const data = JSON.stringify(location?.state);
+  const isFromApp = JSON.parse(data).isFromApp;
+  const pastAppBookings = JSON.parse(data).pastAppBookings
 
   const [userDetails] = useAtom(userDetailsAtom);
-  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
-  const [isFromApp, setIsFromApp] = useState(false);
-  const [gotPastBookings, setGotPastAppBookings] = useState(false);
+  // const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  // const [isFromApp, setIsFromApp] = useState(false);
+  // const [gotPastBookings, setGotPastAppBookings] = useState(false);
 
-  const { mutate: _getPastAppBookings } = useMutation({
-    mutationFn: getPastAppBookings,
-    onError: () => {
-      errorToast("Error in getting past app bookings");
-    },
-    onSuccess: (result) => {
-      console.log("past app bookings - ", result);
-      setPastAppBookings(result.bookings);
-    },
-  });
+  // const { mutate: _getPastAppBookings } = useMutation({
+  //   mutationFn: getPastAppBookings,
+  //   onError: () => {
+  //     errorToast("Error in getting past app bookings");
+  //   },
+  //   onSuccess: (result) => {
+  //     console.log("past app bookings - ", result);
+  //     setPastAppBookings(result.bookings);
+  //   },
+  // });
 
   const { mutate: _saveNotificationToken } = useMutation({
     mutationFn: saveNotificationToken,
@@ -70,18 +74,18 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   });
 
   useEffect(() => {
-    const userSource = window?.platformInfo?.platform  || 'web';
-    const appFlag = userSource != 'web' ? true : false;
-    setIsFromApp(appFlag);
+    // const userSource = window?.platformInfo?.platform  || 'web';
+    // const appFlag = userSource != 'web' ? true : false;
+    // setIsFromApp(appFlag);
     if(userDetails){
       const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
-      _getPastAppBookings(userId)
-      setGotPastAppBookings(true);
+      // _getPastAppBookings(userId)
+      // setGotPastAppBookings(true);
       const firebaseToken = window.localStorage["token"];
       if(firebaseToken)
         _saveNotificationToken({userId, token: firebaseToken});
     }
-    setGotPastAppBookings(true);
+    // setGotPastAppBookings(true);
   }, [])
 
   const { mutate: _getActivityById } = useMutation({
@@ -240,7 +244,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
   const backBtn = () => (
     <svg
-      onClick={() => navigate(`/checkout/batch/${batchId}`)}
+      onClick={() => navigate(`/checkout/batch/${batchId}`, {state: { isFromApp: isFromApp, pastAppBookings: pastAppBookings}})}
       xmlns="http://www.w3.org/2000/svg"
       width="20"
       height="20"

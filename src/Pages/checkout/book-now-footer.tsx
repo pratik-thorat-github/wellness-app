@@ -252,7 +252,7 @@ async function processBookNowCta() {
       Mixpanel.track("open_batch_checkout_booking", {
         batchId: props.batchId,
       });
-      navigate(batchBookingUrl);
+      navigate(batchBookingUrl, {state: { isFromApp: props.isFromApp, pastAppBookings: props.pastAppBookings}});
       return;
     }
     if (!userDetails) {
@@ -272,7 +272,7 @@ async function processBookNowCta() {
       Mixpanel.track("open_batch_checkout_booking", {
         batchId: props.batchId,
       });
-      navigate(batchBookingUrl);
+      navigate(batchBookingUrl, {state: { isFromApp: props.isFromApp, pastAppBookings: props.pastAppBookings}});
     } else {
       Mixpanel.track("open_batch_checkout_pay_now", {
         batchId: props.batchId,

@@ -46,12 +46,18 @@ interface PastAppBookingObject {
 
 interface IClassCheckout extends RouteComponentProps {}
 
-interface IClassCheckout {}
+interface IClassCheckout {
+}
 
 const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [selectedDate, setSelectedDate] = useState(
     formatDate(new Date()).isoDate
   );
+
+  const location = useLocation();
+  const data = JSON.stringify(location?.state);
+  const isFromApp = JSON.parse(data).isFromApp;
+  const pastAppBookings = JSON.parse(data).pastAppBookings
   const [selectedActivity, setSelectedActivity] = useState("all");
   const [batches, setBatches] = useState<IBatch[]>([]);
   const activityFromURl = new URLSearchParams(window.location.search).get(
@@ -63,32 +69,32 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
   const [userDetails] = useAtom(userDetailsAtom);
-  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
-  const [isFromApp, setIsFromApp] = useState(false);
-  const [gotPastBookings, setGotPastAppBookings] = useState(false);
+  // const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  // const [isFromApp, setIsFromApp] = useState(false);
+  // const [gotPastBookings, setGotPastAppBookings] = useState(false);
 
-  const { mutate: _getPastAppBookings } = useMutation({
-    mutationFn: getPastAppBookings,
-    onError: () => {
-      errorToast("Error in getting past app bookings");
-    },
-    onSuccess: (result) => {
-      console.log("past app bookings - ", result);
-      setPastAppBookings(result.bookings);
-    },
-  });
+  // const { mutate: _getPastAppBookings } = useMutation({
+  //   mutationFn: getPastAppBookings,
+  //   onError: () => {
+  //     errorToast("Error in getting past app bookings");
+  //   },
+  //   onSuccess: (result) => {
+  //     console.log("past app bookings - ", result);
+  //     setPastAppBookings(result.bookings);
+  //   },
+  // });
 
-  useEffect(() => {
-    const userSource = window?.platformInfo?.platform  || 'web';
-    const appFlag = userSource != 'web' ? true : false;
-    setIsFromApp(appFlag);
-    if(userDetails){
-      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
-      _getPastAppBookings(userId)
-      setGotPastAppBookings(true);
-    }
-    setGotPastAppBookings(true);
-  }, [])
+  // useEffect(() => {
+  //   const userSource = window?.platformInfo?.platform  || 'web';
+  //   const appFlag = userSource != 'web' ? true : false;
+  //   setIsFromApp(appFlag);
+  //   if(userDetails){
+  //     const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+  //     _getPastAppBookings(userId)
+  //     setGotPastAppBookings(true);
+  //   }
+  //   setGotPastAppBookings(true);
+  // }, [])
 
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");
@@ -210,7 +216,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     </span>
   );
 
-  if (!gym?.batches || !gotPastBookings) return <Loader />;
+  if (!gym?.batches) return <Loader />;
 
   function generateBatchTile(gym: IGymDetails, batches: IBatch[]) {
     const batchTile = (batch: IBatch) => {
@@ -243,6 +249,8 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 batchId: batch.batchId.toString(),
                 batchDetails: batch,
                 gym,
+                isFromApp,
+                pastAppBookings
               },
             });
           }}
@@ -468,7 +476,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   const goToGymPage = () => {
     console.log(window.location);
-    navigate(`/gym/${gymId}`);
+    navigate(`/gym/${gymId}`, {state: {isFromApp, pastAppBookings}});
   };
 
   function generateDateTiles() {

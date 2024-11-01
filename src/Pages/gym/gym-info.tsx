@@ -33,39 +33,40 @@ interface PastAppBookingObject {
 }
 
 interface IGymInfo {
-  gymData: IGymDetails
+  gymData: IGymDetails;
+  isFromApp?: boolean;
+  pastAppBookings?: PastAppBookingObject;
 }
 
-const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
+const GymInfo: React.FC<IGymInfo> = ({ gymData, isFromApp = false, pastAppBookings = {}}) => {
   const description = `${gymData.description}`;
   const { maxDiscount, offerPercentage, discountType} = gymData;
-
   let [isTruncated, setIsTruncated] = useState(description.length > maxChar);
   let shortDescription = useRef(description.substring(0, maxChar));
   shortDescription.current.replace(/<br>/, "");
 
   const [userDetails] = useAtom(userDetailsAtom);
-  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
-  const [isFromApp, setIsFromApp] = useState(false);
+  // const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  // const [isFromApp, setIsFromApp] = useState(false);
 
-  const { mutate: _getPastAppBookings } = useMutation({
-    mutationFn: getPastAppBookings,
-    onError: () => {
-      errorToast("Error in getting past app bookings");
-    },
-    onSuccess: (result) => {
-      console.log("past app bookings - ", result);
-      setPastAppBookings(result.bookings);
-    },
-  });
+  // const { mutate: _getPastAppBookings } = useMutation({
+  //   mutationFn: getPastAppBookings,
+  //   onError: () => {
+  //     errorToast("Error in getting past app bookings");
+  //   },
+  //   onSuccess: (result) => {
+  //     console.log("past app bookings - ", result);
+  //     setPastAppBookings(result.bookings);
+  //   },
+  // });
 
-  useEffect(() => {
-    const userSource = window?.platformInfo?.platform  || 'web';
-    const appFlag = userSource != 'web' ? true : false;
-    setIsFromApp(appFlag);
-    const userId = userDetails?.id?.toString() || '0';
-    _getPastAppBookings(userId);
-  }, [])
+  // useEffect(() => {
+  //   const userSource = window?.platformInfo?.platform  || 'web';
+  //   const appFlag = userSource != 'web' ? true : false;
+  //   setIsFromApp(appFlag);
+  //   const userId = userDetails?.id?.toString() || '0';
+  //   _getPastAppBookings(userId);
+  // }, [])
   let showDiscount = showDiscountText(gymData, userDetails, isFromApp, pastAppBookings);
 
   const [showTimeOptions, setShowTimeOptions] = useState<Boolean>(false);
@@ -96,7 +97,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
         gymId: gymData.gymId,
         activity,
       });
-    navigate(`${pathname}/batch?activity=${activity.toLowerCase()}`);
+    navigate(`${pathname}/batch?activity=${activity.toLowerCase()}`, {state: {isFromApp, pastAppBookings}});
   };
 
   const exclusiveIcon = () => {

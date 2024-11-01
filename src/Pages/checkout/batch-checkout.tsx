@@ -44,6 +44,10 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [userDetails] = useAtom(userDetailsAtom);
 
   let locationStates = useLocation().state;
+  const location = useLocation();
+  const data = JSON.stringify(location?.state);
+  const isFromApp = JSON.parse(data).isFromApp;
+  const pastAppBookings = JSON.parse(data).pastAppBookings
   const batchId = window.location.pathname.split("/")[3];
   const [selectedPlan, setSelectedPlan] = useState<ESelectedPlan>(
     ESelectedPlan.BATCH
@@ -60,33 +64,33 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [gotGymDetails, setGymDetailsCheck] = useState<Boolean>(false);
   const [loading, setLoading] = useState(true);
 
-  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
-  const [isFromApp, setIsFromApp] = useState(false);
-  const [gotPastAppBookings, setGotPastAppBookings] = useState(false);
+  // const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  // const [isFromApp, setIsFromApp] = useState(false);
+  // const [gotPastAppBookings, setGotPastAppBookings] = useState(false);
 
-  const { mutate: _getPastAppBookings } = useMutation({
-    mutationFn: getPastAppBookings,
-    onError: () => {
-      errorToast("Error in getting past app bookings");
-    },
-    onSuccess: (result) => {
-      console.log("past app bookings - ", result);
-      setPastAppBookings(result.bookings);
-    },
-  });
+  // const { mutate: _getPastAppBookings } = useMutation({
+  //   mutationFn: getPastAppBookings,
+  //   onError: () => {
+  //     errorToast("Error in getting past app bookings");
+  //   },
+  //   onSuccess: (result) => {
+  //     console.log("past app bookings - ", result);
+  //     setPastAppBookings(result.bookings);
+  //   },
+  // });
 
-  useEffect(() => {
-    const userSource = window?.platformInfo?.platform  || 'web';
-    const appFlag = userSource != 'web' ? true : false;
-    setIsFromApp(appFlag);
-    if(userDetails){
-      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
-      _getPastAppBookings(userId)
-      setGotPastAppBookings(true);
-    } else {
-      setGotPastAppBookings(true);
-    }
-  }, [])
+  // useEffect(() => {
+  //   const userSource = window?.platformInfo?.platform  || 'web';
+  //   const appFlag = userSource != 'web' ? true : false;
+  //   setIsFromApp(appFlag);
+  //   if(userDetails){
+  //     const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+  //     _getPastAppBookings(userId)
+  //     setGotPastAppBookings(true);
+  //   } else {
+  //     setGotPastAppBookings(true);
+  //   }
+  // }, [])
 
   const gymId = batchDetails?.gymId;
 
@@ -160,7 +164,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   );
 
   const navigateToHome = () => {
-    navigate(`/gym/${gymId}/batch`);
+    navigate(`/gym/${gymId}/batch`, {state: {isFromApp, pastAppBookings}});
   };
 
   const leftDivider = () => {
@@ -298,7 +302,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const mapsLink = createMapsLink(batchDetails?.venueAddressLine1 || '', batchDetails?.venueAddressLine1 || '');
 
 
-  if(loading || !gotPastAppBookings){
+  if(loading){
     return <Loader/>
   }
 
