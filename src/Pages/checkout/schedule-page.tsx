@@ -66,6 +66,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
   const [isFromApp, setIsFromApp] = useState(false);
+  const [gotPastBookings, setGotPastAppBookings] = useState(false);
 
   const { mutate: _getPastAppBookings } = useMutation({
     mutationFn: getPastAppBookings,
@@ -85,7 +86,9 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     if(userDetails){
       const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
       _getPastAppBookings(userId)
+      setGotPastAppBookings(true);
     }
+    setGotPastAppBookings(true);
   }, [])
 
   useEffect(() => {
@@ -208,7 +211,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     </span>
   );
 
-  if (!gym?.batches) return <Loader />;
+  if (!gym?.batches || !gotPastBookings) return <Loader />;
 
   function generateBatchTile(gym: IGymDetails, batches: IBatch[]) {
     const batchTile = (batch: IBatch) => {
