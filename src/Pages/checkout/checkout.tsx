@@ -108,7 +108,6 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
 
   useEffect(() => {
     if (batchDetails) {
-      console.log("dfwfwf");
       if(!userDetails){
         setShowDiscount(true);
       } else if(!isFromApp){
@@ -125,21 +124,6 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   useEffect(() => {
     _getActivityById(batchId);
   }, []);
-
-  useEffect(() => {
-    if (batchDetails) {
-      console.log("dfwfwf");
-      if(!userDetails){
-        setShowDiscount(true);
-      } else if(!isFromApp){
-        setShowDiscount(false);
-      } else if(pastAppBookings?.[batchDetails.gymId]){
-        setShowDiscount(false);
-      } else {
-        setShowDiscount(true);
-      }
-    }
-  }, [batchDetails])
 
   useEffect(() => {
     if (batchDetails?.gymId) {
