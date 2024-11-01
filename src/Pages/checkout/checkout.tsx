@@ -397,7 +397,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
     </svg>
   );
 
-  if(!gotPastBookings) return <Loader />
+  // if(!gotPastBookings) return <Loader />
 
   return (
     <>
