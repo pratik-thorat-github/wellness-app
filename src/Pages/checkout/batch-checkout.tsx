@@ -86,7 +86,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     } else {
       setGotPastAppBookings(true);
     }
-  }, [])
+  })
 
   const gymId = batchDetails?.gymId;
 
