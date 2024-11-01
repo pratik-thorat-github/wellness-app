@@ -161,12 +161,6 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   }, [])
 
   useEffect(() => {
-    const userSource = window?.platformInfo?.platform  || 'web';
-    const appFlag = userSource != 'web' ? true : false;
-    setIsFromApp(appFlag);
-  }, [])
-
-  useEffect(() => {
     if (onboarding) {
       setCookie("onboarding", "done", 1);
     }
