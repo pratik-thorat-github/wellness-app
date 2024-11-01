@@ -20,6 +20,7 @@ import BookNowFooter from "./book-now-footer";
 import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { deductPercentage } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
+import { saveNotificationToken } from "../../apis/notifications/notifications";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -57,6 +58,25 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       setPastAppBookings(result.bookings);
     },
   });
+
+  window.addEventListener('message', (event) => {
+    alert(event.data.type);
+    if (event.data.type === 'TOKEN') {
+      const token = event.data.token;
+      alert(token);
+      // Now send this token to your server or use it as needed
+    }
+  });
+
+  const { mutate: _saveNotificationToken } = useMutation({
+    mutationFn: saveNotificationToken,
+    onError: () => {
+    },
+    onSuccess: (result) => {
+      console.log("notification token stored successfully!");
+    },
+  });
+
   useEffect(() => {
     const userSource = window?.platformInfo?.platform  || 'web';
     const appFlag = userSource != 'web' ? true : false;
@@ -64,6 +84,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
     if(userDetails){
       const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
       _getPastAppBookings(userId)
+      const firebaseToken = window.localStorage["token"];
+      if(firebaseToken.length)
+        _saveNotificationToken({userId, token: firebaseToken});
     }
   }, [])
 
