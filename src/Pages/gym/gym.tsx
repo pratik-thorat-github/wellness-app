@@ -68,12 +68,6 @@ const Gym: React.FC<IGYmPage> = ({ gymId }) => {
   }, [])
 
   useEffect(() => {
-    const userSource = window?.platformInfo?.platform  || 'web';
-    const appFlag = userSource != 'web' ? true : false;
-    setIsFromApp(appFlag);
-  }, [])
-
-  useEffect(() => {
     _getGymById(gymId as string);
   }, [gymId]);
 

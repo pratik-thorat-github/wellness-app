@@ -88,7 +88,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       setGotPastAppBookings(true);
     }
     setGotPastAppBookings(true);
-  })
+  }, [])
 
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");
