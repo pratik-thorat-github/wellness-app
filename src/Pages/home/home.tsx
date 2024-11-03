@@ -87,7 +87,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   const { mutate: _getUserDeatils } = useMutation({
     mutationFn: getUserDeatils,
     onError: () => {
-      errorToast("Error in getting user details");
+      // errorToast("Error in getting user details");
+      console.log("Error in getting user details");
     },
     onSuccess: (result) => {
       console.log("deatils - ", result);
