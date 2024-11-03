@@ -447,7 +447,7 @@ text-transform: uppercase;
 }
 
 .obImgWrap{
-    background: linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);
+    /* background: linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%); */
     position: absolute;
     width: 100%;
     overflow: hidden;
