@@ -61,6 +61,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     onSuccess: (result) => {
       console.log("past app bookings - ", result);
       setPastAppBookings(result.bookings);
+      setGotPastAppBookings(true);
     },
   });
 
@@ -77,10 +78,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     const userSource = window?.platformInfo?.platform  || 'web';
     const appFlag = userSource != 'web' ? true : false;
     setIsFromApp(appFlag);
-    if(userDetails){
-      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
-      _getPastAppBookings(userId)
-      setGotPastAppBookings(true);
+    const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+    if(userId){
+      _getPastAppBookings(userId);
       const firebaseToken = window.localStorage["token"];
       if(firebaseToken)
         _saveNotificationToken({userId, token: firebaseToken});
@@ -123,7 +123,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         setShowDiscount(true);
       }
     }
-  }, [batchDetails && pastAppBookings])
+  }, [batchDetails, pastAppBookings])
 
 
   useEffect(() => {
@@ -147,7 +147,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         batchDetails.offerPercentage
       )
         offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people (full court)`;
-      else if(!userDetails || (isFromApp && pastAppBookings?.[batchDetails.gymId])){
+      else if(showDiscount){
         if(batchDetails.discountType == "PERCENTAGE"){
           offerStrip.current = `${batchDetails.offerPercentage}% discount upto ${Rs}${batchDetails.maxDiscount} on 1st booking on App`;
         } else if(batchDetails.discountType == "FLAT"){
@@ -158,7 +158,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
       //   offerStrip.current = "50% off on your 1st booking on ZenfitX";
       // }
     }
-  }, [batchDetails]);
+  }, [batchDetails, showDiscount]);
 
   useEffect(() => {
     if (
@@ -197,7 +197,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
       setTotalAmount(finalPrice);
       setTotalSavings(discount);
     }
-  }, [batchDetails && showDiscount && pastAppBookings]);
+  }, [batchDetails, showDiscount, pastAppBookings]);
 
   if (!gym || !batchDetails || !gotPastBookings) return <Loader />;
 
