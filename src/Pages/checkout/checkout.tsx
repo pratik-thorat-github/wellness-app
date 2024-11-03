@@ -122,7 +122,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         setShowDiscount(true);
       }
     }
-  }, [batchDetails])
+  }, [batchDetails && pastAppBookings])
 
 
   useEffect(() => {
@@ -153,7 +153,6 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   }, [batchDetails]);
 
   useEffect(() => {
-    console.log("heyyyyy joew ", showDiscount, batchDetails);
     if (
       batchDetails &&
       // (!userDetails || (userDetails && userDetails.noOfBookings < 1)) && 
@@ -168,7 +167,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
       let price = batchDetails?.price;
       let maxDiscount = batchDetails?.maxDiscount;
       let offerPercentage = batchDetails?.offerPercentage;
-      let finalPrice = 0;
+      let finalPrice = price * noOfGuests;
       if(batchDetails.discountType == "PERCENTAGE"){
         finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
                       ?  price * noOfGuests  - maxDiscount
@@ -182,13 +181,17 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
 
       setTotalAmount(newTotalAmount);
       setTotalSavings(discount);
-
-      // batchDetails.offerPercentage = 50;
+      batchDetails.offerPercentage = (discount * 100) / (price * noOfGuests);
       batchDetails.offerType = EOfferType.APP;
+    } else if(!showDiscount) {
+      let finalPrice = (batchDetails?.price as number) * noOfGuests; 
+      let discount = 0;
+      setTotalAmount(finalPrice);
+      setTotalSavings(discount);
     }
-  }, [batchDetails && showDiscount]);
+  }, [batchDetails && showDiscount && pastAppBookings]);
 
-  if (!gym || !batchDetails) return <Loader />;
+  if (!gym || !batchDetails || !gotPastBookings) return <Loader />;
 
   //   A function that adds totalAmount
 
@@ -385,7 +388,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     </svg>
   );
 
-  if(!gotPastBookings) return <Loader />
+  // if(!gotPastBookings) return <Loader />
 
   return (
     <>
