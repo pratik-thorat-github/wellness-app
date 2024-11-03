@@ -557,7 +557,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   return (
     <>
     <MetaPixel />
-    <SwipeBackHandler onBack={() => navigate(-1)}>
+    {/* <SwipeBackHandler onBack={() => navigate(-1)}> */}
     <div>
       <div className="stickyWrap">
         {" "}
@@ -610,7 +610,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           : noBatchComponent()}
       </Flex>
     </div>
-    </SwipeBackHandler>
+    {/* </SwipeBackHandler> */}
     </>
   );
 };
