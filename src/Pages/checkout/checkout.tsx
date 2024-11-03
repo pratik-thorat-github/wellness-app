@@ -78,7 +78,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     const userSource = window?.platformInfo?.platform  || 'web';
     const appFlag = userSource != 'web' ? true : false;
     setIsFromApp(appFlag);
-    const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+    const userId = window.localStorage["zenfitx-user-details"] ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null : null;
     if(userId){
       _getPastAppBookings(userId);
       const firebaseToken = window.localStorage["token"];
