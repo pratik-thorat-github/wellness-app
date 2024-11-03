@@ -55,7 +55,7 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
 						Explore & book any fitness or wellness activity near you!
 					</div>
 				</div>
-				<span
+				<button
 					className="obBtn"
 					onClick={() => {
 						setOnboarding(true);
@@ -64,7 +64,7 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
 					}}
 				>
 					Explore Now
-				</span>
+				</button>
 			</div>
 		</>
 	);
