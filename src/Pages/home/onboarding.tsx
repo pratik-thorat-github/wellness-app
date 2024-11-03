@@ -5,11 +5,12 @@ import Boxing from "../../images/home/Boxing.png";
 import Badminton from "../../images/home/Badminton.png";
 import Gym from "../../images/home/Gym.png";
 import Swim from "../../images/home/Swim.png";
-import Pickelball from "../../images/home/Pickelball.png";
+import Pickleball from "../../images/home/Pickleball.png";
 
 import { Carousel } from "react-responsive-carousel";
 import { Mixpanel } from "../../mixpanel/init";
 import { Cookies } from 'react-cookie';
+import { navigate } from "@reach/router";
 
 interface Onboarding {
   setOnboarding: (val: boolean) => void;
@@ -22,7 +23,7 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
   }, []);
 
   const images = [
-		{ id: "Pickelball", url: Pickelball },
+		{ id: "Pickleball", url: Pickleball },
 		{ id: "Baddy", url: Badminton },
 		{ id: "Swim", url: Swim },
 		{ id: "Gym", url: Gym },
@@ -59,6 +60,7 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
 					onClick={() => {
 						setOnboarding(true);
 						Mixpanel.track("clicked_explore_now_on_onboarding_page");
+            navigate('/');
 					}}
 				>
 					Explore Now
