@@ -84,8 +84,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
       const firebaseToken = window.localStorage["token"];
       if(firebaseToken)
         _saveNotificationToken({userId, token: firebaseToken});
+    } else {
+      setGotPastAppBookings(true);
     }
-    setGotPastAppBookings(true);
   }, [])
 
   const { mutate: _getActivityById } = useMutation({

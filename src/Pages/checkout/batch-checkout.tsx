@@ -42,12 +42,22 @@ function MixpanelBatchCheckoutInit(batchDetails: IBatch, gymData: IGymDetails) {
 
 const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [userDetails] = useAtom(userDetailsAtom);
+  const [isFromApp, setIsFromApp] = useState(false);
+  const [pastAppBookings, setPastAppBookings] = useState({});
 
+  
   let locationStates = useLocation().state;
   const location = useLocation();
-  const data = JSON.stringify(location?.state);
-  const isFromApp = JSON.parse(data).isFromApp;
-  const pastAppBookings = JSON.parse(data).pastAppBookings
+  useEffect(() => {
+    const a = locationStates ? (locationStates as any).isFromApp : false;
+    const b =  locationStates ? (locationStates as any).pastAppBookings : {}; 
+    setIsFromApp(a);
+    setPastAppBookings(b);
+  }, [])
+  // const data = JSON.stringify(location?.state);
+  // alert(location?.state?.isFromApp);
+  // const isFromApp = JSON.parse(data).isFromApp;
+  // const pastAppBookings = JSON.parse(data).pastAppBookings
   const batchId = window.location.pathname.split("/")[3];
   const [selectedPlan, setSelectedPlan] = useState<ESelectedPlan>(
     ESelectedPlan.BATCH
