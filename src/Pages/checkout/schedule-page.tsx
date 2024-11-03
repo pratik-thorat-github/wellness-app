@@ -38,6 +38,7 @@ import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
 import { showDiscountText } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
+import SwipeBackHandler from "../../components/backhandler";
 
 
 interface PastAppBookingObject {
@@ -556,6 +557,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   return (
     <>
     <MetaPixel />
+    <SwipeBackHandler onBack={() => navigate(-1)}>
     <div>
       <div className="stickyWrap">
         {" "}
@@ -608,6 +610,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           : noBatchComponent()}
       </Flex>
     </div>
+    </SwipeBackHandler>
     </>
   );
 };
