@@ -20,6 +20,7 @@ import { IBookings, IPlusDetails } from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
 import MetaPixel from "../../components/meta-pixel";
+import Loader from "../../components/Loader";
 
 interface IProfile extends RouteComponentProps {}
 
@@ -35,20 +36,23 @@ const Profile: React.FC<IProfile> = () => {
 
   const [pastBookings, setPastBookings] = useState<IBookings[]>([]);
   const [upcomingBookings, setUpcomingBookings] = useState<IBookings[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const { mutate: _getBookingOfUser } = useMutation({
     mutationFn: getBookingOfUser,
     onSuccess: (result) => {
       setPastBookings(result.bookings.pastBookings);
       setUpcomingBookings(result.bookings.upcomingBookings);
-
+      setLoading(false);
       MixpanelProfileInit(
         result.bookings.pastBookings.length +
           result.bookings.upcomingBookings.length
         // plusDetails as IPlusDetails
       );
     },
-    onError: () => {},
+    onError: () => {
+      setLoading(false);
+    },
   });
 
   useEffect(() => {
@@ -88,6 +92,8 @@ const Profile: React.FC<IProfile> = () => {
       </div>
     );
   };
+
+  if(loading) return <Loader />
 
   return (
     <>
