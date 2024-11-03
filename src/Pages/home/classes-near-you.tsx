@@ -1,9 +1,13 @@
 import { Flex } from "antd";
 
-import { navigate } from "@reach/router";
+import { navigate, RouteComponentProps } from "@reach/router";
 import { Mixpanel } from "../../mixpanel/init";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import { toLetterCase } from "../../utils/string-operation";
+
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
 
 async function navigateToHome(activity: string) {
   Mixpanel.track("clicked_classes_tile_home", {
@@ -19,11 +23,11 @@ async function navigateToHome(activity: string) {
   });
 }
 
-const classTile = (activity: string) => (
+const classTile = (activity: string, isFromApp: boolean, pastAppBookings: PastAppBookingObject) => (
   <Flex
     onClick={async () => {
       Mixpanel.track("clicked_activity_tile_on_home_page", { activity });
-      await navigate(`/${activity}`);
+      await navigate(`/${activity}`, {state: {isFromApp, pastAppBookings}});
     }}
     justify="center"
     align="center"
@@ -34,7 +38,7 @@ const classTile = (activity: string) => (
   </Flex>
 );
 
-const trendingTile = () => {
+const trendingTile = (isFromApp: boolean, pastAppBookings: PastAppBookingObject) => {
   return (
     <div
       className="trendingBox"
@@ -42,7 +46,7 @@ const trendingTile = () => {
         Mixpanel.track("clicked_activity_tile_on_home_page", {
           activity: "trending",
         });
-        await navigate(`/trending`);
+        await navigate(`/trending`, {state: {isFromApp, pastAppBookings}});
       }}
     >
       <div className="trendingWrapper">
@@ -72,7 +76,7 @@ const trendingTile = () => {
   );
 };
 
-function createUpperFlexTiles() {
+function createUpperFlexTiles(isFromApp: boolean, pastAppBookings: PastAppBookingObject) {
   return (
     <Flex
       style={{
@@ -82,18 +86,18 @@ function createUpperFlexTiles() {
         gap: "8px",
       }}
     >
-      <span>{trendingTile()}</span>
-      <span> {classTile("boxing")} </span>
-      <span>{classTile("badminton")}</span>
-      <span>{classTile("strength")}</span>
-      <span>{classTile("swimming")}</span>
-      <span>{classTile("personaltraining")}</span>
-      <span>{classTile("dance")}</span>
+      <span>{trendingTile(isFromApp, pastAppBookings)}</span>
+      <span> {classTile("boxing", isFromApp, pastAppBookings)} </span>
+      <span>{classTile("badminton", isFromApp, pastAppBookings)}</span>
+      <span>{classTile("strength", isFromApp, pastAppBookings)}</span>
+      <span>{classTile("swimming", isFromApp, pastAppBookings)}</span>
+      <span>{classTile("personaltraining", isFromApp, pastAppBookings)}</span>
+      <span>{classTile("dance", isFromApp, pastAppBookings)}</span>
     </Flex>
   );
 }
 
-function createLowerFlexTiles() {
+function createLowerFlexTiles(isFromApp: boolean, pastAppBookings: PastAppBookingObject) {
   return (
     <Flex
       style={{
@@ -103,19 +107,24 @@ function createLowerFlexTiles() {
         gap: "8px",
       }}
     >
-      <span>{classTile("yoga")}</span>
-      <span>{classTile("pickleball")}</span>
-      <span> {classTile("gym")} </span>
-      <span> {classTile("zumba")} </span>
-      <span> {classTile("football")} </span>
-      <span> {classTile("hiit")} </span>
-      <span> {classTile("cricket")} </span>
-      <span> {classTile("gymming")} </span>
+      <span>{classTile("yoga", isFromApp, pastAppBookings)}</span>
+      <span>{classTile("pickleball", isFromApp, pastAppBookings)}</span>
+      <span> {classTile("gym", isFromApp, pastAppBookings)} </span>
+      <span> {classTile("zumba", isFromApp, pastAppBookings)} </span>
+      <span> {classTile("football", isFromApp, pastAppBookings)} </span>
+      <span> {classTile("hiit", isFromApp, pastAppBookings)} </span>
+      <span> {classTile("cricket", isFromApp, pastAppBookings)} </span>
+      <span> {classTile("gymming", isFromApp, pastAppBookings)} </span>
     </Flex>
   );
 }
 
-const ClassesNearYou: React.FC = () => {
+interface IClassesNearYou extends RouteComponentProps  {
+  isFromApp: boolean;
+  pastAppBookings: PastAppBookingObject
+}
+
+const ClassesNearYou: React.FC<IClassesNearYou> = ({isFromApp, pastAppBookings}) => {
   return (
     <Flex flex={1} vertical style={{}}>
       <Flex flex={1} align="left" className="sectionHeading">
@@ -134,10 +143,10 @@ const ClassesNearYou: React.FC = () => {
             }}
           >
             <Flex flex={1} wrap="nowrap">
-              {createUpperFlexTiles()}
+              {createUpperFlexTiles(isFromApp, pastAppBookings)}
             </Flex>
             <Flex flex={1} wrap="nowrap">
-              {createLowerFlexTiles()}
+              {createLowerFlexTiles(isFromApp, pastAppBookings)}
             </Flex>
           </div>
         </Flex>

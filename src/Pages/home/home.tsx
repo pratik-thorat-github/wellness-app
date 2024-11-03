@@ -221,7 +221,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   }
 
   if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
-  if (!activities.length || !gymCardsData.length || !gotPastBookings) return <Loader />;
+  if (!activities.length || !gotPastBookings) return <Loader />;
 
   return (
     <>
@@ -240,7 +240,10 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
 
           {showClassesNearYou ? (
             <Flex style={{ marginLeft: "16px" }} flex={3}>
-              <ClassesNearYou />
+              <ClassesNearYou 
+                isFromApp={isFromApp}
+                pastAppBookings={pastAppBookings} 
+              />
             </Flex>
           ) : null}
         </div>

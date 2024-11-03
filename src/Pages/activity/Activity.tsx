@@ -26,8 +26,10 @@ const [activities, setActivities] = useState<string[]>([]);
 const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
 const [selectedActivity,setSelectedActivity]=useState<string>(activity);
 const [userDetails] = useAtom(userDetailsAtom);
-const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
-const [isFromApp, setIsFromApp] = useState(false);
+const location = useLocation();
+const data = JSON.stringify(location?.state);
+const isFromApp = JSON.parse(data).isFromApp;
+const pastAppBookings = JSON.parse(data).pastAppBookings
 
 
 const { mutate: _getAllActivities } = useMutation({
@@ -63,27 +65,9 @@ const { mutate: _getAllActivities } = useMutation({
     },
   });
 
-  const { mutate: _getPastAppBookings } = useMutation({
-    mutationFn: getPastAppBookings,
-    onError: () => {
-      errorToast("Error in getting past app bookings");
-    },
-    onSuccess: (result) => {
-      console.log("past app bookings - ", result);
-      setPastAppBookings(result.bookings);
-    },
-  });
-  useEffect(() => {
-    const userSource = window?.platformInfo?.platform  || 'web';
-    const appFlag = userSource != 'web' ? true : false;
-    setIsFromApp(appFlag);
-  }, [])
-
-useEffect(()=>{
+  useEffect(()=>{
     _getAllActivities();
-
-
-},[])
+  },[])
 
 useEffect(()=>{
 
@@ -175,12 +159,12 @@ const exclusiveIcon = () => {
   };
 
 
-  const cardWidget = (gymCard: IGymCard) => {
-    console.log(gymCard);
-    const { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage } = gymCard;
-    console.log(medias, "media");
+  const cardWidget = (gymCard: IGymCard, isFromApp: boolean, pastAppBookings: PastAppBookingObject) => {
+    const { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage, discountType } = gymCard;
     const finalPrice = (minPrice - maxDiscount) >  (minPrice *  (100 - offerPercentage) / 100) ? (minPrice - maxDiscount) : (minPrice * (100 - offerPercentage) / 100)
     let showDiscount = showDiscountText(gymCard, userDetails, isFromApp, pastAppBookings);
+    const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on your 1st booking on App` :
+                         discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on your 1st booking on App` : ``;
 
     return (
       <div
@@ -204,7 +188,7 @@ const exclusiveIcon = () => {
         >
           <div className="activityDetail">
           <div className={name.length<38 ? name.length > 23 ? "nameInc" : "name":'nameNoheight'}>
-              <span>{name}</span> {priceCard(minPrice, showDiscount, finalPrice)}
+              <span>{name}</span> {priceCard(minPrice, showDiscount, maxDiscount, offerPercentage, discountType)}
             </div>
             <div className="activity">
               {concatAndUpperCaseActivities(activities?.slice(0, 8))}
@@ -220,7 +204,7 @@ const exclusiveIcon = () => {
             <div className="discount">
               <div>
                 {discountIcon()}
-                <span className="dTxt">{discountTxt}</span>
+                <span className="dTxt">{discountText}</span>
               </div>
             </div>
           )}
@@ -229,10 +213,17 @@ const exclusiveIcon = () => {
     );
   };
 
-  const priceCard = (price: number, showDiscount: boolean, finalPrice: number) => {
+  const priceCard = (price: number, showDiscount: boolean, maxDiscount: number, offerPercentage: number, discountType: string) => {
+    let finalPrice = (price - maxDiscount) >  (price *  (100 - offerPercentage) / 100) ? (price - maxDiscount) : (price * (100 - offerPercentage) / 100)
+    if(discountType == 'FLAT'){
+      finalPrice = price - price * offerPercentage / 100;
+    }
+    if(!showDiscount){
+      finalPrice = price;
+    }
     return showDiscount ? (
       <div className="dCard">
-        <div className="dPrice">₹{Math.floor(finalPrice / 2)}</div>
+        <div className="dPrice">₹{Math.floor(finalPrice)}</div>
         <div className="sPrice slash">₹{price}</div>
         <div className="sPrice">onwards</div>
       </div>
@@ -289,7 +280,7 @@ const exclusiveIcon = () => {
         />
         <div>
           {gymCardsData.map((gymCard) => {
-            return cardWidget(gymCard);
+            return cardWidget(gymCard, isFromApp, pastAppBookings);
           })}
         </div>
       </div>
