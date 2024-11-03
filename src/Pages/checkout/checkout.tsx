@@ -146,6 +146,13 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         batchDetails.offerPercentage
       )
         offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people (full court)`;
+      else if(!userDetails || (isFromApp && pastAppBookings?.[batchDetails.gymId])){
+        if(batchDetails.discountType == "PERCENTAGE"){
+          offerStrip.current = `${batchDetails.offerPercentage}% discount upto ${Rs}${batchDetails.maxDiscount} on 1st booking on App`;
+        } else if(batchDetails.discountType == "FLAT"){
+          offerStrip.current = `FLAT ${batchDetails.offerPercentage}% off on 1st booking on App`;
+        }
+      }
       // else if ((!userDetails || (userDetails && userDetails.noOfBookings < 1)) && ![6, 21].includes(batchDetails.gymId)) {
       //   offerStrip.current = "50% off on your 1st booking on ZenfitX";
       // }
