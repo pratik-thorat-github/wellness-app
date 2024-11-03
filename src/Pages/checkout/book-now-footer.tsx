@@ -233,6 +233,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const batchBookingUrl = `/checkout/batch/${props.batchId}/booking`;
   const maxDiscount = props.batchDetails?.maxDiscount || 0;
   const offerPercentage = props.batchDetails?.offerPercentage || 0;
+  const discountType = props.batchDetails?.discountType || "";
   const price  =  props.batchDetails?.price || 0;
   let noOfGuests = 1;
   if(props.totalGuests && props.totalGuests > 1){
@@ -244,7 +245,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   if(props.gymData?.discountType == 'FLAT'){
     finalPrice = (price * (100 - offerPercentage) / 100)
   }  
-  const discountText = props.gymData?.discountType == 'FLAT' ? `${offerPercentage}% off` : 
+  const discountText = props.gymData?.discountType == 'FLAT' ? `FLAT ${offerPercentage}% off` : 
                        props.gymData?.discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : ``;
   
 async function processBookNowCta() {
@@ -333,6 +334,9 @@ async function processBookNowCta() {
       let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
                       ?  price * noOfGuests  - maxDiscount
                       : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+      if(discountType == "FLAT"){
+        finalPrice = (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+      }
       setDiscountedAmount(finalPrice);
     }
   }, [showDiscount]);
