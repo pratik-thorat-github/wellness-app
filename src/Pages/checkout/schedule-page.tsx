@@ -196,7 +196,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       </span>
       <span
         style={{
-          color: "#008B4F",
+          color: "#828081",
           fontSize: "12px",
           fontWeight: "400",
         }}
