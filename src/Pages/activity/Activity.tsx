@@ -13,6 +13,8 @@ import { concatAndUpperCaseActivities } from "../../utils/activities";
 import { discountTxt, showDiscountText } from "../../utils/offers";
 import { Rs } from "../../constants/symbols";
 import MetaPixel from "../../components/meta-pixel";
+import PullToRefresh from 'react-simple-pull-to-refresh';
+import {handleRefresh} from '../../utils/refresh';
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -266,6 +268,7 @@ const exclusiveIcon = () => {
   return (
     <>
     <MetaPixel />
+    <PullToRefresh onRefresh={handleRefresh}>
     <div>
       {" "}
       {shareAndBack()}
@@ -285,6 +288,7 @@ const exclusiveIcon = () => {
         </div>
       </div>
     </div>
+    </PullToRefresh>
     </>
   ); 
 };

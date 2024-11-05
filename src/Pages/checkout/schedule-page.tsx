@@ -38,7 +38,8 @@ import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
 import { showDiscountText } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
-import SwipeBackHandler from "../../components/backhandler";
+import PullToRefresh from 'react-simple-pull-to-refresh';
+import {handleRefresh} from '../../utils/refresh';
 
 
 interface PastAppBookingObject {
@@ -558,6 +559,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     <>
     <MetaPixel />
     {/* <SwipeBackHandler onBack={() => navigate(-1)}> */}
+    <PullToRefresh onRefresh={handleRefresh}>
     <div>
       <div className="stickyWrap">
         {" "}
@@ -610,6 +612,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           : noBatchComponent()}
       </Flex>
     </div>
+    </PullToRefresh>
     {/* </SwipeBackHandler> */}
     </>
   );

@@ -25,6 +25,9 @@ import LandingFooter from "../landing/Footer";
 import { getUserDeatils } from "../../apis/user/userDetails";
 import Onboarding from "./onboarding";
 import MetaPixel from "../../components/meta-pixel";
+import PullToRefresh from 'react-simple-pull-to-refresh';
+import {handleRefresh} from '../../utils/refresh';
+
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -129,6 +132,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     },
   });
 
+  
+
   // useEffect(()=>{
   //   const { mutate: _getGymsByActivities } = useMutation({
   //     mutationFn: getGymsByActivity,
@@ -227,6 +232,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   return (
     <>
       <MetaPixel />
+      <PullToRefresh onRefresh={handleRefresh}>
+        <div>
       <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
         <div>
           <Space></Space>
@@ -260,6 +267,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
           />
         </Flex>
       </Flex>
+      </div>
+      </PullToRefresh>
     </>
   );
 };

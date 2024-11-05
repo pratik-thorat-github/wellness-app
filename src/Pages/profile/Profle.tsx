@@ -21,6 +21,8 @@ import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
 import MetaPixel from "../../components/meta-pixel";
 import Loader from "../../components/Loader";
+import PullToRefresh from 'react-simple-pull-to-refresh';
+import {handleRefresh} from '../../utils/refresh';
 
 interface IProfile extends RouteComponentProps {}
 
@@ -98,6 +100,7 @@ const Profile: React.FC<IProfile> = () => {
   return (
     <>
       <MetaPixel />
+    <PullToRefresh onRefresh={handleRefresh}>
     <Flex
       flex={1}
       vertical
@@ -149,6 +152,7 @@ const Profile: React.FC<IProfile> = () => {
         </Flex>
       </Flex> */}
     </Flex>
+    </PullToRefresh>
     </>
   );
 };

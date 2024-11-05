@@ -21,6 +21,8 @@ import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { deductPercentage } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 import { saveNotificationToken } from "../../apis/notifications/notifications";
+import PullToRefresh from 'react-simple-pull-to-refresh';
+import {handleRefresh} from '../../utils/refresh';
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -403,6 +405,15 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   return (
     <>
       <MetaPixel />
+      <PullToRefresh onRefresh={handleRefresh}>
+      <Flex
+        flex={1}
+        vertical
+        style={{
+          backgroundColor: "#F8F8F8",
+          minHeight: "100vh",
+        }}
+      >
       <div className="checkWrapper">
         <div className="backBtn2">{backBtn()}</div>
         <div className="checkoutDetail">
@@ -500,7 +511,6 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         )}
       </div>
 
-      <Flex>
         <BookNowFooter
           batchDetails={batchDetails}
           gymData={gym}
@@ -514,6 +524,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
           pastAppBookings={pastAppBookings}
         />
       </Flex>
+      </PullToRefresh>
     </>
   );
 };

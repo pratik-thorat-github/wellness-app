@@ -24,6 +24,8 @@ import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
 import MetaPixel from "../../components/meta-pixel";
 import ShareMetadata from "../../components/share-metadata";
 import Loader from "../../components/Loader";
+import PullToRefresh from 'react-simple-pull-to-refresh';
+import {handleRefresh} from '../../utils/refresh';
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -318,6 +320,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
 
   return (
     <>
+    <PullToRefresh onRefresh={handleRefresh}>
     <Flex
       flex={1}
       vertical
@@ -473,6 +476,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         pastAppBookings={pastAppBookings}
       />
     </Flex>
+    </PullToRefresh>
     <MetaPixel />
     </>
   );

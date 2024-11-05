@@ -13,6 +13,8 @@ import { IGymDetails } from "../../types/gyms";
 import { Mixpanel } from "../../mixpanel/init";
 import ShareMetada from "../../components/share-metadata";
 import MetaPixel from "../../components/meta-pixel";
+import PullToRefresh from 'react-simple-pull-to-refresh';
+import {handleRefresh} from '../../utils/refresh';
 
 interface IGYmPage extends RouteComponentProps {
   gymId?: string;
@@ -65,6 +67,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
       image={gym.medias[0].url}
     />
     <MetaPixel />
+    <PullToRefresh onRefresh={handleRefresh}>
     <div className="gymWrap">
       <Flex flex={1}>
         <GymPhotos gym={gym} />
@@ -84,6 +87,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
         </Flex> */}
       </Flex>
     </div>
+    </PullToRefresh>
     </>
   );
 };
