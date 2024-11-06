@@ -20,7 +20,7 @@ const SwipeHandler: React.FC<SwipeHandlerProps> = ({
   threshold = 50,
   className = '',
   maxSwipeDistance = 200,
-  diagonalThreshold = 10,
+  diagonalThreshold = 1, // Adjust diagonal threshold to enforce horizontal swipes
 }) => {
   const [touchStart, setTouchStart] = useState<TouchCoordinates | null>(null);
   const [touchEnd, setTouchEnd] = useState<TouchCoordinates | null>(null);
@@ -29,7 +29,6 @@ const SwipeHandler: React.FC<SwipeHandlerProps> = ({
   const [isHorizontalSwipe, setIsHorizontalSwipe] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
 
-  // Function to prevent default on all touch events during swipe
   const preventTouchMove = (e: TouchEvent) => {
     if (isHorizontalSwipe) {
       e.preventDefault();
@@ -44,10 +43,7 @@ const SwipeHandler: React.FC<SwipeHandlerProps> = ({
     const handleTouchStart = (e: TouchEvent) => {
       const touch = e.targetTouches[0];
       setTouchEnd(null);
-      setTouchStart({
-        x: touch.clientX,
-        y: touch.clientY
-      });
+      setTouchStart({ x: touch.clientX, y: touch.clientY });
       setIsDragging(true);
     };
 
@@ -55,46 +51,41 @@ const SwipeHandler: React.FC<SwipeHandlerProps> = ({
       if (!touchStart || !isDragging) return;
 
       const touch = e.targetTouches[0];
-      const currentTouch = {
-        x: touch.clientX,
-        y: touch.clientY
-      };
+      const currentTouch = { x: touch.clientX, y: touch.clientY };
 
       const diffX = currentTouch.x - touchStart.x;
       const diffY = Math.abs(currentTouch.y - touchStart.y);
       const absX = Math.abs(diffX);
 
+      // Enforce a small diagonal threshold to ignore vertical movement
+      if (diffY > diagonalThreshold) {
+        resetState();
+        return;
+      }
+
       // If already in horizontal swipe mode, prevent all vertical movement
       if (isHorizontalSwipe) {
         e.preventDefault();
-        
-        // Only allow left to right movement (positive diffX)
+
         if (diffX < 0) {
           setTranslateX(0);
           return;
         }
 
-        // Limit the maximum swipe distance
         const limitedDiffX = Math.min(diffX, maxSwipeDistance);
         setTranslateX(limitedDiffX);
         setTouchEnd(currentTouch);
         return;
       }
 
-      // Initial detection of swipe direction
-      if (!isHorizontalSwipe && (absX > 10 || diffY > 10)) {
-        // If movement is more horizontal than vertical
-        if (absX > diffY && diffX > 0) {
-          e.preventDefault();
-          setIsHorizontalSwipe(true);
-          
-          // Add global touch event prevention
-          document.body.style.overflow = 'hidden';
-          document.addEventListener('touchmove', preventTouchMove as any, { passive: false });
-        } else {
-          // If it's more vertical or negative horizontal, reset
-          resetState();
-        }
+      if (absX > diffY && diffX > 0) {
+        e.preventDefault();
+        setIsHorizontalSwipe(true);
+
+        document.body.style.overflow = 'hidden';
+        document.addEventListener('touchmove', preventTouchMove as any, { passive: false });
+      } else {
+        resetState();
       }
     };
 
@@ -114,12 +105,10 @@ const SwipeHandler: React.FC<SwipeHandlerProps> = ({
       resetState();
     };
 
-    // Add event listeners with { passive: false }
     element.addEventListener('touchstart', handleTouchStart as any, { passive: true });
     element.addEventListener('touchmove', handleTouchMove as any, { passive: false });
     element.addEventListener('touchend', handleTouchEnd as any, { passive: true });
 
-    // Cleanup
     return () => {
       element.removeEventListener('touchstart', handleTouchStart as any);
       element.removeEventListener('touchmove', handleTouchMove as any);
@@ -134,7 +123,8 @@ const SwipeHandler: React.FC<SwipeHandlerProps> = ({
     threshold,
     onSwipeRight,
     touchEnd,
-    maxSwipeDistance
+    maxSwipeDistance,
+    diagonalThreshold, // Include diagonal threshold dependency
   ]);
 
   const resetState = () => {
