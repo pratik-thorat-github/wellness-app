@@ -40,6 +40,7 @@ import { showDiscountText } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
+import SwipeHandler from "../../components/back-swipe-handler";
 
 
 interface PastAppBookingObject {
@@ -476,8 +477,11 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     );
   };
 
+  const handleSwipeRight = async () => {
+    goToGymPage();
+  }
+
   const goToGymPage = () => {
-    console.log(window.location);
     navigate(`/gym/${gymId}`, {state: {isFromApp, pastAppBookings}});
   };
 
@@ -558,7 +562,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   return (
     <>
     <MetaPixel />
-    {/* <SwipeBackHandler onBack={() => navigate(-1)}> */}
+    <SwipeHandler onSwipeRight={handleSwipeRight}>
     <PullToRefresh onRefresh={handleRefresh}>
     <div>
       <div className="stickyWrap">
@@ -613,7 +617,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       </Flex>
     </div>
     </PullToRefresh>
-    {/* </SwipeBackHandler> */}
+    </SwipeHandler>
     </>
   );
 };

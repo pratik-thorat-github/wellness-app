@@ -1,4 +1,4 @@
-import { RouteComponentProps, useLocation } from "@reach/router";
+import { navigate, RouteComponentProps, useLocation } from "@reach/router";
 import { Flex } from "antd";
 import GymPhotos from "./gym-photos";
 import GymInfo from "./gym-info";
@@ -15,6 +15,7 @@ import ShareMetada from "../../components/share-metadata";
 import MetaPixel from "../../components/meta-pixel";
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
+import SwipeHandler from '../../components/back-swipe-handler';
 
 interface IGYmPage extends RouteComponentProps {
   gymId?: string;
@@ -52,6 +53,11 @@ const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
     window.scrollTo(0, 0);
   }, []);
 
+  const handleSwipeRight = async () => {
+    // Add your right swipe logic here
+    navigate('/');
+  };
+
   useEffect(() => {
     _getGymById(gymId as string);
   }, [gymId]);
@@ -67,6 +73,8 @@ const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
       image={gym.medias[0].url}
     />
     <MetaPixel />
+
+    <SwipeHandler onSwipeRight={handleSwipeRight}>
     <PullToRefresh onRefresh={handleRefresh}>
     <div className="gymWrap">
       <Flex flex={1}>
@@ -88,6 +96,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
       </Flex>
     </div>
     </PullToRefresh>
+    </SwipeHandler>
     </>
   );
 };

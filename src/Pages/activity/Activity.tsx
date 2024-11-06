@@ -15,6 +15,7 @@ import { Rs } from "../../constants/symbols";
 import MetaPixel from "../../components/meta-pixel";
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
+import SwipeHandler from "../../components/back-swipe-handler";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -33,6 +34,11 @@ const data = JSON.stringify(location?.state);
 const isFromApp = JSON.parse(data).isFromApp;
 const pastAppBookings = JSON.parse(data).pastAppBookings
 
+
+const handleSwipeRight = async () => {
+  // Add your right swipe logic here
+  navigate(-1);
+};
 
 const { mutate: _getAllActivities } = useMutation({
     mutationFn: getAllActivities,
@@ -268,6 +274,7 @@ const exclusiveIcon = () => {
   return (
     <>
     <MetaPixel />
+    <SwipeHandler onSwipeRight={handleSwipeRight}>
     <PullToRefresh onRefresh={handleRefresh}>
     <div>
       {" "}
@@ -289,6 +296,7 @@ const exclusiveIcon = () => {
       </div>
     </div>
     </PullToRefresh>
+    </SwipeHandler>
     </>
   ); 
 };

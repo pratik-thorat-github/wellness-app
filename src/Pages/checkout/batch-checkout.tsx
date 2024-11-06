@@ -26,6 +26,7 @@ import ShareMetadata from "../../components/share-metadata";
 import Loader from "../../components/Loader";
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
+import SwipeHandler from "../../components/back-swipe-handler";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -56,6 +57,11 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     setIsFromApp(a);
     setPastAppBookings(b);
   }, [])
+
+  const handleSwipeRight = async () => {
+    // Add your right swipe logic here
+    navigateToHome();
+  };
   // const data = JSON.stringify(location?.state);
   // alert(location?.state?.isFromApp);
   // const isFromApp = JSON.parse(data).isFromApp;
@@ -320,6 +326,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
 
   return (
     <>
+    <SwipeHandler onSwipeRight={handleSwipeRight}>
     <PullToRefresh onRefresh={handleRefresh}>
     <Flex
       flex={1}
@@ -477,6 +484,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
       />
     </Flex>
     </PullToRefresh>
+    </SwipeHandler>
     <MetaPixel />
     </>
   );

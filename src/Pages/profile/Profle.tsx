@@ -23,6 +23,7 @@ import MetaPixel from "../../components/meta-pixel";
 import Loader from "../../components/Loader";
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
+import SwipeHandler from "../../components/back-swipe-handler";
 
 interface IProfile extends RouteComponentProps {}
 
@@ -71,6 +72,10 @@ const Profile: React.FC<IProfile> = () => {
     _getBookingOfUser();
   }, []);
 
+  const handleSwipeRight = async () => {
+    navigate("/");
+  }
+
   const shareAndBack = () => {
     return (
       <div className="shareAndBack">
@@ -100,6 +105,7 @@ const Profile: React.FC<IProfile> = () => {
   return (
     <>
       <MetaPixel />
+    <SwipeHandler onSwipeRight={handleSwipeRight}>
     <PullToRefresh onRefresh={handleRefresh}>
     <Flex
       flex={1}
@@ -153,6 +159,7 @@ const Profile: React.FC<IProfile> = () => {
       </Flex> */}
     </Flex>
     </PullToRefresh>
+    </SwipeHandler>
     </>
   );
 };

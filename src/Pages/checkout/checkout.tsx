@@ -23,6 +23,7 @@ import MetaPixel from "../../components/meta-pixel";
 import { saveNotificationToken } from "../../apis/notifications/notifications";
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
+import SwipeHandler from "../../components/back-swipe-handler";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -257,6 +258,10 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     });
   }
 
+  const handleSwipeRight = async () => {
+    navigate(`/checkout/batch/${batchId}`, {state: { isFromApp: isFromApp, pastAppBookings: pastAppBookings}})
+  }
+
   const backBtn = () => (
     <svg
       onClick={() => navigate(`/checkout/batch/${batchId}`, {state: { isFromApp: isFromApp, pastAppBookings: pastAppBookings}})}
@@ -405,6 +410,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   return (
     <>
       <MetaPixel />
+      <SwipeHandler onSwipeRight={handleSwipeRight}>
       <PullToRefresh onRefresh={handleRefresh}>
       <Flex
         flex={1}
@@ -525,6 +531,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         />
       </Flex>
       </PullToRefresh>
+      </SwipeHandler>
     </>
   );
 };
