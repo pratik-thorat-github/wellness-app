@@ -258,7 +258,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             });
           }}
         >
-          <Flex flex={2} vertical>
+          <Flex flex='auto' vertical={true}>
             <Flex flex={1}>
               <Flex flex={1}>
                 <span>
@@ -278,9 +278,9 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               <Flex
                 flex={6}
                 style={{
-                  borderBottomWidth: "1px",
-                  borderBottomColor: colors.border,
-                  borderBottomStyle: "solid",
+                  // borderBottomWidth: "1px",
+                  // borderBottomColor: colors.border,
+                  // borderBottomStyle: "solid",
                   marginLeft: '16px',
                   paddingBottom: "8px",
                 }}
@@ -378,7 +378,14 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 </Flex>
               </Flex>
             </Flex>
-            <Flex style={{justifyContent: 'center', color:'#828081', fontSize: '11px'}}>
+            <Flex style={{
+                  justifyContent:'center',
+                  color:'#828081', 
+                  fontSize: '11px', 
+                  borderBottomWidth: "1px",
+                  borderBottomColor: colors.border,
+                  borderBottomStyle: "solid"
+                }}>
               {showDiscountText(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ?
                 `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : ``
               }
