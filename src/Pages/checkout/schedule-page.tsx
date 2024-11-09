@@ -572,7 +572,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     <>
     <MetaPixel />
     <SwipeHandler onSwipeRight={handleSwipeRight}>
-    <PullToRefresh onRefresh={handleRefresh}>
+    {/* <PullToRefresh onRefresh={handleRefresh}> */}
     <div>
       <div className="stickyWrap">
         {" "}
@@ -625,7 +625,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           : noBatchComponent()}
       </Flex>
     </div>
-    </PullToRefresh>
+    {/* </PullToRefresh> */}
     </SwipeHandler>
     </>
   );

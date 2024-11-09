@@ -106,7 +106,7 @@ const Profile: React.FC<IProfile> = () => {
     <>
       <MetaPixel />
     <SwipeHandler onSwipeRight={handleSwipeRight}>
-    <PullToRefresh onRefresh={handleRefresh}>
+    {/* <PullToRefresh onRefresh={handleRefresh}> */}
     <Flex
       flex={1}
       vertical
@@ -158,7 +158,7 @@ const Profile: React.FC<IProfile> = () => {
         </Flex>
       </Flex> */}
     </Flex>
-    </PullToRefresh>
+    {/* </PullToRefresh> */}
     </SwipeHandler>
     </>
   );

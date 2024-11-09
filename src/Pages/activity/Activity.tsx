@@ -275,7 +275,7 @@ const exclusiveIcon = () => {
     <>
     <MetaPixel />
     <SwipeHandler onSwipeRight={handleSwipeRight}>
-    <PullToRefresh onRefresh={handleRefresh}>
+    {/* <PullToRefresh onRefresh={handleRefresh}> */}
     <div>
       {" "}
       {shareAndBack()}
@@ -295,7 +295,7 @@ const exclusiveIcon = () => {
         </div>
       </div>
     </div>
-    </PullToRefresh>
+    {/* </PullToRefresh> */}
     </SwipeHandler>
     </>
   ); 

@@ -232,7 +232,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   return (
     <>
       <MetaPixel />
-      <PullToRefresh onRefresh={handleRefresh}>
+      {/* <PullToRefresh onRefresh={handleRefresh}> */}
         <div>
       <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
         <div>
@@ -268,7 +268,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
         </Flex>
       </Flex>
       </div>
-      </PullToRefresh>
+      {/* </PullToRefresh> */}
     </>
   );
 };

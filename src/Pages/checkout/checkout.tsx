@@ -411,7 +411,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     <>
       <MetaPixel />
       <SwipeHandler onSwipeRight={handleSwipeRight}>
-      <PullToRefresh onRefresh={handleRefresh}>
+      {/* <PullToRefresh onRefresh={handleRefresh}> */}
       <Flex
         flex={1}
         vertical
@@ -530,7 +530,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
           pastAppBookings={pastAppBookings}
         />
       </Flex>
-      </PullToRefresh>
+      {/* </PullToRefresh> */}
       </SwipeHandler>
     </>
   );
