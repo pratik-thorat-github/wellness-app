@@ -75,7 +75,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
     <MetaPixel />
 
     <SwipeHandler onSwipeRight={handleSwipeRight}>
-    <PullToRefresh onRefresh={handleRefresh}>
+    {/* <PullToRefresh onRefresh={handleRefresh}> */}
     <div className="gymWrap">
       <Flex flex={1}>
         <GymPhotos gym={gym} />
@@ -95,7 +95,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
         </Flex> */}
       </Flex>
     </div>
-    </PullToRefresh>
+    {/* </PullToRefresh> */}
     </SwipeHandler>
     </>
   );

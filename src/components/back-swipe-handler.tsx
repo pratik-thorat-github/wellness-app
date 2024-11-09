@@ -142,8 +142,8 @@ const SwipeHandler: React.FC<SwipeHandlerProps> = ({
       ref={elementRef}
       className={`touch-handler ${className}`}
       style={{
-        transform: `translateX(${translateX}px)`,
-        transition: isDragging ? 'none' : 'transform 0.3s ease-out',
+        // transform: `translateX(${translateX}px)`,
+        // transition: isDragging ? 'none' : 'transform 0.3s ease-out',
         touchAction: 'none',
         userSelect: 'none',
       }}
