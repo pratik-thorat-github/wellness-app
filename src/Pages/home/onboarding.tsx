@@ -11,12 +11,15 @@ import { Carousel } from "react-responsive-carousel";
 import { Mixpanel } from "../../mixpanel/init";
 import { Cookies } from 'react-cookie';
 import { navigate } from "@reach/router";
+import Loader from "../../components/Loader";
 
 interface Onboarding {
   setOnboarding: (val: boolean) => void;
 }
 
 const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
+
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
     Mixpanel.track("open_onboarding_page");
@@ -35,7 +38,8 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
 
   return (
 		<>
-			<div className="obImgWrap">
+      {showLoader ? <Loader /> : ``}
+			<div className="obImgWrap" style={{transform: '0px'}}>
 				<Carousel
 					swipeable={true}
 					showArrows={false}
@@ -59,8 +63,9 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
 					className="obBtn"
 					onClick={() => {
 						setOnboarding(true);
+            setShowLoader(true);
 						Mixpanel.track("clicked_explore_now_on_onboarding_page");
-            navigate('/');
+            // navigate('/');
 					}}
 				>
 					Explore Now
