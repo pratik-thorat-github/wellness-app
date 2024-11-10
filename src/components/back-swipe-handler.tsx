@@ -17,7 +17,7 @@ interface TouchCoordinates {
 const SwipeHandler: React.FC<SwipeHandlerProps> = ({
   children,
   onSwipeRight,
-  threshold = 50,
+  threshold = 20,
   className = '',
   maxSwipeDistance = 200,
   diagonalThreshold = 10, // Adjust diagonal threshold to enforce horizontal swipes
