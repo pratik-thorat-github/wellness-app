@@ -170,6 +170,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   useEffect(() => {
     if (onboarding) {
       setCookie("onboarding", "done", 1);
+      window.ReactNativeWebView.postMessage("notification alert");
     }
   }, [onboarding]);
 

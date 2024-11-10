@@ -380,7 +380,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             </Flex>
             <Flex style={{
                   justifyContent:'center',
-                  color:'#828081', 
+                  color:'#1AAC6D', 
                   fontSize: '11px', 
                   borderBottomWidth: "1px",
                   borderBottomColor: colors.border,
