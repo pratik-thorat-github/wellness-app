@@ -2,7 +2,7 @@ import { Card, Flex } from "antd";
 
 import { Link, NavigateFn, navigate, useNavigate } from "@reach/router";
 import { EOfferType, IGymCard } from "../../types/gyms";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ActivityTiles from "../../components/activity-tiles";
 import { concatAndUpperCaseActivities } from "../../utils/activities";
 import colors from "../../constants/colours";
@@ -163,7 +163,7 @@ function getListOfCenters(
         className="cardWrapper"
         onClick={() => {
           navigate(`/gym/${gymCard.gymId}`, {
-            state: { gymId: gymCard.gymId.toString(), isFromApp: isFromApp, pastAppBookings: pastAppBookings }
+            state: { gymId: gymCard.gymId.toString() }
           });
         }}
         key={gymCard.gymId}
@@ -224,8 +224,6 @@ interface ICentersNearYou {
   activitySelected?: string;
   gymCardsData: IGymCard[];
   showClassesNearYou: boolean;
-  isFromApp: boolean;
-  pastAppBookings: PastAppBookingObject;
 }
 
 
@@ -234,13 +232,19 @@ const CentersAroundYou: React.FC<ICentersNearYou> = ({
   activities,
   activitySelected,
   gymCardsData,
-  showClassesNearYou,
-  isFromApp,
-  pastAppBookings
+  showClassesNearYou
 }) => {
   const navigate = useNavigate();
   const [plusDetails] = useAtom(plusDetailsAtom);
   const [userDetails] = useAtom(userDetailsAtom);
+
+  const [isFromApp, setIsFromApp] = useState(false);
+  const [pastAppBookings, setPastAppBookings] = useState({});
+
+  useEffect(() => {
+    setIsFromApp(window?.isFromApp || false);
+    setPastAppBookings(window?.pastAppBookings || {});
+  }, []);
 
   const activityTilesOnClick = async (activity: string) => {
     if (navigate) {

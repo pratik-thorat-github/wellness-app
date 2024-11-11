@@ -65,6 +65,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
       console.log("past app bookings - ", result);
       setPastAppBookings(result.bookings);
       setGotPastAppBookings(true);
+      window.pastAppBookings = result.bookings;
     },
   });
 
@@ -81,6 +82,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     const userSource = window?.platformInfo?.platform  || 'web';
     const appFlag = userSource != 'web' ? true : false;
     setIsFromApp(appFlag);
+    window.isFromApp = appFlag;
     const userId = window.localStorage["zenfitx-user-details"] ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null : null;
     if(userId){
       _getPastAppBookings(userId);
@@ -259,12 +261,12 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   }
 
   const handleSwipeRight = async () => {
-    navigate(`/checkout/batch/${batchId}`, {state: { isFromApp: isFromApp, pastAppBookings: pastAppBookings}})
+    navigate(`/checkout/batch/${batchId}`)
   }
 
   const backBtn = () => (
     <svg
-      onClick={() => navigate(`/checkout/batch/${batchId}`, {state: { isFromApp: isFromApp, pastAppBookings: pastAppBookings}})}
+      onClick={() => navigate(`/checkout/batch/${batchId}`)}
       xmlns="http://www.w3.org/2000/svg"
       width="20"
       height="20"
@@ -410,7 +412,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   return (
     <>
       <MetaPixel />
-      <SwipeHandler onSwipeRight={handleSwipeRight}>
+      {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
       {/* <PullToRefresh onRefresh={handleRefresh}> */}
       <Flex
         flex={1}
@@ -531,7 +533,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         />
       </Flex>
       {/* </PullToRefresh> */}
-      </SwipeHandler>
+      {/* </SwipeHandler> */}
     </>
   );
 };

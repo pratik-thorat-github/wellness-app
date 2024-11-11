@@ -4,6 +4,7 @@ import { navigate, RouteComponentProps } from "@reach/router";
 import { Mixpanel } from "../../mixpanel/init";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import { toLetterCase } from "../../utils/string-operation";
+import { useEffect, useState } from "react";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -27,7 +28,7 @@ const classTile = (activity: string, isFromApp: boolean, pastAppBookings: PastAp
   <Flex
     onClick={async () => {
       Mixpanel.track("clicked_activity_tile_on_home_page", { activity });
-      await navigate(`/${activity}`, {state: {isFromApp, pastAppBookings}});
+      await navigate(`/${activity}`);
     }}
     justify="center"
     align="center"
@@ -46,7 +47,7 @@ const trendingTile = (isFromApp: boolean, pastAppBookings: PastAppBookingObject)
         Mixpanel.track("clicked_activity_tile_on_home_page", {
           activity: "trending",
         });
-        await navigate(`/trending`, {state: {isFromApp, pastAppBookings}});
+        await navigate(`/trending`);
       }}
     >
       <div className="trendingWrapper">
@@ -119,12 +120,17 @@ function createLowerFlexTiles(isFromApp: boolean, pastAppBookings: PastAppBookin
   );
 }
 
-interface IClassesNearYou extends RouteComponentProps  {
-  isFromApp: boolean;
-  pastAppBookings: PastAppBookingObject
-}
+interface IClassesNearYou extends RouteComponentProps  {}
 
-const ClassesNearYou: React.FC<IClassesNearYou> = ({isFromApp, pastAppBookings}) => {
+const ClassesNearYou: React.FC<IClassesNearYou> = () => {
+  const [isFromApp, setIsFromApp] = useState(false);
+  const [pastAppBookings, setPastAppBookings] = useState({});
+
+  useEffect(() => {
+    setIsFromApp(window?.isFromApp || false);
+    setPastAppBookings(window?.pastAppBookings || {});
+  }, []);
+
   return (
     <Flex flex={1} vertical style={{}}>
       <Flex flex={1} align="left" className="sectionHeading">

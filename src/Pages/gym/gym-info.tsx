@@ -34,11 +34,9 @@ interface PastAppBookingObject {
 
 interface IGymInfo {
   gymData: IGymDetails;
-  isFromApp?: boolean;
-  pastAppBookings?: PastAppBookingObject;
 }
 
-const GymInfo: React.FC<IGymInfo> = ({ gymData, isFromApp = false, pastAppBookings = {}}) => {
+const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   const description = `${gymData.description}`;
   const { maxDiscount, offerPercentage, discountType} = gymData;
   let [isTruncated, setIsTruncated] = useState(description.length > maxChar);
@@ -67,8 +65,15 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData, isFromApp = false, pastAppBookin
   //   const userId = userDetails?.id?.toString() || '0';
   //   _getPastAppBookings(userId);
   // }, [])
+  const [isFromApp, setIsFromApp] = useState(false);
+  const [pastAppBookings, setPastAppBookings] = useState({});
+  
+  useEffect(() => {
+    setIsFromApp(window?.isFromApp || false);
+    setPastAppBookings(window?.pastAppBookings || {});
+  }, []);
+  
   let showDiscount = showDiscountText(gymData, userDetails, isFromApp, pastAppBookings);
-
   const [showTimeOptions, setShowTimeOptions] = useState<Boolean>(false);
 
   const mapsLink = createMapsLink(gymData.addressLine1, gymData.addressLine2);
@@ -97,7 +102,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData, isFromApp = false, pastAppBookin
         gymId: gymData.gymId,
         activity,
       });
-    navigate(`${pathname}/batch?activity=${activity.toLowerCase()}`, {state: {isFromApp, pastAppBookings}});
+    navigate(`${pathname}/batch?activity=${activity.toLowerCase()}`);
   };
 
   const exclusiveIcon = () => {

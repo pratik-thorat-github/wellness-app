@@ -29,10 +29,13 @@ const [activities, setActivities] = useState<string[]>([]);
 const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
 const [selectedActivity,setSelectedActivity]=useState<string>(activity);
 const [userDetails] = useAtom(userDetailsAtom);
-const location = useLocation();
-const data = JSON.stringify(location?.state);
-const isFromApp = JSON.parse(data).isFromApp;
-const pastAppBookings = JSON.parse(data).pastAppBookings
+const [isFromApp, setIsFromApp] = useState(false);
+const [pastAppBookings, setPastAppBookings] = useState({});
+
+useEffect(() => {
+  setIsFromApp(window?.isFromApp || false);
+  setPastAppBookings(window?.pastAppBookings || {});
+}, []);
 
 
 const handleSwipeRight = async () => {
@@ -274,7 +277,7 @@ const exclusiveIcon = () => {
   return (
     <>
     <MetaPixel />
-    <SwipeHandler onSwipeRight={handleSwipeRight}>
+    {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
     {/* <PullToRefresh onRefresh={handleRefresh}> */}
     <div>
       {" "}
@@ -296,7 +299,7 @@ const exclusiveIcon = () => {
       </div>
     </div>
     {/* </PullToRefresh> */}
-    </SwipeHandler>
+    {/* </SwipeHandler> */}
     </>
   ); 
 };

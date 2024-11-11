@@ -33,10 +33,6 @@ function MixpanelGymInit(gym: IGymDetails) {
 }
 
 const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
-  const location = useLocation();
-  const data = JSON.stringify(location?.state);
-  const isFromApp = JSON.parse(data)?.isFromApp;
-  const pastAppBookings = JSON.parse(data)?.pastAppBookings;
   const [gym, setGym] = useState<IGymDetails | null>(null);
   const { mutate: _getGymById } = useMutation({
     mutationFn: getGymById,
@@ -74,8 +70,8 @@ const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
     />
     <MetaPixel />
 
-    <SwipeHandler onSwipeRight={handleSwipeRight}>
     {/* <PullToRefresh onRefresh={handleRefresh}> */}
+    {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
     <div className="gymWrap">
       <Flex flex={1}>
         <GymPhotos gym={gym} />
@@ -83,7 +79,7 @@ const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
 
       <Flex flex={2} vertical justify="center">
       
-          <GymInfo gymData={gym} isFromApp={isFromApp} pastAppBookings = {pastAppBookings}/>
+          <GymInfo gymData={gym} />
        
 
           {/* <Flex flex={2}>
@@ -95,8 +91,8 @@ const Gym: React.FC<IGYmPage> = ({ gymId, }) => {
         </Flex> */}
       </Flex>
     </div>
+    {/* </SwipeHandler> */}
     {/* </PullToRefresh> */}
-    </SwipeHandler>
     </>
   );
 };

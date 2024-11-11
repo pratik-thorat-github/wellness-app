@@ -107,6 +107,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     onSuccess: (result) => {
       console.log("past app bookings - ", result);
       setPastAppBookings(result.bookings);
+      window.pastAppBookings = result.bookings;
     },
   });
 
@@ -165,6 +166,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     const userSource = window?.platformInfo?.platform  || 'web';
     const appFlag = userSource != 'web' ? true : false;
     setIsFromApp(appFlag);
+    window.isFromApp = appFlag;
   }, [])
 
   useEffect(() => {
@@ -249,10 +251,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
 
           {showClassesNearYou ? (
             <Flex style={{ marginLeft: "16px" }} flex={3}>
-              <ClassesNearYou 
-                isFromApp={isFromApp}
-                pastAppBookings={pastAppBookings} 
-              />
+              <ClassesNearYou />
             </Flex>
           ) : null}
         </div>
@@ -263,8 +262,6 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             activitySelected={activitySelected}
             gymCardsData={gymCardsData}
             showClassesNearYou={showClassesNearYou}
-            isFromApp={isFromApp}
-            pastAppBookings={pastAppBookings}
           />
         </Flex>
       </Flex>

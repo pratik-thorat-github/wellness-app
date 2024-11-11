@@ -59,8 +59,6 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   const location = useLocation();
   const data = JSON.stringify(location?.state);
-  const isFromApp = JSON.parse(data).isFromApp;
-  const pastAppBookings = JSON.parse(data).pastAppBookings
   const [selectedActivity, setSelectedActivity] = useState("all");
   const [batches, setBatches] = useState<IBatch[]>([]);
   const activityFromURl = new URLSearchParams(window.location.search).get(
@@ -72,6 +70,13 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
   const [userDetails] = useAtom(userDetailsAtom);
+  const [isFromApp, setIsFromApp] = useState(false);
+  const [pastAppBookings, setPastAppBookings] = useState({});
+
+  useEffect(() => {
+    setIsFromApp(window?.isFromApp || false);
+    setPastAppBookings(window?.pastAppBookings || {});
+  }, []);
   // const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
   // const [isFromApp, setIsFromApp] = useState(false);
   // const [gotPastBookings, setGotPastAppBookings] = useState(false);
@@ -491,7 +496,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   }
 
   const goToGymPage = () => {
-    navigate(`/gym/${gymId}`, {state: {isFromApp, pastAppBookings}});
+    navigate(`/gym/${gymId}`);
   };
 
   function generateDateTiles() {
@@ -571,7 +576,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   return (
     <>
     <MetaPixel />
-    <SwipeHandler onSwipeRight={handleSwipeRight}>
+    {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
     {/* <PullToRefresh onRefresh={handleRefresh}> */}
     <div>
       <div className="stickyWrap">
@@ -626,7 +631,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       </Flex>
     </div>
     {/* </PullToRefresh> */}
-    </SwipeHandler>
+    {/* </SwipeHandler> */}
     </>
   );
 };
