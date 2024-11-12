@@ -265,7 +265,7 @@ async function processBookNowCta() {
         afterLoginUrl: batchBookingUrl,
       });
 
-      navigate("/login");
+      navigate("/login", {replace: true});
     } else if (
       props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_PAGE &&
       props.batchDetails?.guestsAllowed
