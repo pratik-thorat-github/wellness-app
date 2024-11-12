@@ -53,6 +53,7 @@ const Login: React.FC<ILoginProps> = () => {
           phoneNumber: input.phone,
           otpLessOrderId: response.orderId,
         },
+        replace: true
       });
     },
   });
