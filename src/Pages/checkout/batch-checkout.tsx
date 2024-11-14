@@ -319,7 +319,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
           <span className="locIcon">{locationIcon()}</span>
           {gym?.name},{gym?.area}
         </div>
-        {(gym?.gymId == 6 || gym?.gymId == 24) && batchDetails?.slots && batchDetails?.slotsBooked >= 0 ?
+        {(gym?.gymId == 6 || gym?.gymId == 22 || gym?.gymId == 24) && batchDetails?.slots && batchDetails?.slotsBooked >= 0 ?
         <div className="remainingSlots">
         <span>
             {batchDetails.slots-batchDetails.slotsBooked} spot(s) left out of {batchDetails?.slots}
