@@ -386,15 +386,13 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             <Flex style={{
                   justifyContent:'center',
                   color:'#1AAC6D', 
-                  fontSize: '11px', 
+                  fontSize: showDiscountText(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ? '11px' : '0px', 
                   borderBottomWidth: "1px",
                   borderBottomColor: colors.border,
                   borderBottomStyle: "solid"
                 }}>
               {showDiscountText(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ?
-                `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : 
-                showDiscountText(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'FLAT') ?
-                `FLAT ${offerPercentage}% off on 1st booking on App` : ``
+                `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : `.`
               }
             </Flex>
           </Flex>
