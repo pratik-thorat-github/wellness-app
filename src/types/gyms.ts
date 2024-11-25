@@ -34,9 +34,13 @@ export interface IBatch {
   moreInfo?: string;
   gymId: number;
   image?: string;
-  description?:string
-  slots: number
-  slotsBooked: number
+  description?:string;
+  slots: number;
+  slotsBooked: number;
+  maxDiscount: number;
+  discountType: string;
+  participants?: ParticipantDetail[];
+  noOfParticipants?: number;
 
   guestsAllowed?: boolean;
   offerType?: EOfferType;
@@ -48,6 +52,12 @@ export interface IBatch {
   venueAddressLine1?: string;
   venueAddressLine2?: string;
   updatedAt?:string
+}
+
+export interface ParticipantDetail {
+  participantName: string;
+  // jerseyName?: string;
+  // jerseySize: string;
 }
 
 export interface IGymDetails extends Omit<IGymCard, "medias"> {

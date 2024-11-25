@@ -59,7 +59,8 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     username: userDetails.name,
     batchName: props?.batchDetails?.activityName || "",
     batchDate: props?.batchDetails?.date || "",
-    batchTime: props?.batchDetails?.startTime || 0
+    batchTime: props?.batchDetails?.startTime || 0,
+    participants: props?.batchDetails?.participants || [],
   };
 
   Mixpanel.track("pay_now_button_clicked_on_checkout_page", {

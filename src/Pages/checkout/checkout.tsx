@@ -4,7 +4,7 @@ import { Mixpanel } from "../../mixpanel/init";
 import { Flex } from "antd";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 
-import { EOfferType, IBatch, IGymDetails } from "../../types/gyms";
+import { EOfferType, IBatch, IGymDetails, ParticipantDetail } from "../../types/gyms";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
@@ -20,6 +20,7 @@ import BookNowFooter from "./book-now-footer";
 import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { deductPercentage } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
+import ParticipantDetailsForm from "./pariticipant-detail";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -32,6 +33,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   let [noOfGuests, setNoOfGuests] = useState(1);
 
   const [batchDetails, setBatchDetails] = useState<IBatch>();
+  const [participantErrors, setParticipantErrors] = useState<{ [key: string]: string }>({});
 
   const batchId = window.location.pathname.split("/")[3];
 
@@ -109,6 +111,35 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   }, [batchDetails]);
 
   if (!gym) return <Loader />;
+  const setParticipants = (participants: ParticipantDetail[]) => {
+    if (batchDetails) {
+      setBatchDetails({
+        ...batchDetails,
+        participants
+      });
+    }
+  };
+
+  const validateParticipants = (): boolean => {
+    const errors: { [key: string]: string } = {};
+    let isValid = true;
+
+    batchDetails?.participants?.forEach((participant, index) => {
+      if (!participant.participantName.trim()) {
+        errors[`participant_${index}_name`] = 'Participant name is required';
+        isValid = false;
+      }
+      // if (!participant.jerseySize) {
+      //   errors[`participant_${index}_size`] = 'Jersey size is required';
+      //   isValid = false;
+      // }
+    });
+
+    setParticipantErrors(errors);
+    return isValid;
+  };
+
+  if (!gym || !batchDetails) return <Loader />;
 
   //   A function that adds totalAmount
 
@@ -293,7 +324,12 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   );
 
   return (
-    <>
+    <div 
+    style={{ 
+      flex: 1,
+      overflowY: "auto",
+      paddingBottom: "80px" // Prevent content from being hidden behind footer
+    }}>
       <MetaPixel />
       <div className="checkWrapper">
         <div className="backBtn2">{backBtn()}</div>
@@ -393,6 +429,20 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       </div>
 
       <Flex>
+      {batchDetails.noOfParticipants != undefined && batchDetails.noOfParticipants > 0  && (
+          <>
+            <div style={{ margin: '0 -16px' }}>
+              <ParticipantDetailsForm 
+                noOfGuests={batchDetails?.noOfParticipants}
+                participants={batchDetails?.participants ?? []}
+                setParticipants={setParticipants}
+                participantErrors={participantErrors}
+              />
+            </div>
+            <div className="actLine"></div>
+          </>
+        )}
+
         <BookNowFooter
           batchDetails={batchDetails}
           gymData={gym}
@@ -404,7 +454,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
           totalSavings={totalSavings}
         />
       </Flex>
-    </>
+    </div>
   );
 };
 
