@@ -58,6 +58,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
   const [userDetails] = useAtom(userDetailsAtom);
+  const gymIdArray = [6, 22, 24, 25];
 
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");
@@ -174,7 +175,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   function generateBatchTile(gym: IGymDetails, batches: IBatch[]) {
     const batchTile = (batch: IBatch) => {
       return (
-        <Card className={(gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24) && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
+        <Card className={ gymIdArray.includes(gym.gymId) && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
           style={{
             // paddingTop: "16px",
             // paddingBottom: "16px",
@@ -249,7 +250,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                     {batch.duration} min
                   </Flex>
                 ) : null}
-                {(gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24) && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
+                { gymIdArray.includes(gym.gymId) && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
                   <Flex 
                     style={{
                       color: "#C15700",
@@ -265,7 +266,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   </Flex>
                 )
                 :
-                (gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24) && batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
+                gymIdArray.includes(gym.gymId)  && batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
                   <Flex 
                     style={{
                       color: "#C15700",

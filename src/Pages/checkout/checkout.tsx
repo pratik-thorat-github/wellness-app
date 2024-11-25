@@ -82,7 +82,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
         batchDetails.offerPercentage
       )
         offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people (full court)`;
-      else if ((!userDetails || (userDetails && userDetails.noOfBookings < 1)) && ![6, 21, 22, 24].includes(batchDetails.gymId)) {
+      else if ((!userDetails || (userDetails && userDetails.noOfBookings < 1)) && ![6, 21, 22, 24, 25].includes(batchDetails.gymId)) {
         offerStrip.current = "50% off on your 1st booking on ZenfitX";
       }
     }
@@ -92,7 +92,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
     if (
       batchDetails &&
       (!userDetails || (userDetails && userDetails.noOfBookings < 1)) && 
-      ![6, 21, 22, 24].includes(batchDetails.gymId) &&
+      ![6, 21, 22, 24, 25].includes(batchDetails.gymId) &&
       batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
     ) {
       const [newTotalAmount, discount] = deductPercentage(
@@ -327,7 +327,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
                 </>
               )}
             </div>
-              {(gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24) && batchDetails?.slots && batchDetails.slotsBooked >= 0 ?
+              {(gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24 || gym.gymId == 25) && batchDetails?.slots && batchDetails.slotsBooked >= 0 ?
                 <div className="actTime">
                     <span style={{color: "#C15700"}}>
                       {batchDetails.slots - batchDetails.slotsBooked} spot(s) left out of {batchDetails.slots}
