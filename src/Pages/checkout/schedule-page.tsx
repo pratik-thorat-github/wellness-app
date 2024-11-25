@@ -308,7 +308,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                     fontSize: '12px',
                     color: '#828081'
                   }}>
-                  per person
+                  {gym.gymId != 25 ? 'per person' : ``}
                   </div>
                 </Flex>
               </Flex>
