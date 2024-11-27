@@ -58,7 +58,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
   const [userDetails] = useAtom(userDetailsAtom);
-  const gymIdArray = [6, 22, 24, 25];
+  const gymIdArray = [6, 22, 24, 25, 27];
 
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");

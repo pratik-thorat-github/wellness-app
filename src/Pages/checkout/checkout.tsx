@@ -363,7 +363,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
                 </>
               )}
             </div>
-              {(gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24 || gym.gymId == 25) && batchDetails?.slots && batchDetails.slotsBooked >= 0 ?
+              {(gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24 || gym.gymId == 25 || gym.gymId == 27) && batchDetails?.slots && batchDetails.slotsBooked >= 0 ?
                 <div className="actTime">
                     <span style={{color: "#C15700"}}>
                       {batchDetails.slots - batchDetails.slotsBooked} spot(s) left out of {batchDetails.slots}

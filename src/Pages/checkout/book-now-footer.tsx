@@ -287,14 +287,14 @@ async function processBookNowCta() {
     if (props.batchDetails) {
       if (
         !userDetails &&
-        ![6, 21, 22, 24, 25].includes(props.batchDetails?.gymId) &&
+        ![6, 21, 22, 24, 25, 27].includes(props.batchDetails?.gymId) &&
         props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
       ) {
         setShowDiscount(true);
       } else {
         if (
           userDetails &&
-          ![6, 21, 22, 24, 25].includes(props.batchDetails?.gymId) &&
+          ![6, 21, 22, 24, 25, 27].includes(props.batchDetails?.gymId) &&
           userDetails.noOfBookings < 1 &&
           props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
         ) {
