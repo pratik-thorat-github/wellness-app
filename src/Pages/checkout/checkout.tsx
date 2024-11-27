@@ -94,7 +94,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
     if (
       batchDetails &&
       (!userDetails || (userDetails && userDetails.noOfBookings < 1)) && 
-      ![6, 21, 22, 24, 25].includes(batchDetails.gymId) &&
+      ![6, 21, 22, 24, 25, 27].includes(batchDetails.gymId) &&
       batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
     ) {
       const [newTotalAmount, discount] = deductPercentage(
