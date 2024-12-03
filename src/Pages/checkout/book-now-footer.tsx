@@ -16,7 +16,7 @@ import IUser from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
-import { deductPercentage, discountTxt } from "../../utils/offers";
+import { deductPercentage, discountTxt, excludedOfferGymIds } from "../../utils/offers";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -311,6 +311,8 @@ async function processBookNowCta() {
       } else if(props.pastAppBookings?.[props.batchDetails.gymId]){
         setShowDiscount(false);
       } else if(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) {
+        setShowDiscount(false);
+      } else if(excludedOfferGymIds.includes(gym.gymId)) { 
         setShowDiscount(false);
       } else {
         setShowDiscount(true);

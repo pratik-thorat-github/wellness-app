@@ -19,7 +19,7 @@ export function deductPercentage(
 
 export const discountTxt = "50% off on your first booking on ZenfitX";
 
-
+export excludedOfferGymIds = [6, 24, 27]
 export function showDiscountText(
   gym: IGymCard | IGymDetails,
   userDetails: IUser | null,
@@ -32,6 +32,7 @@ export function showDiscountText(
   else if(!isFromApp) showDiscount = false;
   else if(gym.offerType == EOfferType.BATCH_WITH_GUESTS) showDiscount = false;
   else if(pastAppBookingExists) showDiscount = false;
+  else if(excludedOfferGymIds.includes(gym.gymId)) showDiscount = false;
   else showDiscount = true;
 
   console.log({showDiscount});
