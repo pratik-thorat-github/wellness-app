@@ -287,7 +287,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   );
 
   const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` :
-                        discountType == 'FLAT' ? `FLAT ${offerPercentage} off on 1st booking on App` : ``
+                        discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on 1st booking on App` : ``
   const discountLine = () => {
     console.log({discountText});
     return showDiscount ? (

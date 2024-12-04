@@ -28,7 +28,8 @@ export function showDiscountText(
 ) {
   let showDiscount = false;
   let pastAppBookingExists = pastAppBookings[`${gym.gymId}`];
-  if(!userDetails) showDiscount = true;
+  if(gym.discountType == "NONE") showDiscount = false;
+  else if(!userDetails) showDiscount = true;
   else if(!isFromApp) showDiscount = false;
   else if(gym.offerType == EOfferType.BATCH_WITH_GUESTS) showDiscount = false;
   else if(pastAppBookingExists) showDiscount = false;

@@ -304,7 +304,10 @@ async function processBookNowCta() {
 
   useEffect(() => {
     if (props.batchDetails) {
-      if(!userDetails){
+      console.log(props?.batchDetails)
+      if(props.batchDetails?.discountType == "NONE"){
+        setShowDiscount(false);
+      } else if(!userDetails){
         setShowDiscount(true);
       } else if(!props.isFromApp){
         setShowDiscount(false);
@@ -341,23 +344,23 @@ async function processBookNowCta() {
     }
   }, [showDiscount]);
 
-  useEffect(() => {
-    if (showDiscount && props.batchDetails) {
-      const [newTotalAmount] = deductPercentage(
-        props.batchDetails?.price || 0,
-        50
-      );
+  // useEffect(() => {
+  //   if (showDiscount && props.batchDetails) {
+  //     const [newTotalAmount] = deductPercentage(
+  //       props.batchDetails?.price || 0,
+  //       50
+  //     );
       
-      let noOfGuests = 1;
-      if(props.totalGuests){
-        noOfGuests = props.totalGuests;
-      }
-      let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
-                      ?  price * noOfGuests  - maxDiscount
-                      : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
-      setDiscountedAmount(finalPrice);
-    }
-  }, [props.totalAmount]);
+  //     let noOfGuests = 1;
+  //     if(props.totalGuests){
+  //       noOfGuests = props.totalGuests;
+  //     }
+  //     let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
+  //                     ?  price * noOfGuests  - maxDiscount
+  //                     : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+  //     setDiscountedAmount(finalPrice);
+  //   }
+  // }, [props.totalAmount]);
 
   if (loading) return <Loader />;
   const showCTA = () => {
