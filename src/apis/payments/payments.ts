@@ -1,4 +1,4 @@
-import { EOfferType } from "../../types/gyms";
+import { EOfferType, ParticipantDetail } from "../../types/gyms";
 import networkAdapter from "../network";
 
 export interface ICreateRzpOrder {
@@ -17,6 +17,7 @@ export interface ICreateRzpOrder {
   batchDate: Date | string;
   username: string;
   platform: string;
+  participants: ParticipantDetail[];
 }
 
 export async function createRzpOrder(data: ICreateRzpOrder) {

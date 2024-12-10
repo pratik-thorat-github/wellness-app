@@ -4,7 +4,7 @@ import { Mixpanel } from "../../mixpanel/init";
 import { Flex } from "antd";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 
-import { EOfferType, IBatch, IGymDetails } from "../../types/gyms";
+import { EOfferType, IBatch, IGymDetails, ParticipantDetail } from "../../types/gyms";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
@@ -21,6 +21,7 @@ import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { deductPercentage } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 import { saveNotificationToken } from "../../apis/notifications/notifications";
+import ParticipantDetailsForm from "./pariticipant-detail";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -38,6 +39,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   const [showDiscount, setShowDiscount] = useState(false);
 
   const [batchDetails, setBatchDetails] = useState<IBatch>();
+  const [participantErrors, setParticipantErrors] = useState<{ [key: string]: string }>({});
 
   const batchId = window.location.pathname.split("/")[3];
 
@@ -143,19 +145,18 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
         batchDetails.offerPercentage
       )
         offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people (full court)`;
-      // else if ((!userDetails || (userDetails && userDetails.noOfBookings < 1)) && ![6, 21].includes(batchDetails.gymId)) {
-      //   offerStrip.current = "50% off on your 1st booking on ZenfitX";
-      // }
+      else if ((!userDetails || (userDetails && userDetails.noOfBookings < 1)) && ![6, 21, 22, 24, 25, 27].includes(batchDetails.gymId)) {
+        offerStrip.current = "50% off on your 1st booking on ZenfitX";
+      }
     }
   }, [batchDetails]);
 
   useEffect(() => {
     if (
       batchDetails &&
-      // (!userDetails || (userDetails && userDetails.noOfBookings < 1)) && 
-      // ![6, 21].includes(batchDetails.gymId) &&
-      // batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
-      showDiscount
+      (!userDetails || (userDetails && userDetails.noOfBookings < 1)) && 
+      ![6, 21, 22, 24, 25, 27].includes(batchDetails.gymId) &&
+      batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
     ) {
       // const [newTotalAmount, discount] = deductPercentage(
       //   batchDetails?.price || 0,
@@ -183,6 +184,36 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       batchDetails.offerType = EOfferType.APP;
     }
   }, [batchDetails && showDiscount]);
+
+
+  if (!gym) return <Loader />;
+  const setParticipants = (participants: ParticipantDetail[]) => {
+    if (batchDetails) {
+      setBatchDetails({
+        ...batchDetails,
+        participants
+      });
+    }
+  };
+
+  const validateParticipants = (): boolean => {
+    const errors: { [key: string]: string } = {};
+    let isValid = true;
+
+    batchDetails?.participants?.forEach((participant, index) => {
+      if (!participant.participantName.trim()) {
+        errors[`participant_${index}_name`] = 'Participant name is required';
+        isValid = false;
+      }
+      // if (!participant.jerseySize) {
+      //   errors[`participant_${index}_size`] = 'Jersey size is required';
+      //   isValid = false;
+      // }
+    });
+
+    setParticipantErrors(errors);
+    return isValid;
+  };
 
   if (!gym || !batchDetails) return <Loader />;
 
@@ -384,7 +415,12 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
   if(!gotPastBookings) return <Loader />
 
   return (
-    <>
+    <div 
+    style={{ 
+      flex: 1,
+      overflowY: "auto",
+      paddingBottom: "80px" // Prevent content from being hidden behind footer
+    }}>
       <MetaPixel />
       <div className="checkWrapper">
         <div className="backBtn2">{backBtn()}</div>
@@ -418,7 +454,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
                 </>
               )}
             </div>
-              {gym.gymId == 6 && batchDetails?.slots && batchDetails.slotsBooked >= 0 ?
+              {(gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24 || gym.gymId == 25 || gym.gymId == 27) && batchDetails?.slots && batchDetails.slotsBooked >= 0 ?
                 <div className="actTime">
                     <span style={{color: "#C15700"}}>
                       {batchDetails.slots - batchDetails.slotsBooked} spot(s) left out of {batchDetails.slots}
@@ -484,6 +520,20 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
       </div>
 
       <Flex>
+      {batchDetails.noOfParticipants != undefined && batchDetails.noOfParticipants > 0  && (
+          <>
+            <div style={{ margin: '0 -16px' }}>
+              <ParticipantDetailsForm 
+                noOfGuests={batchDetails?.noOfParticipants}
+                participants={batchDetails?.participants ?? []}
+                setParticipants={setParticipants}
+                participantErrors={participantErrors}
+              />
+            </div>
+            <div className="actLine"></div>
+          </>
+        )}
+
         <BookNowFooter
           batchDetails={batchDetails}
           gymData={gym}
@@ -497,7 +547,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = ({}) => {
           pastAppBookings={pastAppBookings}
         />
       </Flex>
-    </>
+    </div>
   );
 };
 

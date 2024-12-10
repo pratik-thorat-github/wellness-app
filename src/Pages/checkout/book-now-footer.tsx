@@ -64,7 +64,8 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     username: userDetails.name,
     batchName: props?.batchDetails?.activityName || "",
     batchDate: props?.batchDetails?.date || "",
-    batchTime: props?.batchDetails?.startTime || 0
+    batchTime: props?.batchDetails?.startTime || 0,
+    participants: props?.batchDetails?.participants || [],
   };
 
   Mixpanel.track("pay_now_button_clicked_on_checkout_page", {
@@ -304,7 +305,11 @@ async function processBookNowCta() {
 
   useEffect(() => {
     if (props.batchDetails) {
-      if(!userDetails){
+      if (
+        !userDetails &&
+        ![6, 21, 22, 24, 25, 27].includes(props.batchDetails?.gymId) &&
+        props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
+      ) {
         setShowDiscount(true);
       } else if(!props.isFromApp){
         setShowDiscount(false);
@@ -313,7 +318,17 @@ async function processBookNowCta() {
       } else if(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) {
         setShowDiscount(false);
       } else {
-        setShowDiscount(true);
+        if (
+          userDetails &&
+          ![6, 21, 22, 24, 25, 27].includes(props.batchDetails?.gymId) &&
+          userDetails.noOfBookings < 1 &&
+          props.batchDetails?.offerType !== "BATCH_WITH_GUESTS"
+        ) {
+          setShowDiscount(true);
+        }
+        if (props.batchDetails?.offerType === "BATCH_WITH_GUESTS") {
+          setShowDiscount(false);
+        }
       }
     }
     if (showCTA()) {

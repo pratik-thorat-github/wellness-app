@@ -31,6 +31,10 @@ export function showDiscountText(
   else if(!isFromApp) showDiscount = false;
   else if(gym.offerType == EOfferType.BATCH_WITH_GUESTS) showDiscount = false;
   else if(pastAppBookingExists) showDiscount = false;
+  else if(gym.gymId == 6 || gym.gymId == 25 || gym.gymId == 22 || gym.gymId == 24 || gym.gymId == 27) showDiscount = false;
+  else if (gym.offerType == EOfferType.BATCH_WITH_GUESTS) showDiscount = false;
+  else if (!userDetails) showDiscount = true;
+  else if (userDetails && userDetails.noOfBookings < 1) showDiscount = true;
   else showDiscount = true;
 
   return showDiscount;

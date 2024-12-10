@@ -63,6 +63,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   const [gym, setGym] = useState<IGymDetails | null>(null);
   const [userDetails] = useAtom(userDetailsAtom);
+  const gymIdArray = [6, 22, 24, 25, 27];
 
   const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
   const [isFromApp, setIsFromApp] = useState(false);
@@ -225,7 +226,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                            discountType == 'PERCENTAGE' ? 
                            `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : ``;
       return (
-        <Card className={gym.gymId == 6 && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
+        <Card className={ gymIdArray.includes(gym.gymId) && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
           style={{
             // paddingTop: "16px",
             // paddingBottom: "16px",
@@ -250,9 +251,58 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
         >
           <Flex flex={2} vertical>
             <Flex flex={1}>
-              <Flex flex={1}>
-                <span>
-                  <span
+              <span>
+                <span
+                  style={{
+                    backgroundColor: colors.border,
+                    borderRadius: "4px",
+                    padding: "3px",
+                  }}
+                >
+                  {batch.isDayPass
+                    ? "All Day"
+                    : formatTimeIntToAmPm(batch.startTime)}
+                </span>
+              </span>
+            </Flex>
+            <Flex
+              flex={6}
+              style={{
+                borderBottomWidth: "1px",
+                borderBottomColor: colors.border,
+                borderBottomStyle: "solid",
+                marginLeft: '16px',
+                paddingBottom: "8px",
+              }}
+            >
+              <Flex flex={4} vertical >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {batch.venue && (
+                    <span>{formatDate(batch.date)["date suffix"]}</span>
+                  )}
+                  <span style={{ fontWeight: "bold" }}>
+                    {batch.activityName}
+                  </span>
+                  {batch.venue && <span>{batch.venue}</span>}
+                </div>
+                {batch.trainer ? (
+                  <Flex flex={1}>By {batch.trainer}</Flex>
+                ) : null}
+                {!batch.isDayPass ? (
+                  <Flex
+                    style={{ color: colors.secondary, marginTop: "4px" }}
+                    flex={1}
+                  >
+                    {batch.duration} min
+                  </Flex>
+                ) : null}
+                { gymIdArray.includes(gym.gymId) && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
+                  <Flex 
                     style={{
                       backgroundColor: colors.border,
                       borderRadius: "4px",
@@ -277,6 +327,12 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               >
                 <Flex flex={4} vertical >
                   <div
+                    {batch.slots - batch.slotsBooked} spot(s) left out of {batch.slots}
+                  </Flex>
+                )
+                :
+                gymIdArray.includes(gym.gymId)  && batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
+                  <Flex 
                     style={{
                       display: "flex",
                       flexDirection: "column",
@@ -363,8 +419,8 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                       color: '#828081'
                     }}>
                     {!showDiscountText(gym, userDetails, isFromApp, pastAppBookings) ?  `per person` : ``}
-                    </div>
-                  </Flex>
+                  {gym.gymId != 25 ? 'per person' : ``}
+                  </div>
                 </Flex>
               </Flex>
             </Flex>
