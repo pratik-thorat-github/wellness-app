@@ -281,7 +281,7 @@ async function processBookNowCta() {
         phone: userDetails.phone,
       });
 
-      const batchDetailsResp = await fetch(`https://stag-be.zenfitx.link/gyms/batch/byBatchId?batchId=${props.batchId}`);
+      const batchDetailsResp = await fetch(`https://be.zenfitx.link/gyms/batch/byBatchId?batchId=${props.batchId}`);
       
       const r = await batchDetailsResp?.json();
       console.log({r});
@@ -289,7 +289,6 @@ async function processBookNowCta() {
       if(r?.batch?.slotsBooked + props.totalGuests > r.batch.slots){
         if(r?.batch?.slotsBooked == r?.batch?.slots){
           alert(`Sorry, all spots are booked for this slot. Please choose the next available slot.`);
-
         } else
           alert(`Sorry, only ${r.batch.slots - r.batch.slotsBooked} spots are available for this slot. Please choose the next available slot!`);
         window.location.reload();
