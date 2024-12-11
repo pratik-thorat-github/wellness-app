@@ -10,6 +10,7 @@ import {
   getAllActivities,
   getExclusiveGyms,
   getGymsByActivity,
+  getPastAppBookings
 } from "../../apis/gym/activities";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../../components/Loader";
@@ -24,6 +25,12 @@ import LandingFooter from "../landing/Footer";
 import { getUserDeatils } from "../../apis/user/userDetails";
 import Onboarding from "./onboarding";
 import MetaPixel from "../../components/meta-pixel";
+import {handleRefresh} from '../../utils/refresh';
+
+
+interface PastAppBookingObject {
+  [key: string]: any; // Or use a more specific type
+}
 
 interface IHome extends RouteComponentProps {
   activitySelected?: string;
@@ -57,10 +64,13 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   showClassesNearYou = showClassesNearYouFilters == false ? false : true;
   const [activities, setActivities] = useState<string[]>([]);
   const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
+  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  const [isFromApp, setIsFromApp] = useState(false);
 
   const [pluDetails, setPlusDetailsAtom] = useAtom(plusDetailsAtom);
   const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
   const [onboarding, setOnboarding] = useState<boolean>(false);
+  const [gotPastBookings, setGotPastAppBookings] = useState(false);
   const showClassesNearYouRef = useRef(true);
 
   const mixpanelSet = useRef(false);
@@ -79,11 +89,24 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   const { mutate: _getUserDeatils } = useMutation({
     mutationFn: getUserDeatils,
     onError: () => {
-      errorToast("Error in getting user details");
+      // errorToast("Error in getting user details");
+      console.log("Error in getting user details");
     },
     onSuccess: (result) => {
       console.log("deatils - ", result);
       setUserDetailsAtom(result.user);
+    },
+  });
+
+  const { mutate: _getPastAppBookings } = useMutation({
+    mutationFn: getPastAppBookings,
+    onError: () => {
+      errorToast("Error in getting past app bookings");
+    },
+    onSuccess: (result) => {
+      console.log("past app bookings - ", result);
+      setPastAppBookings(result.bookings);
+      window.pastAppBookings = result.bookings;
     },
   });
 
@@ -109,6 +132,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     },
   });
 
+  
+
   // useEffect(()=>{
   //   const { mutate: _getGymsByActivities } = useMutation({
   //     mutationFn: getGymsByActivity,
@@ -126,6 +151,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   const { mutate: _getPlusDetailsOfUser } = useMutation({
     mutationFn: getPlusDetailsOfUser,
     onSuccess: (data) => {
+      console.log("HELLO => ")
       console.log(data);
       setPlusDetailsAtom(data.plus as unknown as IPlusDetails);
     },
@@ -134,9 +160,18 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     },
   });
 
+
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform  || 'web';
+    const appFlag = userSource != 'web' ? true : false;
+    setIsFromApp(appFlag);
+    window.isFromApp = appFlag;
+  }, [])
+
   useEffect(() => {
     if (onboarding) {
       setCookie("onboarding", "done", 1);
+      window?.ReactNativeWebView?.postMessage("notification alert");
     }
   }, [onboarding]);
 
@@ -149,7 +184,12 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
       _getUserDeatils();
     }
     _getAllActivities();
-
+    if(userDetails){
+      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+      _getPastAppBookings(userId)
+      setGotPastAppBookings(true);
+    }
+    setGotPastAppBookings(true);
     _getGymsByActivities(activitySelected);
 
     // _getPlusDetailsOfUser(userDetails?.phone as string);
@@ -173,6 +213,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   const showOnBoarding = () => {
     return (
       !onboarding && !userDetails?.id && getCookie("onboarding") !== "done"
+      // !userDetails?.id && getCookie("onboarding") !== "done"
     );
   };
 
@@ -187,12 +228,14 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     return null;
   }
 
-  // if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
-  if (!activities.length || !gymCardsData.length) return <Loader />;
+  if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
+  if (!activities.length || !gotPastBookings) return <Loader />;
 
   return (
     <>
       <MetaPixel />
+      {/* <PullToRefresh onRefresh={handleRefresh}> */}
+        <div>
       <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
         <div>
           <Space></Space>
@@ -221,6 +264,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
           />
         </Flex>
       </Flex>
+      </div>
+      {/* </PullToRefresh> */}
     </>
   );
 };

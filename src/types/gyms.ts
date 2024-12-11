@@ -8,12 +8,16 @@ export interface IGymCard {
   medias: string[];
   offerType: EOfferType;
   isExclusive: boolean;
+  maxDiscount: number;
+  offerPercentage: number;
+  discountType: string;
 }
 
 export enum EOfferType {
   NONE = "NONE",
   BATCH_WITH_GUESTS = "BATCH_WITH_GUESTS",
   PLATFORM = "PLATFORM",
+  APP = "APP"
 }
 
 export interface IBatch {
@@ -44,7 +48,7 @@ export interface IBatch {
 
   guestsAllowed?: boolean;
   offerType?: EOfferType;
-  offerPercentage?: number;
+  offerPercentage: number;
   minGuestsForOffer?: number;
   venue?: string;
   address?: string;

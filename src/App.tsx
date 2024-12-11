@@ -18,6 +18,7 @@ import SchedulePage from "./Pages/checkout/schedule-page";
 import Activity from "./Pages/activity/Activity";
 import BatchCheckoutBooking from "./Pages/checkout/checkout";
 import PrivacyPolicy from "./Pages/privacy/privacy";
+import { useEffect, useState } from "react";
 
 // Create a client
 const queryClient = new QueryClient();

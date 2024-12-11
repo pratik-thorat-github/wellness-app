@@ -16,6 +16,7 @@ export interface ICreateRzpOrder {
   batchTime: number;
   batchDate: Date | string;
   username: string;
+  platform: string;
   participants: ParticipantDetail[];
 }
 

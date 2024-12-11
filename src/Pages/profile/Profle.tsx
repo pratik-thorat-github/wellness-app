@@ -20,6 +20,9 @@ import { IBookings, IPlusDetails } from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
 import MetaPixel from "../../components/meta-pixel";
+import Loader from "../../components/Loader";
+import {handleRefresh} from '../../utils/refresh';
+import SwipeHandler from "../../components/back-swipe-handler";
 
 interface IProfile extends RouteComponentProps {}
 
@@ -35,20 +38,23 @@ const Profile: React.FC<IProfile> = () => {
 
   const [pastBookings, setPastBookings] = useState<IBookings[]>([]);
   const [upcomingBookings, setUpcomingBookings] = useState<IBookings[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const { mutate: _getBookingOfUser } = useMutation({
     mutationFn: getBookingOfUser,
     onSuccess: (result) => {
       setPastBookings(result.bookings.pastBookings);
       setUpcomingBookings(result.bookings.upcomingBookings);
-
+      setLoading(false);
       MixpanelProfileInit(
         result.bookings.pastBookings.length +
           result.bookings.upcomingBookings.length
         // plusDetails as IPlusDetails
       );
     },
-    onError: () => {},
+    onError: () => {
+      setLoading(false);
+    },
   });
 
   useEffect(() => {
@@ -64,6 +70,10 @@ const Profile: React.FC<IProfile> = () => {
 
     _getBookingOfUser();
   }, []);
+
+  const handleSwipeRight = async () => {
+    navigate("/");
+  }
 
   const shareAndBack = () => {
     return (
@@ -89,9 +99,13 @@ const Profile: React.FC<IProfile> = () => {
     );
   };
 
+  if(loading) return <Loader />
+
   return (
     <>
       <MetaPixel />
+    {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
+    {/* <PullToRefresh onRefresh={handleRefresh}> */}
     <Flex
       flex={1}
       vertical
@@ -143,6 +157,8 @@ const Profile: React.FC<IProfile> = () => {
         </Flex>
       </Flex> */}
     </Flex>
+    {/* </PullToRefresh> */}
+    {/* </SwipeHandler> */}
     </>
   );
 };

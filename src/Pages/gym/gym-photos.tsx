@@ -6,8 +6,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { navigate } from "@reach/router";
 import ReactPlayer from "react-player";
 import { MutedOutlined, SoundOutlined } from "@ant-design/icons";
-import ShareMetadata  from "../../components/share-metadata"; 
-import { message } from "antd"; 
+import ShareMetadata from "../../components/share-metadata";
+import { message } from "antd";
 
 interface IGymPhotos {
   gym?: IGymDetails;
@@ -108,37 +108,38 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
     );
   };
 
-const handleToggleMute = () => setMuted((current) => !current);
+  const handleToggleMute = () => setMuted((current) => !current);
 
-                
   if (gym?.medias?.length) {
     const medias = gym?.medias.map((p: { type: string; url: string }, ind) => {
       if (p.type === "VIDEO") {
         return (
           <>
-           <span className='muteIcon' style={{zIndex:1000}}onClick={handleToggleMute}>{
-            muted ? <MutedOutlined /> :<SoundOutlined />
-           }</span>
-          <ReactPlayer
-            className="player"
-            url={p.url}
-            playing={false}
-            muted={muted}
-            playsinline
-            volume={1}
-            loop={false}
-            height={"200px"}
-            config={{
-              file: {
-                attributes: {
-                  controlsList: "nofullscreen",
+            <span
+              className="muteIcon"
+              style={{ zIndex: 1000 }}
+              onClick={handleToggleMute}
+            >
+              {muted ? <MutedOutlined /> : <SoundOutlined />}
+            </span>
+            <ReactPlayer
+              className="player"
+              url={p.url}
+              playing
+              muted={muted}
+              playsinline
+              volume={1}
+              loop
+              height={"200px"}
+              config={{
+                file: {
+                  attributes: {
+                    controlsList: "nofullscreen",
+                  },
                 },
-              },
-            }}
-          />
-         
+              }}
+            />
           </>
-
         );
       } else
         return (
