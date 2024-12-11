@@ -342,6 +342,7 @@ async function processBookNowCta() {
       if(discountType == "FLAT"){
         finalPrice = (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
       }
+      finalPrice = Math.floor(finalPrice);
       setDiscountedAmount(finalPrice);
     }
   }, [showDiscount]);
