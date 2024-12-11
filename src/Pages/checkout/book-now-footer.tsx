@@ -64,7 +64,8 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     username: userDetails.name,
     batchName: props?.batchDetails?.activityName || "",
     batchDate: props?.batchDetails?.date || "",
-    batchTime: props?.batchDetails?.startTime || 0
+    batchTime: props?.batchDetails?.startTime || 0,
+    participants: props?.batchDetails?.participants || [],
   };
 
   Mixpanel.track("pay_now_button_clicked_on_checkout_page", {
@@ -288,6 +289,7 @@ async function processBookNowCta() {
       if(r?.batch?.slotsBooked + props.totalGuests > r.batch.slots){
         if(r?.batch?.slotsBooked == r?.batch?.slots){
           alert(`Sorry, all spots are booked for this slot. Please choose the next available slot.`);
+
         } else
           alert(`Sorry, only ${r.batch.slots - r.batch.slotsBooked} spots are available for this slot. Please choose the next available slot!`);
         window.location.reload();

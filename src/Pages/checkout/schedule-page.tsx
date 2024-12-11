@@ -238,7 +238,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                            discountType == 'PERCENTAGE' ? 
                            `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : ``;
       return (
-        <Card className={gym.gymId == 6 && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
+        <Card className={ gymIdArray.includes(gym.gymId) && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
           style={{
             // paddingTop: "16px",
             // paddingBottom: "16px",
