@@ -192,7 +192,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
       else if(batchDetails.discountType == "FLAT"){
         finalPrice = (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
       }
-      finalPrice = Math.round(finalPrice);
+      finalPrice = Math.floor(finalPrice);
       let newTotalAmount = finalPrice;
       let discount = price * noOfGuests - finalPrice;
 
