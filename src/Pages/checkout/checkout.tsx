@@ -21,7 +21,6 @@ import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { deductPercentage } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 import { saveNotificationToken } from "../../apis/notifications/notifications";
-import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
 import SwipeHandler from "../../components/back-swipe-handler";
 import ParticipantDetailsForm from "./pariticipant-detail";

@@ -25,7 +25,6 @@ import LandingFooter from "../landing/Footer";
 import { getUserDeatils } from "../../apis/user/userDetails";
 import Onboarding from "./onboarding";
 import MetaPixel from "../../components/meta-pixel";
-import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
 
 

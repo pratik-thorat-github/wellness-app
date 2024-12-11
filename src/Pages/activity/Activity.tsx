@@ -13,7 +13,6 @@ import { concatAndUpperCaseActivities } from "../../utils/activities";
 import { discountTxt, showDiscountText } from "../../utils/offers";
 import { Rs } from "../../constants/symbols";
 import MetaPixel from "../../components/meta-pixel";
-import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
 import SwipeHandler from "../../components/back-swipe-handler";
 

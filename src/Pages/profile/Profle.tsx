@@ -21,7 +21,6 @@ import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
 import MetaPixel from "../../components/meta-pixel";
 import Loader from "../../components/Loader";
-import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
 import SwipeHandler from "../../components/back-swipe-handler";
 

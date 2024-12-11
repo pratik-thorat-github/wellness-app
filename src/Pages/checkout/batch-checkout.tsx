@@ -24,7 +24,6 @@ import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
 import MetaPixel from "../../components/meta-pixel";
 import ShareMetadata from "../../components/share-metadata";
 import Loader from "../../components/Loader";
-import PullToRefresh from 'react-simple-pull-to-refresh';
 import {handleRefresh} from '../../utils/refresh';
 import SwipeHandler from "../../components/back-swipe-handler";
 
