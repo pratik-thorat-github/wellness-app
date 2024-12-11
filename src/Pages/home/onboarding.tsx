@@ -9,8 +9,6 @@ import Pickleball from "../../images/home/Pickleball.png";
 
 import { Carousel } from "react-responsive-carousel";
 import { Mixpanel } from "../../mixpanel/init";
-import { Cookies } from 'react-cookie';
-import { navigate } from "@reach/router";
 import Loader from "../../components/Loader";
 
 interface Onboarding {

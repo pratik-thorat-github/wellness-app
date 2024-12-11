@@ -38,9 +38,6 @@ import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
 import { showDiscountText } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
-import {handleRefresh} from '../../utils/refresh';
-import SwipeHandler from "../../components/back-swipe-handler";
-
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -237,7 +234,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                            discountType == 'PERCENTAGE' ? 
                            `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : ``;
       return (
-        <Card className={ gymIdArray.includes(gym.gymId) && batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
+        <Card className={ batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
           style={{
             // paddingTop: "16px",
             // paddingBottom: "16px",

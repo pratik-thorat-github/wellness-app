@@ -455,103 +455,103 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
           minHeight: "100vh",
         }}
       >
-      <div className="checkWrapper">
-        <div className="backBtn2">{backBtn()}</div>
-        <div className="checkoutDetail">
-          <span className="actImg">
-            <img src={batchDetails?.image} width="90px" height="90px" />
-          </span>
-          <span className="actDetail">
-            <div className="actName">
-              {batchDetails?.activityName}
-              {batchDetails?.trainer ? ` with ${batchDetails.trainer}` : null}
+        <div className="checkWrapper">
+          <div className="backBtn2">{backBtn()}</div>
+          <div className="checkoutDetail">
+            <span className="actImg">
+              <img src={batchDetails?.image} width="90px" height="90px" />
+            </span>
+            <span className="actDetail">
+              <div className="actName">
+                {batchDetails?.activityName}
+                {batchDetails?.trainer ? ` with ${batchDetails.trainer}` : null}
+              </div>
+              <div className="actGym"> {gym.name}</div>
+              <div className="actLoc">{gym.area}</div>
+              <div className="actTime">
+                {" "}
+                {batchDetails?.date &&
+                  formatDate(batchDetails?.date)["date suffix"]}{" "}
+                &bull;{" "}
+                {batchDetails?.isDayPass ? (
+                  <>
+                    All Day
+                  </>
+                ) : (
+                  <>
+                    {batchDetails?.startTime &&
+                      <>
+                        {formatTimeIntToAmPm(batchDetails?.startTime)} &bull; {batchDetails?.DurationMin} min
+                      </>
+                    }
+                  </>
+                )}
+              </div>
+                {(gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24 || gym.gymId == 25 || gym.gymId == 27) && batchDetails?.slots && batchDetails.slotsBooked >= 0 ?
+                  <div className="actTime">
+                      <span style={{color: "#C15700"}}>
+                        {batchDetails.slots - batchDetails.slotsBooked} spot(s) left out of {batchDetails.slots}
+                      </span>
+                  </div>
+                  : null}
+            </span>
+          </div>
+          <div className="actLine"></div>
+          {batchDetails?.guestsAllowed && (
+            <div className="guestCount flexy">
+              <span className="guestIcon">
+                {guestIcon()} &nbsp;Guest{noOfGuests > 1 && "s"}
+              </span>
+              <span className="counter">
+                <span onClick={() => manageGuests(false)}>{dscIcon()}</span>
+                <span style={{ marginBottom: "2px" }}>{noOfGuests}</span>
+                <span onClick={() => manageGuests(true)}>{incIcon()}</span>
+              </span>
             </div>
-            <div className="actGym"> {gym.name}</div>
-            <div className="actLoc">{gym.area}</div>
-            <div className="actTime">
-              {" "}
-              {batchDetails?.date &&
-                formatDate(batchDetails?.date)["date suffix"]}{" "}
-              &bull;{" "}
-              {batchDetails?.isDayPass ? (
-                <>
-                  All Day
-                </>
-              ) : (
-                <>
-                  {batchDetails?.startTime &&
-                    <>
-                      {formatTimeIntToAmPm(batchDetails?.startTime)} &bull; {batchDetails?.DurationMin} min
-                    </>
-                  }
-                </>
+          )}
+          {batchDetails?.guestsAllowed && <div className="actLine"></div>}
+          {!batchDetails?.guestsAllowed && (
+            <div className="priceArea">
+              <div className="priceHead">Total</div>
+              <div className="flexy">
+                <span className="checkDsc">Session price</span>
+                <span className="checkAmt">₹{totalAmount}</span>
+              </div>
+              {totalSavings > 0 && (
+                <div className="flexy">
+                  <span className="saveDsc">Saving ₹{totalSavings}</span>
+                  <span className="saveAmt">₹{batchDetails?.price}</span>
+                </div>
               )}
             </div>
-              {(gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24 || gym.gymId == 25 || gym.gymId == 27) && batchDetails?.slots && batchDetails.slotsBooked >= 0 ?
-                <div className="actTime">
-                    <span style={{color: "#C15700"}}>
-                      {batchDetails.slots - batchDetails.slotsBooked} spot(s) left out of {batchDetails.slots}
-                    </span>
-                </div>
-                : null}
-          </span>
-        </div>
-        <div className="actLine"></div>
-        {batchDetails?.guestsAllowed && (
-          <div className="guestCount flexy">
-            <span className="guestIcon">
-              {guestIcon()} &nbsp;Guest{noOfGuests > 1 && "s"}
-            </span>
-            <span className="counter">
-              <span onClick={() => manageGuests(false)}>{dscIcon()}</span>
-              <span style={{ marginBottom: "2px" }}>{noOfGuests}</span>
-              <span onClick={() => manageGuests(true)}>{incIcon()}</span>
-            </span>
-          </div>
-        )}
-        {batchDetails?.guestsAllowed && <div className="actLine"></div>}
-        {!batchDetails?.guestsAllowed && (
-          <div className="priceArea">
-            <div className="priceHead">Total</div>
-            <div className="flexy">
-              <span className="checkDsc">Session price</span>
-              <span className="checkAmt">₹{totalAmount}</span>
-            </div>
-            {totalSavings > 0 && (
-              <div className="flexy">
-                <span className="saveDsc">Saving ₹{totalSavings}</span>
-                <span className="saveAmt">₹{batchDetails?.price}</span>
-              </div>
-            )}
-          </div>
-        )}
-        {batchDetails?.guestsAllowed && (
-          <div className="guestArea">
-            <div className="priceHead">Total</div>
-            <span className="flexy">
-              <span className="checkDsc">
-                {noOfGuests} {noOfGuests > 1 ? "guests" : "guest"}
-              </span>
-              <span className="checkAmt">₹{totalAmount}</span>
-            </span>
-            {totalSavings ? (
+          )}
+          {batchDetails?.guestsAllowed && (
+            <div className="guestArea">
+              <div className="priceHead">Total</div>
               <span className="flexy">
-                <span className="saveDsc">Saving ₹{totalSavings}</span>
-                <span className="saveAmt">₹{baseAmount}</span>
+                <span className="checkDsc">
+                  {noOfGuests} {noOfGuests > 1 ? "guests" : "guest"}
+                </span>
+                <span className="checkAmt">₹{totalAmount}</span>
               </span>
-            ) : null}
-          </div>
-        )}
-        {offerStrip.current && (
-          <div
-            className={totalSavings ? "offer offerGreen" : "offer offerGray"}
-          >
-            {totalSavings ? discountIconGreen() : discountIconGray()}
-            {offerStrip.current ? offerStrip.current : null}
-          </div>
-        )}
-      </div>
-
+              {totalSavings ? (
+                <span className="flexy">
+                  <span className="saveDsc">Saving ₹{totalSavings}</span>
+                  <span className="saveAmt">₹{baseAmount}</span>
+                </span>
+              ) : null}
+            </div>
+          )}
+          {offerStrip.current && (
+            <div
+              className={totalSavings ? "offer offerGreen" : "offer offerGray"}
+            >
+              {totalSavings ? discountIconGreen() : discountIconGray()}
+              {offerStrip.current ? offerStrip.current : null}
+            </div>
+          )}
+        </div>
+      </Flex>
       <Flex>
       {batchDetails.noOfParticipants != undefined && batchDetails.noOfParticipants > 0  && (
           <>
