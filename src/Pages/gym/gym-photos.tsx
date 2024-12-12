@@ -115,7 +115,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
       if (p.type === "VIDEO") {
         return (
           <>
-            <span
+            {/* <span
               className="muteIcon"
               style={{ zIndex: 1000 }}
               onClick={handleToggleMute}
@@ -138,7 +138,7 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
                   },
                 },
               }}
-            />
+            /> */}
           </>
         );
       } else
