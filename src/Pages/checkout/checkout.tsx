@@ -155,9 +155,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people (full court)`;
       else if(showDiscount){
         if(batchDetails.discountType == "PERCENTAGE"){
-          offerStrip.current = `${batchDetails.offerPercentage}% discount upto ${Rs}${batchDetails.maxDiscount} on 1st booking on App`;
+          offerStrip.current = `${batchDetails.offerPercentage}% discount upto ${Rs}${batchDetails.maxDiscount} on 1st booking at this center`;
         } else if(batchDetails.discountType == "FLAT"){
-          offerStrip.current = `FLAT ${batchDetails.offerPercentage}% off on 1st booking on App`;
+          offerStrip.current = `FLAT ${batchDetails.offerPercentage}% off on 1st booking at this center`;
         }
       } else {
         offerStrip.current = "";

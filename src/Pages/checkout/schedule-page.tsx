@@ -232,7 +232,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       }
       const discountText = discountType == 'FLAT' ? `${offerPercentage}% off` : 
                            discountType == 'PERCENTAGE' ? 
-                           `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : ``;
+                           `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center` : ``;
       return (
         <Card className={ batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
           style={{
@@ -388,7 +388,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   borderBottomStyle: "solid"
                 }}>
               {showDiscountText(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ?
-                `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : `.`
+                `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center` : `.`
               }
             </Flex>
           </Flex>

@@ -247,8 +247,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     finalPrice = (price * (100 - offerPercentage) / 100)
   }  
   finalPrice = Math.floor(finalPrice) 
-  const discountText = props.gymData?.discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on 1st booking on App` : 
-                       props.gymData?.discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking on App` : ``;
+  const discountText = props.gymData?.discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on 1st booking at this center` : 
+                       props.gymData?.discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center` : ``;
   
 async function processBookNowCta() {
     if (props.forceBookNowCta) {

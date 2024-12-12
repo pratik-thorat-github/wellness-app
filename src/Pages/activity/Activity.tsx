@@ -173,8 +173,8 @@ const exclusiveIcon = () => {
     const { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage, discountType } = gymCard;
     const finalPrice = (minPrice - maxDiscount) >  (minPrice *  (100 - offerPercentage) / 100) ? (minPrice - maxDiscount) : (minPrice * (100 - offerPercentage) / 100)
     let showDiscount = showDiscountText(gymCard, userDetails, isFromApp, pastAppBookings);
-    const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on your 1st booking on App` :
-                         discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on your 1st booking on App` : ``;
+    const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on your 1st booking at this center` :
+                         discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on your 1st booking at this center` : ``;
 
     return (
       <div

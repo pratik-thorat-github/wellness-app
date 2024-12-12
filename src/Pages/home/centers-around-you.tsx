@@ -154,8 +154,8 @@ function getListOfCenters(
     console.log(medias, "media");
 
     let showDiscount = showDiscountText(gymCard, userDetails, isFromApp, pastAppBookings);
-    const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on your 1st booking on App` :
-                         discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on your 1st booking on App` : ``;
+    const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on your 1st booking at this center` :
+                         discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on your 1st booking at this center` : ``;
 
     console.log({minPrice});
     return (

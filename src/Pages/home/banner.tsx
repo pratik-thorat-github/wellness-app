@@ -86,7 +86,7 @@ const HomeBanner: React.FC = () => {
       Just pay for sessions not memberships!
       </div>
       <div className="head3">
-      Upto 80% off on your 1st booking in any center.
+      Upto 80% off on your 1st booking at selected centers.
       </div>
     </div>}
     {userDetails && <div className="loginWrapper">
