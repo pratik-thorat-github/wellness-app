@@ -311,8 +311,8 @@ async function processBookNowCta() {
         setShowDiscount(false);
       } else if(!userDetails){
         setShowDiscount(true);
-      } else if(!props.isFromApp){
-        setShowDiscount(false);
+      } else if(props.isFromApp){
+        setShowDiscount(true);
       } else if(props.pastAppBookings?.[props.batchDetails.gymId]){
         setShowDiscount(false);
       // } else if(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) {
