@@ -223,7 +223,7 @@ function MixpanelBookNowFooterInit(
 
 const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [userDetails] = useAtom(userDetailsAtom);
-  const [showDiscount, setShowDiscount] = useState(false);
+  const [showDiscount, setShowDiscount] = useState(true);
   const [discountedAmount, setDiscountedAmount] = useState(props.totalAmount);
   const [_, setAfterLoginRedirectAtom] = useAtom(afterLoginRedirectAtom);
 
@@ -311,15 +311,17 @@ async function processBookNowCta() {
         setShowDiscount(false);
       } else if(!userDetails){
         setShowDiscount(true);
-      } else if(props.isFromApp){
-        setShowDiscount(true);
+      } else if(!props.isFromApp){
+        setShowDiscount(false);
       } else if(props.pastAppBookings?.[props.batchDetails.gymId]){
         setShowDiscount(false);
-      // } else if(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) {
-      //   setShowDiscount(false);
+      } else if(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) {
+        setShowDiscount(false);
       } else {
         setShowDiscount(true);
       }
+    } else {
+      setShowDiscount(false);
     }
     if (showCTA()) {
       setShowDiscount(false);
