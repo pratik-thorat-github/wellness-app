@@ -210,7 +210,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
       setTotalAmount(finalPrice);
       setTotalSavings(discount);
     }
-  }, [batchDetails, showDiscount, pastAppBookings]);
+  }, [batchDetails, showDiscount, pastAppBookings, noOfGuests]);
 
   if (!gym || !batchDetails || !gotPastBookings) return <Loader />;
   const setParticipants = (participants: ParticipantDetail[]) => {
