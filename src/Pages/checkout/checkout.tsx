@@ -184,7 +184,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
       let maxDiscount = batchDetails?.maxDiscount;
       let offerPercentage = batchDetails?.offerPercentage;
       let finalPrice = price * noOfGuests;
-      if (batchDetails.offerType ===  EOfferType.BATCH_WITH_GUESTS && (batchDetails.minGuestsForOffer || 100) <= noOfGuests) {
+      if (batchDetails.offerType == EOfferType.BATCH_WITH_GUESTS && (batchDetails.minGuestsForOffer || 100) <= noOfGuests) {
         finalPrice = (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
         batchDetails.offerType = EOfferType.BATCH_WITH_GUESTS;
       } else if(batchDetails.discountType == "PERCENTAGE"){
