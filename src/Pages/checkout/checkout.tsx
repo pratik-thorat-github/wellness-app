@@ -4,14 +4,23 @@ import { Mixpanel } from "../../mixpanel/init";
 import { Flex } from "antd";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 
-import { EOfferType, IBatch, IGymDetails, ParticipantDetail } from "../../types/gyms";
+import {
+  EOfferType,
+  IBatch,
+  IGymDetails,
+  ParticipantDetail,
+} from "../../types/gyms";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
 
 import { Rs } from "../../constants/symbols";
 import { toLetterCase } from "../../utils/string-operation";
-import { getActivityById, getGymById, getPastAppBookings } from "../../apis/gym/activities";
+import {
+  getActivityById,
+  getGymById,
+  getPastAppBookings,
+} from "../../apis/gym/activities";
 import Loader from "../../components/Loader";
 import "./style.css";
 import { useAtom } from "jotai";
@@ -21,7 +30,7 @@ import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
 import { deductPercentage } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 import { saveNotificationToken } from "../../apis/notifications/notifications";
-import {handleRefresh} from '../../utils/refresh';
+import { handleRefresh } from "../../utils/refresh";
 import SwipeHandler from "../../components/back-swipe-handler";
 import ParticipantDetailsForm from "./pariticipant-detail";
 
@@ -41,7 +50,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   const [showDiscount, setShowDiscount] = useState(false);
 
   const [batchDetails, setBatchDetails] = useState<IBatch>();
-  const [participantErrors, setParticipantErrors] = useState<{ [key: string]: string }>({});
+  const [participantErrors, setParticipantErrors] = useState<{
+    [key: string]: string;
+  }>({});
 
   const batchId = window.location.pathname.split("/")[3];
 
@@ -53,7 +64,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   // const pastAppBookings = JSON.parse(data).pastAppBookings
 
   const [userDetails] = useAtom(userDetailsAtom);
-  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
+  const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>(
+    {},
+  );
   const [isFromApp, setIsFromApp] = useState(false);
   const [gotPastBookings, setGotPastAppBookings] = useState(false);
 
@@ -72,28 +85,29 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
 
   const { mutate: _saveNotificationToken } = useMutation({
     mutationFn: saveNotificationToken,
-    onError: () => {
-    },
+    onError: () => {},
     onSuccess: (result) => {
       console.log("notification token stored successfully!");
     },
   });
 
   useEffect(() => {
-    const userSource = window?.platformInfo?.platform  || 'web';
-    const appFlag = userSource != 'web' ? true : false;
+    const userSource = window?.platformInfo?.platform || "web";
+    const appFlag = userSource != "web" ? true : false;
     setIsFromApp(appFlag);
     window.isFromApp = appFlag;
-    const userId = window.localStorage["zenfitx-user-details"] ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null : null;
-    if(userId){
+    const userId = window.localStorage["zenfitx-user-details"]
+      ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+      : null;
+    if (userId) {
       _getPastAppBookings(userId);
       const firebaseToken = window.localStorage["token"];
-      if(firebaseToken)
-        _saveNotificationToken({userId, token: firebaseToken});
+      if (firebaseToken)
+        _saveNotificationToken({ userId, token: firebaseToken });
     } else {
       setGotPastAppBookings(true);
     }
-  }, [])
+  }, []);
 
   const { mutate: _getActivityById } = useMutation({
     mutationFn: getActivityById,
@@ -119,18 +133,17 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
 
   useEffect(() => {
     if (batchDetails) {
-      if(!userDetails){
+      if (!userDetails) {
         setShowDiscount(true);
-      } else if(!isFromApp){
+      } else if (!isFromApp) {
         setShowDiscount(false);
-      } else if(pastAppBookings?.[batchDetails.gymId]){
+      } else if (pastAppBookings?.[batchDetails.gymId]) {
         setShowDiscount(false);
       } else {
         setShowDiscount(true);
       }
     }
-  }, [batchDetails, pastAppBookings])
-
+  }, [batchDetails, pastAppBookings]);
 
   useEffect(() => {
     _getActivityById(batchId);
@@ -153,10 +166,10 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         batchDetails.offerPercentage
       )
         offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people (full court)`;
-      else if(showDiscount){
-        if(batchDetails.discountType == "PERCENTAGE"){
+      else if (showDiscount) {
+        if (batchDetails.discountType == "PERCENTAGE") {
           offerStrip.current = `${batchDetails.offerPercentage}% discount upto ${Rs}${batchDetails.maxDiscount} on 1st booking at this center`;
-        } else if(batchDetails.discountType == "FLAT"){
+        } else if (batchDetails.discountType == "FLAT") {
           offerStrip.current = `FLAT ${batchDetails.offerPercentage}% off on 1st booking at this center`;
         }
       } else {
@@ -190,18 +203,19 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         batchDetails.offerType == EOfferType.BATCH_WITH_GUESTS &&
         (batchDetails.minGuestsForOffer || 100) <= noOfGuests
       ) {
-        console.log(`TESTING ${noOfGuests}, ${price} , ${offerPercentage}`);
         finalPrice =
           price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
         batchDetails.offerType = EOfferType.BATCH_WITH_GUESTS;
-      } else if(batchDetails.discountType == "PERCENTAGE"){
-        finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
-                      ?  price * noOfGuests  - maxDiscount
-                      : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+      } else if (batchDetails.discountType == "PERCENTAGE") {
+        finalPrice =
+          price * noOfGuests - maxDiscount >
+          price * noOfGuests - (price * noOfGuests * offerPercentage) / 100
+            ? price * noOfGuests - maxDiscount
+            : price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
         batchDetails.offerType = EOfferType.APP;
-      }
-      else if(batchDetails.discountType == "FLAT"){
-        finalPrice = (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+      } else if (batchDetails.discountType == "FLAT") {
+        finalPrice =
+          price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
         batchDetails.offerType = EOfferType.APP;
       }
       finalPrice = Math.floor(finalPrice);
@@ -210,21 +224,23 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
 
       setTotalAmount(newTotalAmount);
       setTotalSavings(discount);
-      batchDetails.offerPercentage = (discount * 100) / (price * noOfGuests);
-    } else if(!showDiscount) {
-      let finalPrice = (batchDetails?.price as number) * noOfGuests; 
+      if (batchDetails.discountType == "PERCENTAGE") {
+        batchDetails.offerPercentage = (discount * 100) / (price * noOfGuests);
+      }
+    } else if (!showDiscount) {
+      let finalPrice = (batchDetails?.price as number) * noOfGuests;
       let discount = 0;
       setTotalAmount(finalPrice);
       setTotalSavings(discount);
     }
-  }, [batchDetails, showDiscount, pastAppBookings, noOfGuests]);
+  }, [showDiscount, batchDetails, pastAppBookings, noOfGuests]);
 
   if (!gym || !batchDetails || !gotPastBookings) return <Loader />;
   const setParticipants = (participants: ParticipantDetail[]) => {
     if (batchDetails) {
       setBatchDetails({
         ...batchDetails,
-        participants
+        participants,
       });
     }
   };
@@ -235,7 +251,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
 
     batchDetails?.participants?.forEach((participant, index) => {
       if (!participant.participantName.trim()) {
-        errors[`participant_${index}_name`] = 'Participant name is required';
+        errors[`participant_${index}_name`] = "Participant name is required";
         isValid = false;
       }
       // if (!participant.jerseySize) {
@@ -254,8 +270,12 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     if (noOfGuests === 1 && !increment) {
       return;
     }
-    if(noOfGuests + (batchDetails?.slotsBooked || 0) >= (batchDetails?.slots || 0 ) && increment){
-      return ;
+    if (
+      noOfGuests + (batchDetails?.slotsBooked || 0) >=
+        (batchDetails?.slots || 0) &&
+      increment
+    ) {
+      return;
     }
     let noOfGuestIncremented = increment ? noOfGuests + 1 : noOfGuests - 1;
     noOfGuests = noOfGuests || 1;
@@ -278,12 +298,18 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     let discount = 0;
     let offerPercentage = batchDetails?.offerPercentage || 0;
     let maxDiscount = batchDetails?.maxDiscount || 0;
-    if(showDiscount){
-      finalAmount = (baseAmountAfterIncrement - maxDiscount) > (baseAmountAfterIncrement - baseAmountAfterIncrement * offerPercentage / 100) 
-                    ? (baseAmountAfterIncrement - maxDiscount) 
-                    : (baseAmountAfterIncrement - baseAmountAfterIncrement * offerPercentage / 100);
-      if(batchDetails?.discountType == "FLAT"){
-        finalAmount = (baseAmountAfterIncrement - baseAmountAfterIncrement * offerPercentage / 100);
+    if (showDiscount) {
+      finalAmount =
+        baseAmountAfterIncrement - maxDiscount >
+        baseAmountAfterIncrement -
+          (baseAmountAfterIncrement * offerPercentage) / 100
+          ? baseAmountAfterIncrement - maxDiscount
+          : baseAmountAfterIncrement -
+            (baseAmountAfterIncrement * offerPercentage) / 100;
+      if (batchDetails?.discountType == "FLAT") {
+        finalAmount =
+          baseAmountAfterIncrement -
+          (baseAmountAfterIncrement * offerPercentage) / 100;
       }
       discount = baseAmountAfterIncrement - finalAmount;
     }
@@ -301,8 +327,8 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   }
 
   const handleSwipeRight = async () => {
-    navigate(`/checkout/batch/${batchId}`)
-  }
+    navigate(`/checkout/batch/${batchId}`);
+  };
 
   const backBtn = () => (
     <svg
@@ -342,7 +368,12 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
 
   const incIcon = () => (
     <svg
-      className={(noOfGuests + (batchDetails?.slotsBooked || 0) >= (batchDetails?.slots || 0)) ? "disabled" : ""}
+      className={
+        noOfGuests + (batchDetails?.slotsBooked || 0) >=
+        (batchDetails?.slots || 0)
+          ? "disabled"
+          : ""
+      }
       xmlns="http://www.w3.org/2000/svg"
       width="16"
       height="16"
@@ -450,12 +481,13 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   // if(!gotPastBookings) return <Loader />
 
   return (
-    <div 
-    style={{ 
-      flex: 1,
-      overflowY: "auto",
-      paddingBottom: "80px" // Prevent content from being hidden behind footer
-    }}>
+    <div
+      style={{
+        flex: 1,
+        overflowY: "auto",
+        paddingBottom: "80px", // Prevent content from being hidden behind footer
+      }}
+    >
       <MetaPixel />
       {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
       {/* <PullToRefresh onRefresh={handleRefresh}> */}
@@ -486,26 +518,32 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
                   formatDate(batchDetails?.date)["date suffix"]}{" "}
                 &bull;{" "}
                 {batchDetails?.isDayPass ? (
-                  <>
-                    All Day
-                  </>
+                  <>All Day</>
                 ) : (
                   <>
-                    {batchDetails?.startTime &&
+                    {batchDetails?.startTime && (
                       <>
-                        {formatTimeIntToAmPm(batchDetails?.startTime)} &bull; {batchDetails?.DurationMin} min
+                        {formatTimeIntToAmPm(batchDetails?.startTime)} &bull;{" "}
+                        {batchDetails?.DurationMin} min
                       </>
-                    }
+                    )}
                   </>
                 )}
               </div>
-                {(gym.gymId == 6 || gym.gymId == 22 || gym.gymId == 24 || gym.gymId == 25 || gym.gymId == 27) && batchDetails?.slots && batchDetails.slotsBooked >= 0 ?
-                  <div className="actTime">
-                      <span style={{color: "#C15700"}}>
-                        {batchDetails.slots - batchDetails.slotsBooked} spot(s) left out of {batchDetails.slots}
-                      </span>
-                  </div>
-                  : null}
+              {(gym.gymId == 6 ||
+                gym.gymId == 22 ||
+                gym.gymId == 24 ||
+                gym.gymId == 25 ||
+                gym.gymId == 27) &&
+              batchDetails?.slots &&
+              batchDetails.slotsBooked >= 0 ? (
+                <div className="actTime">
+                  <span style={{ color: "#C15700" }}>
+                    {batchDetails.slots - batchDetails.slotsBooked} spot(s) left
+                    out of {batchDetails.slots}
+                  </span>
+                </div>
+              ) : null}
             </span>
           </div>
           <div className="actLine"></div>
@@ -565,21 +603,22 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         </div>
       </Flex>
       <Flex>
-      {batchDetails.noOfParticipants != undefined && batchDetails.noOfParticipants > 0  && (
-          <>
-            <div style={{ margin: '0 -16px' }}>
-              <ParticipantDetailsForm 
-                noOfGuests={batchDetails?.noOfParticipants}
-                participants={batchDetails?.participants ?? []}
-                setParticipants={setParticipants}
-                participantErrors={participantErrors}
-              />
-            </div>
-            <div className="actLine"></div>
-          </>
-        )}
+        {batchDetails.noOfParticipants != undefined &&
+          batchDetails.noOfParticipants > 0 && (
+            <>
+              <div style={{ margin: "0 -16px" }}>
+                <ParticipantDetailsForm
+                  noOfGuests={batchDetails?.noOfParticipants}
+                  participants={batchDetails?.participants ?? []}
+                  setParticipants={setParticipants}
+                  participantErrors={participantErrors}
+                />
+              </div>
+              <div className="actLine"></div>
+            </>
+          )}
 
-       <BookNowFooter
+        <BookNowFooter
           batchDetails={batchDetails}
           gymData={gym}
           batchId={Number(batchId)}
