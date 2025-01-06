@@ -203,8 +203,8 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         batchDetails.offerType == EOfferType.BATCH_WITH_GUESTS &&
         (batchDetails.minGuestsForOffer || 100) <= noOfGuests
       ) {
-        finalPrice =
-          price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
+        let totalDiscount = (price * noOfGuests * offerPercentage) / 100;
+        finalPrice = Math.floor(price * noOfGuests - totalDiscount);
         batchDetails.offerType = EOfferType.BATCH_WITH_GUESTS;
       } else if (batchDetails.discountType == "PERCENTAGE") {
         finalPrice =
@@ -212,13 +212,16 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
           price * noOfGuests - (price * noOfGuests * offerPercentage) / 100
             ? price * noOfGuests - maxDiscount
             : price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
+        finalPrice = Math.floor(finalPrice);
         batchDetails.offerType = EOfferType.APP;
       } else if (batchDetails.discountType == "FLAT") {
         finalPrice =
           price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
         batchDetails.offerType = EOfferType.APP;
+        finalPrice = Math.floor(finalPrice);
+      } else {
+        finalPrice = Math.floor(finalPrice);
       }
-      finalPrice = Math.floor(finalPrice);
       let newTotalAmount = finalPrice;
       let discount = price * noOfGuests - finalPrice;
 
