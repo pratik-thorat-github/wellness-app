@@ -1,18 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAtom } from "jotai/react";
 import { userDetailsAtom, accessTokenAtom } from "../atoms/atom";
 import { trackEvent } from "../firebase/config";
 
-interface PlatformInfo {
-  platform: string;
-  version: string;
-}
-
-declare global {
-  interface Window {
-    platformInfo: PlatformInfo;
-  }
-}
 
 export const useFirebase = (): void => {
   const [userDetails] = useAtom(userDetailsAtom);
@@ -35,7 +25,6 @@ export const useFirebase = (): void => {
       trackEvent("page_view", {
         path: window.location.pathname,
         user_id: userDetails?.id,
-        platform_info: window.platformInfo,
       });
     };
 
