@@ -21,6 +21,7 @@ import { useAtom } from "jotai/react";
 import { Mixpanel } from "../../mixpanel/init";
 import colors from "../../constants/colours";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { setUserProfile, trackEvent } from "../../firebase/config";
 
 interface IVerifyMagicLink extends RouteComponentProps {
   otpLessOrderId?: string;
@@ -61,12 +62,50 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
   const [otpLessOrderIdState, setOtpLessOrderIdState] =
     useState(otpLessOrderId);
 
+  function setUserAnalytics(user: any) {
+    // Set Mixpanel user properties
+    Mixpanel.identify(user.phone);
+    Mixpanel.track("Successful login", {
+      phone: user.phone,
+    });
+    Mixpanel.people.set({
+      $name: user.name,
+      $phone: user.phone,
+    });
+
+    // Set Firebase Analytics user properties
+    setUserProfile({
+      user_id: user.phone, // Using phone as user_id since it's unique
+      phone_number: user.phone,
+      name: user.name,
+      no_of_bookings: user.noOfBookings,
+      // Optional properties that can be updated later
+      membership_status: user.membershipStatus,
+      last_booking_date: user.lastBookingDate,
+      preferred_activities: user.preferredActivities,
+      preferred_locations: user.preferredLocations,
+    });
+
+    // Track login event in Firebase
+    trackEvent("user_login", {
+      method: "otp",
+      user_id: user.phone,
+      no_of_bookings: user.noOfBookings,
+    });
+  }
+
   function onSuccessfulLogin(res: any) {
     setAccessTokenAtom(res.accessToken);
-    setUserDetailsAtom(res.user);
-    mixpanelEvents(res.user);
+    const userWithBookings = {
+      ...res.user,
+      noOfBookings: res.user.noOfBookings ?? 0,
+    };
+    setUserDetailsAtom(userWithBookings);
 
-    navigate(afterLoginRedirectProps?.afterLoginUrl as string, {
+    // Set user properties in both Mixpanel and Firebase
+    setUserAnalytics(userWithBookings);
+
+    navigate(afterLoginRedirectProps?.afterLoginUrl || "/", {
       replace: true,
       state: { ...afterLoginRedirectProps },
     });
