@@ -24,13 +24,11 @@ export const setUserProfile = (userProfile: {
   user_id: string;
   phone_number: string;
   name: string;
-  no_of_bookings: number;
 }) => {
   setUserProperties(analytics, {
     user_id: userProfile.user_id,
     phone_number: userProfile.phone_number,
     name: userProfile.name,
-    no_of_bookings: userProfile.no_of_bookings.toString() || 0,
   });
 };
 
