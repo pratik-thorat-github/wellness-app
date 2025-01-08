@@ -17,6 +17,7 @@ import { Mixpanel } from "../../mixpanel/init";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
 import { deductPercentage, discountTxt } from "../../utils/offers";
+import { trackEvent } from "../../firebase/config";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -133,6 +134,7 @@ async function displayRazorpay(
         else if (props.checkoutType === ECheckoutType.PLUS) {
           navigate("/plus/success");
         }
+        trackEvent('slot_purchase', props)
       }
     },
 
