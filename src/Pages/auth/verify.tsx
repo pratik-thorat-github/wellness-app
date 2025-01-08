@@ -84,7 +84,6 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
     trackEvent("user_login", {
       method: "otp",
       user_id: user.phone,
-      no_of_bookings: user.noOfBookings,
     });
   }
 
