@@ -25,20 +25,12 @@ export const setUserProfile = (userProfile: {
   phone_number: string;
   name: string;
   no_of_bookings: number;
-  membership_status?: string;
-  last_booking_date?: string;
-  preferred_activities?: string[];
-  preferred_locations?: string[];
 }) => {
   setUserProperties(analytics, {
     user_id: userProfile.user_id,
     phone_number: userProfile.phone_number,
     name: userProfile.name,
-    no_of_bookings: userProfile.no_of_bookings.toString(),
-    membership_status: userProfile.membership_status || "free",
-    last_booking_date: userProfile.last_booking_date || "",
-    preferred_activities: userProfile.preferred_activities?.join(",") || "",
-    preferred_locations: userProfile.preferred_locations?.join(",") || "",
+    no_of_bookings: userProfile.no_of_bookings.toString() || 0,
   });
 };
 

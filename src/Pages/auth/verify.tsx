@@ -78,12 +78,6 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
       user_id: user.phone, // Using phone as user_id since it's unique
       phone_number: user.phone,
       name: user.name,
-      no_of_bookings: user.noOfBookings,
-      // Optional properties that can be updated later
-      membership_status: user.membershipStatus,
-      last_booking_date: user.lastBookingDate,
-      preferred_activities: user.preferredActivities,
-      preferred_locations: user.preferredLocations,
     });
 
     // Track login event in Firebase
