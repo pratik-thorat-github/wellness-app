@@ -84,6 +84,7 @@ const VerifyMagicLink: React.FC<IVerifyMagicLink> = ({
     trackEvent("user_login", {
       method: "otp",
       user_id: user.phone,
+      last_login: new Date().toISOString(),
     });
   }
 
