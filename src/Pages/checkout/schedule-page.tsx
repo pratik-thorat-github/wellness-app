@@ -312,7 +312,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                       {batch.duration} min
                     </Flex>
                   ) : null}
-                  {gym.gymId == 6 && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
+                  {(gym.gymId == 6 || gym.gymId == 28) && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
                     <Flex 
                       style={{
                         color: "#C15700",
@@ -328,7 +328,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                     </Flex>
                   )
                   :
-                  gym.gymId == 6 && batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
+                  (gym.gymId == 6 || gym.gymId == 28) && batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
                     <Flex 
                       style={{
                         color: "#C15700",
