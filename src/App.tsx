@@ -2,8 +2,6 @@ import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Router } from "@reach/router";
 
-import { accessTokenAtom, userDetailsAtom } from "./atoms/atom";
-import { useAtom } from "jotai/react";
 import Home from "./Pages/home/home";
 import Gym from "./Pages/gym/gym";
 import BatchCheckout from "./Pages/checkout/batch-checkout";
@@ -13,19 +11,15 @@ import PlusPaymentSuccess from "./Pages/checkout/plus-payment-success";
 import Login from "./Pages/auth/login";
 import VerifyMagicLink from "./Pages/auth/verify";
 import Profile from "./Pages/profile/Profle";
-import LandingPage from "./Pages/landing/Landing";
 import SchedulePage from "./Pages/checkout/schedule-page";
 import Activity from "./Pages/activity/Activity";
 import BatchCheckoutBooking from "./Pages/checkout/checkout";
 import PrivacyPolicy from "./Pages/privacy/privacy";
-import { useEffect, useState } from "react";
 
 // Create a client
 const queryClient = new QueryClient();
 
 function App() {
-  const [accessToken] = useAtom(accessTokenAtom);
-  const [userDetails] = useAtom(userDetailsAtom);
 
   return (
     <QueryClientProvider client={queryClient}>
