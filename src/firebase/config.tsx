@@ -29,6 +29,7 @@ export const setUserProfile = (userProfile: {
     user_id: userProfile.user_id,
     phone_number: userProfile.phone_number,
     name: userProfile.name,
+    fcm_token: window.localStorage.getItem('token') // Get token from localStorage
   });
 };
 
