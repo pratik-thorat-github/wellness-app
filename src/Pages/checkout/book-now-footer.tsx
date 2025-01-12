@@ -134,7 +134,12 @@ async function displayRazorpay(
         else if (props.checkoutType === ECheckoutType.PLUS) {
           navigate("/plus/success");
         }
-        trackEvent('slot_purchase', props)
+        trackEvent('slot_purchase', {
+            activity_name: props.batchDetails?.activityName,
+            total_amount: props.totalAmount,
+            guests: props.totalGuests,
+            booking_at: new Date().toISOString(),
+        })
       }
     },
 
