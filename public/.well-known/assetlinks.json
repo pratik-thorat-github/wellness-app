@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.zenfitx.zenfitxapp",
+      "sha256_cert_fingerprints": [
+        "C0:28:6C:33:60:63:46:8A:23:BE:A7:E1:EA:A6:12:9C:AA:C5:51:E4:93:F3:17:65:6E:18:84:39:D4:5F:3D:A7"
+      ]
+    }
+  }
+]
