@@ -1,5 +1,5 @@
-import { RouteComponentProps, navigate, useLocation } from "@reach/router";
-import { useEffect, useRef } from "react";
+import { RouteComponentProps, navigate } from "@reach/router";
+import { useEffect, useRef, useState } from "react";
 import { Mixpanel } from "../../mixpanel/init";
 import { Flex } from "antd";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
@@ -10,12 +10,10 @@ import {
   IGymDetails,
   ParticipantDetail,
 } from "../../types/gyms";
-import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
 
 import { Rs } from "../../constants/symbols";
-import { toLetterCase } from "../../utils/string-operation";
 import {
   getActivityById,
   getGymById,
@@ -27,12 +25,10 @@ import { useAtom } from "jotai";
 import { userDetailsAtom } from "../../atoms/atom";
 import BookNowFooter from "./book-now-footer";
 import { EBookNowComingFromPage, ECheckoutType } from "../../types/checkout";
-import { deductPercentage } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 import { saveNotificationToken } from "../../apis/notifications/notifications";
-import { handleRefresh } from "../../utils/refresh";
-import SwipeHandler from "../../components/back-swipe-handler";
 import ParticipantDetailsForm from "./pariticipant-detail";
+import RideSelector from "./ride-selector";
 
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -69,6 +65,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   );
   const [isFromApp, setIsFromApp] = useState(false);
   const [gotPastBookings, setGotPastAppBookings] = useState(false);
+  const [selectedRides, setSelectedRides] = useState<number[]>([]);
 
   const { mutate: _getPastAppBookings } = useMutation({
     mutationFn: getPastAppBookings,
@@ -130,6 +127,16 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
       errorToast("Error in getting gym data");
     },
   });
+
+  const validateBooking = (): boolean => {
+    if (batchDetails?.isRideActivity && selectedRides.length < noOfGuests) {
+      errorToast(
+        `Please select ${noOfGuests} ${noOfGuests === 1 ? "ride" : "rides"}`,
+      );
+      return false;
+    }
+    return true;
+  };
 
   useEffect(() => {
     if (batchDetails) {
@@ -602,6 +609,25 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
               {totalSavings ? discountIconGreen() : discountIconGray()}
               {offerStrip.current ? offerStrip.current : null}
             </div>
+          )}
+          {true && (
+            <>
+              <RideSelector
+                totalRides={batchDetails.rideDetails?.totalRides || 20}
+                availableRides={batchDetails.rideDetails?.availableRides || []}
+                selectedRides={selectedRides}
+                onRideSelect={(rides: number[]) => {
+                  setSelectedRides(rides);
+                  Mixpanel.track("selected_rides", {
+                    batchId,
+                    selectedRides: rides,
+                    gym,
+                  });
+                }}
+                noOfGuests={noOfGuests}
+              />
+              <div className="actLine"></div>
+            </>
           )}
         </div>
       </Flex>

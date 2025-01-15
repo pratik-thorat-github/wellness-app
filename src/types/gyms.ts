@@ -17,7 +17,7 @@ export enum EOfferType {
   NONE = "NONE",
   BATCH_WITH_GUESTS = "BATCH_WITH_GUESTS",
   PLATFORM = "PLATFORM",
-  APP = "APP"
+  APP = "APP",
 }
 
 export interface IBatch {
@@ -38,7 +38,7 @@ export interface IBatch {
   moreInfo?: string;
   gymId: number;
   image?: string;
-  description?:string;
+  description?: string;
   slots: number;
   slotsBooked: number;
   maxDiscount: number;
@@ -52,10 +52,15 @@ export interface IBatch {
   minGuestsForOffer?: number;
   venue?: string;
   address?: string;
+  isRideActivity?: boolean;
+  rideDetails?: {
+    totalRides: number;
+    availableRides: number[];
+  };
 
   venueAddressLine1?: string;
   venueAddressLine2?: string;
-  updatedAt?:string
+  updatedAt?: string;
 }
 
 export interface ParticipantDetail {
