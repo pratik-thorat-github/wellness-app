@@ -255,6 +255,24 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     }
   };
 
+  const updateParticipantsWithRides = (rides: number[]) => {
+    if (batchDetails) {
+      const updatedParticipants: ParticipantDetail[] = rides.map(
+        (rideNumber) => ({
+          participantName: "", // Empty string for participant name
+          rideNumber: rideNumber, // Just the ride number
+        }),
+      );
+
+      setBatchDetails({
+        ...batchDetails,
+        participants: updatedParticipants,
+      });
+
+      setSelectedRides(rides);
+    }
+  };
+
   const validateParticipants = (): boolean => {
     const errors: { [key: string]: string } = {};
     let isValid = true;
@@ -610,20 +628,13 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
               {offerStrip.current ? offerStrip.current : null}
             </div>
           )}
-          {true && (
+          {batchDetails?.isRideActivity && (
             <>
               <RideSelector
-                totalRides={batchDetails.rideDetails?.totalRides || 20}
+                totalRides={batchDetails.rideDetails?.totalRides || 0}
                 availableRides={batchDetails.rideDetails?.availableRides || []}
                 selectedRides={selectedRides}
-                onRideSelect={(rides: number[]) => {
-                  setSelectedRides(rides);
-                  Mixpanel.track("selected_rides", {
-                    batchId,
-                    selectedRides: rides,
-                    gym,
-                  });
-                }}
+                onRideSelect={updateParticipantsWithRides}
                 noOfGuests={noOfGuests}
               />
               <div className="actLine"></div>
