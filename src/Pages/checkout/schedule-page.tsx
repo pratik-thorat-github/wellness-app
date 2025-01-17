@@ -328,7 +328,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                     </Flex>
                   )
                   :
-                  (gym.gymId == 6 || gym.gymId == 28) && batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
+                  batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
                     <Flex 
                       style={{
                         color: "#C15700",
