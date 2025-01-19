@@ -1,9 +1,15 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.zenfitx.zenfitxapp",
-    "sha256_cert_fingerprints":
-    ["07:CE:81:76:C5:B1:AE:F5:A7:62:3A:E2:73:6A:B7:02:C9:DA:B9:7F:1E:B8:B3:46:42:47:93:4D:0F:1A:E3:4D"]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.zenfitx.zenfitxapp",
+      "sha256_cert_fingerprints": [
+        "07:CE:81:76:C5:B1:AE:F5:A7:62:3A:E2:73:6A:B7:02:C9:DA:B9:7F:1E:B8:B3:46:42:47:93:4D:0F:1A:E3:4D",
+        "C0:28:6C:33:60:63:46:8A:23:BE:A7:E1:EA:A6:12:9C:AA:C5:51:E4:93:F3:17:65:6E:18:84:39:D4:5F:3D:A7"
+      ]
+    }
   }
-}]
+]
