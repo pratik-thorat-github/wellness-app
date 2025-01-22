@@ -5,7 +5,6 @@ import App from "./App";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import reportWebVitals from "./reportWebVitals";
 
-// Add the redirect check function
 function checkAndRedirect() {
   const currentUrl = window.location.href;
   const isGymUrl = /^https?:\/\/zenfitx\.in\/gym\/999\/batch$/.test(currentUrl);
@@ -20,14 +19,21 @@ function checkAndRedirect() {
 
   // Only redirect if it's a gym URL and we're not in WebView
   if (isGymUrl && !isInWebView) {
-    const userAgent = navigator.userAgent.toLowerCase();
+    // Clear the page content first
+    document.body.innerHTML = "";
+    document.body.style.backgroundColor = "#FFFFFF";
 
-    if (/iphone|ipad|ipod/.test(userAgent)) {
-      window.location.href = "https://apps.apple.com/app/6736351969";
-    } else if (/android/.test(userAgent)) {
-      window.location.href =
-        "https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp";
-    }
+    // Small delay before redirect to ensure blank screen is shown
+    setTimeout(() => {
+      const userAgent = navigator.userAgent.toLowerCase();
+
+      if (/iphone|ipad|ipod/.test(userAgent)) {
+        window.location.href = "https://apps.apple.com/app/idYOUR_APP_STORE_ID";
+      } else if (/android/.test(userAgent)) {
+        window.location.href =
+          "https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp";
+      }
+    }, 100);
   }
 }
 
