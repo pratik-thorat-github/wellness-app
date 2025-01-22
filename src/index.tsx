@@ -28,7 +28,7 @@ function checkAndRedirect() {
       const userAgent = navigator.userAgent.toLowerCase();
 
       if (/iphone|ipad|ipod/.test(userAgent)) {
-        window.location.href = "https://apps.apple.com/app/idYOUR_APP_STORE_ID";
+        window.location.href = "https://apps.apple.com/app/id6736351969";
       } else if (/android/.test(userAgent)) {
         window.location.href =
           "https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp";
