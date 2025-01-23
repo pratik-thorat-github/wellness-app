@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface RideSelectorProps {
   totalRides: number;
@@ -13,23 +13,29 @@ const RideSelector: React.FC<RideSelectorProps> = ({
   availableRides,
   selectedRides,
   onRideSelect,
-  noOfGuests
+  noOfGuests,
 }) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const handleRideClick = (rideNumber: number) => {
     if (!availableRides.includes(rideNumber)) return;
 
     let newSelectedRides = [...selectedRides];
     
     if (selectedRides.includes(rideNumber)) {
+      // Allow deselecting rides
       newSelectedRides = newSelectedRides.filter(ride => ride !== rideNumber);
-    } else if (selectedRides.length < noOfGuests) {
-      newSelectedRides.push(rideNumber);
+      onRideSelect(newSelectedRides);
+      setErrorMessage(null);
     } else {
-      newSelectedRides.shift();
-      newSelectedRides.push(rideNumber);
+      // Only allow selecting if we haven't reached the guest limit
+      if (selectedRides.length < noOfGuests) {
+        newSelectedRides.push(rideNumber);
+        onRideSelect(newSelectedRides);
+        setErrorMessage(null);
+      } else {
+        setErrorMessage(`You can only select ${noOfGuests} ${noOfGuests === 1 ? 'ride' : 'rides'}`);
+      }
     }
-
-    onRideSelect(newSelectedRides);
   };
 
   return (
