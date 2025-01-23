@@ -34,6 +34,7 @@ export interface IBookNowFooter {
   totalSavings?: number;
   isFromApp?: boolean;
   pastAppBookings?: PastAppBookingObject;
+  disabled?: boolean;
 }
 
 function loadScript(src: string) {
@@ -232,6 +233,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [showDiscount, setShowDiscount] = useState(true);
   const [discountedAmount, setDiscountedAmount] = useState(props.totalAmount);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [_, setAfterLoginRedirectAtom] = useAtom(afterLoginRedirectAtom);
 
   let locationStates = useLocation().state;
@@ -385,6 +387,16 @@ async function processBookNowCta() {
   // const discountLine = () => <div className="discountLine">{discountTxt}</div>;
   const discountLine = () => <div className="discountLine">{discountText}</div>;
 
+  const handleBookNowClick = async () => {
+    if (props.disabled) {
+      setErrorMessage(`Please select ${props.totalGuests} ${props.totalGuests === 1 ? 'bike' : 'bikes'} to continue`);
+      // Clear error message after 3 seconds
+      setTimeout(() => setErrorMessage(null), 3000);
+      return;
+    }
+    await processBookNowCta();
+  };
+
   return (
     <>
       <Flex
@@ -404,6 +416,11 @@ async function processBookNowCta() {
         }}
       >
         {showDiscount ? discountLine() : null}
+        {errorMessage && (
+          <div className="text-sm text-red-600 text-center absolute -top-8 left-0 right-0">
+            {errorMessage}
+          </div>
+        )}
         {showCTA() ? (
           <Flex
             flex={1}
@@ -485,20 +502,18 @@ async function processBookNowCta() {
               </span>
             </Flex>
             <button
-              id = { (props.comingFrom === EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) ? 'conversion-book-now' : 'book-now'}
-              style={{
-                color: "white",
-                fontWeight: "700",
-                fontSize: "16px",
-                backgroundColor: "#05070B",
-                borderRadius: "8px",
-                padding: "12px 24px",
-                display: "flex",
-                alignItems: "center",
-              }}
-              onClick={async () => {
-                await processBookNowCta();
-              }}
+              id={(props.comingFrom === EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) ? 'conversion-book-now' : 'book-now'}
+              className={`
+                text-white font-bold text-base
+                rounded-lg px-6 py-3
+                flex items-center
+                ${props.disabled 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-[#05070B] cursor-pointer'
+                }
+              `}
+              onClick={handleBookNowClick}
+              disabled={props.disabled}
             >
               <span>Book Now</span>
             </button>
