@@ -80,7 +80,7 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
 async function displayRazorpay(
   props: IBookNowFooter,
   userDetails: IUser | null,
-  setLoading: (loading: boolean) => void
+  setLoading: (loading: boolean) => void,
 ) {
   setLoading(true);
   const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
@@ -91,15 +91,15 @@ async function displayRazorpay(
   try {
     orderResult = await createRzpOrder(payload);
   } catch (error) {
-    console.log({error});
+    console.log({ error });
   }
-  
-  console.log({orderResult});
+
+  console.log({ orderResult });
   setLoading(false);
 
-  if(!orderResult && !orderResult?.orderId){
+  if (!orderResult && !orderResult?.orderId) {
     alert(`Could not place order!`);
-    return ;
+    return;
   }
 
   if (!res) {
@@ -120,7 +120,7 @@ async function displayRazorpay(
     image: { logo },
     order_id: orderResult.orderId,
     method: {
-      upi: true
+      upi: true,
     },
     webview_intent: true,
     handler: (response: any) => {
@@ -135,12 +135,12 @@ async function displayRazorpay(
         else if (props.checkoutType === ECheckoutType.PLUS) {
           navigate("/plus/success");
         }
-        trackEvent('slot_purchase', {
-            activity_name: props.batchDetails?.activityName,
-            total_amount: props.totalAmount,
-            guests: props.totalGuests,
-            booking_at: new Date().toISOString(),
-        })
+        trackEvent("slot_purchase", {
+          activity_name: props.batchDetails?.activityName,
+          total_amount: props.totalAmount,
+          guests: props.totalGuests,
+          booking_at: new Date().toISOString(),
+        });
       }
     },
 
@@ -165,7 +165,7 @@ async function displayRazorpay(
 async function displayCashfree(
   props: IBookNowFooter,
   userDetails: IUser | null,
-  setLoading: (loading: boolean) => void
+  setLoading: (loading: boolean) => void,
 ) {
   setLoading(true);
   const res = await loadScript("https://sdk.cashfree.com/js/v3/cashfree.js");
@@ -192,7 +192,7 @@ async function displayCashfree(
     if (result.error) {
       // This will be true whenever user clicks on close icon inside the modal or any error happens during the payment
       console.log(
-        "User has closed the popup or there is some payment error, Check for Payment Status"
+        "User has closed the popup or there is some payment error, Check for Payment Status",
       );
       console.log(result.error);
     }
@@ -221,7 +221,7 @@ async function displayCashfree(
 
 function MixpanelBookNowFooterInit(
   props: IBookNowFooter,
-  checkoutType: ECheckoutType
+  checkoutType: ECheckoutType,
 ) {
   Mixpanel.track("open_payment_page", {
     ...props,
@@ -244,27 +244,38 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const maxDiscount = props.batchDetails?.maxDiscount || 0;
   const offerPercentage = props.batchDetails?.offerPercentage || 0;
   const discountType = props.batchDetails?.discountType || "";
-  const price  =  props.batchDetails?.price || 0;
+  const price = props.batchDetails?.price || 0;
   let noOfGuests = 1;
-  if(props.totalGuests && props.totalGuests > 1){
-    noOfGuests = props.totalGuests
+  if (props.totalGuests && props.totalGuests > 1) {
+    noOfGuests = props.totalGuests;
   }
-  let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
-                      ?  price * noOfGuests  - maxDiscount
-                      : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
-  if(props.gymData?.discountType == 'FLAT'){
-    finalPrice = (price * (100 - offerPercentage) / 100)
-  }  
-  finalPrice = Math.floor(finalPrice) 
-  const discountText = props.gymData?.discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on 1st booking at this center` : 
-                       props.gymData?.discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center` : ``;
-  
-async function processBookNowCta() {
+  let finalPrice =
+    price * noOfGuests - maxDiscount >
+    price * noOfGuests - (price * noOfGuests * offerPercentage) / 100
+      ? price * noOfGuests - maxDiscount
+      : price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
+  if (props.gymData?.discountType == "FLAT") {
+    finalPrice = (price * (100 - offerPercentage)) / 100;
+  }
+  finalPrice = Math.floor(finalPrice);
+  const discountText =
+    props.gymData?.discountType == "FLAT"
+      ? `FLAT ${offerPercentage}% off on 1st booking at this center`
+      : props.gymData?.discountType == "PERCENTAGE"
+        ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center`
+        : ``;
+
+  async function processBookNowCta() {
     if (props.forceBookNowCta) {
       Mixpanel.track("open_batch_checkout_booking", {
         batchId: props.batchId,
       });
-      navigate(batchBookingUrl, {state: { isFromApp: props.isFromApp, pastAppBookings: props.pastAppBookings}});
+      navigate(batchBookingUrl, {
+        state: {
+          isFromApp: props.isFromApp,
+          pastAppBookings: props.pastAppBookings,
+        },
+      });
       return;
     }
     if (!userDetails) {
@@ -276,7 +287,7 @@ async function processBookNowCta() {
         afterLoginUrl: batchBookingUrl,
       });
 
-      navigate("/login", {replace: true});
+      navigate("/login", { replace: true });
     } else if (
       props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_PAGE &&
       props.batchDetails?.guestsAllowed
@@ -284,29 +295,40 @@ async function processBookNowCta() {
       Mixpanel.track("open_batch_checkout_booking", {
         batchId: props.batchId,
       });
-      navigate(batchBookingUrl, {state: { isFromApp: props.isFromApp, pastAppBookings: props.pastAppBookings}});
+      navigate(batchBookingUrl, {
+        state: {
+          isFromApp: props.isFromApp,
+          pastAppBookings: props.pastAppBookings,
+        },
+      });
     } else {
       Mixpanel.track("open_batch_checkout_pay_now", {
         batchId: props.batchId,
         phone: userDetails.phone,
       });
 
-      const batchDetailsResp = await fetch(`${BACKEND_URL}/gyms/batch/byBatchId?batchId=${props.batchId}`);
-      
+      const batchDetailsResp = await fetch(
+        `${BACKEND_URL}/gyms/batch/byBatchId?batchId=${props.batchId}`,
+      );
+
       const r = await batchDetailsResp?.json();
-      console.log({r});
+      console.log({ r });
       console.log(r.batch.slotsBooked, props.batchDetails?.slotsBooked);
-      if(r?.batch?.slotsBooked + props.totalGuests > r.batch.slots){
+      if (r?.batch?.slotsBooked + props.totalGuests > r.batch.slots) {
         if (r?.batch?.slotsBooked == r?.batch?.slots) {
           console.log("batchdets");
-          console.log(r.batch,props);
-          alert(`Sorry, all spots are booked for this slot. Please choose the next available slot.`);
-          
+          console.log(r.batch, props);
+          alert(
+            `Sorry, all spots are booked for this slot. Please choose the next available slot.`,
+          );
         } else
-          alert(`Sorry, only ${r.batch.slots - r.batch.slotsBooked} spots are available for this slot. Please choose the next available slot!`);
+          alert(
+            `Sorry, only ${r.batch.slots - r.batch.slotsBooked} spots are available for this slot. Please choose the next available slot!`,
+          );
         window.location.reload();
       } else {
-        await displayRazorpay(props, userDetails, setLoading);
+        //await displayRazorpay(props, userDetails, setLoading);
+        displayCashfree(props, userDetails, setLoading);
       }
       displayCashfree(props, userDetails, setLoading);
     }
@@ -318,16 +340,18 @@ async function processBookNowCta() {
 
   useEffect(() => {
     if (props.batchDetails) {
-      console.log(props?.batchDetails)
-      if(props.batchDetails?.discountType == "NONE"){
+      console.log(props?.batchDetails);
+      if (props.batchDetails?.discountType == "NONE") {
         setShowDiscount(false);
-      } else if(!userDetails){
+      } else if (!userDetails) {
         setShowDiscount(true);
-      } else if(!props.isFromApp){
+      } else if (!props.isFromApp) {
         setShowDiscount(false);
-      } else if(props.pastAppBookings?.[props.batchDetails.gymId]){
+      } else if (props.pastAppBookings?.[props.batchDetails.gymId]) {
         setShowDiscount(false);
-      } else if(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) {
+      } else if (
+        props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE
+      ) {
         setShowDiscount(false);
       } else {
         setShowDiscount(true);
@@ -344,17 +368,20 @@ async function processBookNowCta() {
     if (showDiscount && props.batchDetails) {
       const [newTotalAmount] = deductPercentage(
         props.batchDetails?.price || 0,
-        50
+        50,
       );
       let noOfGuests = 1;
-      if(props.totalGuests){
+      if (props.totalGuests) {
         noOfGuests = props.totalGuests;
       }
-      let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
-                      ?  price * noOfGuests  - maxDiscount
-                      : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
-      if(discountType == "FLAT"){
-        finalPrice = (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
+      let finalPrice =
+        price * noOfGuests - maxDiscount >
+        price * noOfGuests - (price * noOfGuests * offerPercentage) / 100
+          ? price * noOfGuests - maxDiscount
+          : price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
+      if (discountType == "FLAT") {
+        finalPrice =
+          price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
       }
       finalPrice = Math.floor(finalPrice);
       setDiscountedAmount(finalPrice);
@@ -367,12 +394,12 @@ async function processBookNowCta() {
   //       props.batchDetails?.price || 0,
   //       50
   //     );
-      
+
   //     let noOfGuests = 1;
   //     if(props.totalGuests){
   //       noOfGuests = props.totalGuests;
   //     }
-  //     let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100)) 
+  //     let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100))
   //                     ?  price * noOfGuests  - maxDiscount
   //                     : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
   //     setDiscountedAmount(finalPrice);
@@ -392,7 +419,9 @@ async function processBookNowCta() {
 
   const handleBookNowClick = async () => {
     if (props.disabled) {
-      setErrorMessage(`Please select ${props.totalGuests} ${props.totalGuests === 1 ? 'bike' : 'bikes'} to continue`);
+      setErrorMessage(
+        `Please select ${props.totalGuests} ${props.totalGuests === 1 ? "bike" : "bikes"} to continue`,
+      );
       // Clear error message after 3 seconds
       setTimeout(() => setErrorMessage(null), 3000);
       return;
@@ -505,14 +534,20 @@ async function processBookNowCta() {
               </span>
             </Flex>
             <button
-              id={(props.comingFrom === EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) ? 'conversion-book-now' : 'book-now'}
+              id={
+                props.comingFrom ===
+                EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE
+                  ? "conversion-book-now"
+                  : "book-now"
+              }
               className={`
                 text-white font-bold text-base
                 rounded-lg px-6 py-3
                 flex items-center
-                ${props.disabled 
-                  ? 'bg-gray-400 cursor-not-allowed' 
-                  : 'bg-[#05070B] cursor-pointer'
+                ${
+                  props.disabled
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#05070B] cursor-pointer"
                 }
               `}
               onClick={handleBookNowClick}
