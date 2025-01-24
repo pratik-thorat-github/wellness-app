@@ -68,6 +68,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [isFromApp, setIsFromApp] = useState(false);
   const [pastAppBookings, setPastAppBookings] = useState({});
+  const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];  
 
   useEffect(() => {
     setIsFromApp(window?.isFromApp || false);
@@ -312,7 +313,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                       {batch.duration} min
                     </Flex>
                   ) : null}
-                  {(gym.gymId == 6 || gym.gymId == 28 || gym.gymId == 24) && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
+                  {(slotsRemainingVisible.includes(gym.gymId)) && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
                     <Flex 
                       style={{
                         color: "#C15700",
