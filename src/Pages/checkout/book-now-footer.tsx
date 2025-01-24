@@ -235,7 +235,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [discountedAmount, setDiscountedAmount] = useState(props.totalAmount);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [_, setAfterLoginRedirectAtom] = useAtom(afterLoginRedirectAtom);
-
+  const BACKEND_URL = process.env.REACT_APP_BE_URL;
   let locationStates = useLocation().state;
   console.log(locationStates);
 
@@ -291,7 +291,7 @@ async function processBookNowCta() {
         phone: userDetails.phone,
       });
 
-      const batchDetailsResp = await fetch(`https://be.zenfitx.link/gyms/batch/byBatchId?batchId=${props.batchId}`);
+      const batchDetailsResp = await fetch(`${BACKEND_URL}/gyms/batch/byBatchId?batchId=${props.batchId}`);
       
       const r = await batchDetailsResp?.json();
       console.log({r});
