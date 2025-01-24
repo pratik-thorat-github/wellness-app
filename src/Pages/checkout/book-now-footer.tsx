@@ -330,7 +330,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         //await displayRazorpay(props, userDetails, setLoading);
         displayCashfree(props, userDetails, setLoading);
       }
-      displayCashfree(props, userDetails, setLoading);
+      //displayCashfree(props, userDetails, setLoading);
     }
   }
 
