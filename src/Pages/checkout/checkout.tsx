@@ -675,7 +675,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
           totalSavings={totalSavings}
           isFromApp={isFromApp}
           pastAppBookings={pastAppBookings}
-          disabled={selectedRides.length !== noOfGuests}
+          disabled={selectedRides.length !== noOfGuests && batchDetails?.isRideActivity}
         />
       </Flex>
     </div>
