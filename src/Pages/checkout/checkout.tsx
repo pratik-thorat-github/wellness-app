@@ -310,18 +310,18 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     let baseAmountAfterIncrement =
       (batchDetails?.price as number) * noOfGuestIncremented;
 
+    // Reset selected rides when guest count changes
+    setSelectedRides([]);
+    if (batchDetails) {
+      setBatchDetails({
+        ...batchDetails,
+        participants: [],
+      });
+    }
+
     setNoOfGuests(noOfGuestIncremented);
     setBaseAmount(baseAmountAfterIncrement);
 
-    // let [finalAmount, discount] = [baseAmountAfterIncrement, 0];
-    // if (
-    //   batchDetails?.offerType == EOfferType.BATCH_WITH_GUESTS &&
-    //   noOfGuestIncremented >= (batchDetails?.minGuestsForOffer || 0)
-    // )
-    //   [finalAmount, discount] = deductPercentage(
-    //     baseAmountAfterIncrement,
-    //     batchDetails?.offerPercentage || 0
-    //   );
     let finalAmount = baseAmountAfterIncrement;
     let discount = 0;
     let offerPercentage = batchDetails?.offerPercentage || 0;

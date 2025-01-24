@@ -22,20 +22,19 @@ const RideSelector: React.FC<RideSelectorProps> = ({
 
     let newSelectedRides = [...selectedRides];
     
-    // If ride is already selected, allow deselecting it
     if (selectedRides.includes(rideNumber)) {
       newSelectedRides = newSelectedRides.filter(ride => ride !== rideNumber);
       onRideSelect(newSelectedRides);
       setErrorMessage(null);
     } else {
-      // Only allow selecting if we haven't reached the guest limit
       if (selectedRides.length < noOfGuests) {
         newSelectedRides.push(rideNumber);
-        onRideSelect(newSelectedRides);
-        setErrorMessage(null);
       } else {
-        setErrorMessage(`You can only select ${noOfGuests} ${noOfGuests === 1 ? 'ride' : 'rides'}`);
+        newSelectedRides.pop();
+        newSelectedRides.push(rideNumber);
       }
+      onRideSelect(newSelectedRides);
+      setErrorMessage(null);
     }
   };
 
@@ -48,18 +47,17 @@ const RideSelector: React.FC<RideSelectorProps> = ({
       </p>
 
       {/* Rides in scrollable row */}
-      <div className="flex gap-2 overflow-x-auto pb-2 mb-3">
+      <div className="flex flex-wrap gap-2 mb-3">
         {Array.from({ length: totalRides }).map((_, index) => {
           const rideNumber = index + 1;
           const isAvailable = availableRides.includes(rideNumber);
           const isSelected = selectedRides.includes(rideNumber);
-          const isSelectable = isAvailable && (isSelected || selectedRides.length < noOfGuests);
           
           return (
             <button
               key={rideNumber}
               onClick={() => handleRideClick(rideNumber)}
-              disabled={!isSelectable && !isSelected}
+              disabled={!isAvailable}
               className={`
                 min-w-[28px] h-7
                 flex items-center justify-center
@@ -67,9 +65,7 @@ const RideSelector: React.FC<RideSelectorProps> = ({
                 ${isAvailable 
                   ? isSelected
                     ? 'bg-green-600 text-white border-green-600'
-                    : isSelectable
-                      ? 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                      : 'bg-gray-200 text-gray-500 border-gray-200 cursor-not-allowed'
+                    : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
                   : 'bg-gray-200 text-gray-500 border-gray-200 cursor-not-allowed'
                 }
               `}
@@ -89,7 +85,7 @@ const RideSelector: React.FC<RideSelectorProps> = ({
         <div className="flex gap-2 items-center">
           <span className="min-w-[28px] h-7
                 flex items-center justify-center
-                text-sm border rounded-full bg-gray-200 border-black-700"></span>
+                text-sm border rounded-full bg-gray-200 border-gray-200"></span>
           <span>Booked</span>
         </div>
         <div className="flex gap-2 items-center">
