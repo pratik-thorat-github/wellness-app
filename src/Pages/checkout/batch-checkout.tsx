@@ -71,6 +71,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
 
   const [isFromApp, setIsFromApp] = useState(false);
   const [pastAppBookings, setPastAppBookings] = useState({});
+  const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];  
 
   useEffect(() => {
     setIsFromApp(window?.isFromApp || false);
@@ -369,7 +370,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
           <span className="locIcon">{locationIcon()}</span>
           {gym?.name},{gym?.area}
         </div>
-        {(gym?.gymId == 6 || gym?.gymId == 22 || gym?.gymId == 24 || gym?.gymId == 25 || gym?.gymId == 27 || gym?.gymId == 28) && batchDetails?.slots && batchDetails?.slotsBooked >= 0 ?
+        {(slotsRemainingVisible.includes(gym?.gymId || 0)) && batchDetails?.slots && batchDetails?.slotsBooked >= 0 ?
         <div className="remainingSlots">
         <span>
             {batchDetails.slots-batchDetails.slotsBooked} spot(s) left out of {batchDetails?.slots}

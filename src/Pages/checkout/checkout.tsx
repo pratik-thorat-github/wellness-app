@@ -66,6 +66,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   const [isFromApp, setIsFromApp] = useState(false);
   const [gotPastBookings, setGotPastAppBookings] = useState(false);
   const [selectedRides, setSelectedRides] = useState<number[]>([]);
+  const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];  
 
   const { mutate: _getPastAppBookings } = useMutation({
     mutationFn: getPastAppBookings,
@@ -558,11 +559,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
                   </>
                 )}
               </div>
-              {(gym.gymId == 6 ||
-                gym.gymId == 22 ||
-                gym.gymId == 24 ||
-                gym.gymId == 25 ||
-                gym.gymId == 27) &&
+              {(slotsRemainingVisible.includes(gym.gymId)) &&
               batchDetails?.slots &&
               batchDetails.slotsBooked >= 0 ? (
                 <div className="actTime">

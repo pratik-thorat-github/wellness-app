@@ -316,21 +316,20 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       console.log(r.batch.slotsBooked, props.batchDetails?.slotsBooked);
       if (r?.batch?.slotsBooked + props.totalGuests > r.batch.slots) {
         if (r?.batch?.slotsBooked == r?.batch?.slots) {
-          console.log("batchdets");
-          console.log(r.batch, props);
           alert(
-            `Sorry, all spots are booked for this slot. Please choose the next available slot.`,
+            `Sorry, all spots are booked for this slot. Please choose the next available slot.`
           );
         } else
           alert(
-            `Sorry, only ${r.batch.slots - r.batch.slotsBooked} spots are available for this slot. Please choose the next available slot!`,
+            `Sorry, only ${
+              r.batch.slots - r.batch.slotsBooked
+            } spots are available for this slot. Please choose the next available slot!`
           );
         window.location.reload();
       } else {
-        //await displayRazorpay(props, userDetails, setLoading);
+        // await displayRazorpay(props, userDetails, setLoading);
         displayCashfree(props, userDetails, setLoading);
       }
-      //displayCashfree(props, userDetails, setLoading);
     }
   }
 
