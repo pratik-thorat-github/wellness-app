@@ -325,8 +325,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           );
         window.location.reload();
       } else {
-         await displayRazorpay(props, userDetails, setLoading);
-        //displayCashfree(props, userDetails, setLoading);
+        // await displayRazorpay(props, userDetails, setLoading);
+        displayCashfree(props, userDetails, setLoading);
       }
     }
   }
