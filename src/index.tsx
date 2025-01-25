@@ -7,7 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 
 function checkAndRedirect() {
   const currentUrl = window.location.href;
-  const isGymUrl = /^https?:\/\/zenfitx\.in\/gym\/999\/batch$/.test(currentUrl);
+  const isGymUrl = /^https?:\/\/zenfitx\.in\/gym\/32/.test(currentUrl);
 
   // Check if we're in React Native WebView
   const isInWebView = Boolean(

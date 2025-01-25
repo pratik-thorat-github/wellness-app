@@ -34,6 +34,7 @@ export interface IBookNowFooter {
   totalSavings?: number;
   isFromApp?: boolean;
   pastAppBookings?: PastAppBookingObject;
+  disabled?: boolean;
 }
 
 function loadScript(src: string) {
@@ -79,7 +80,7 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
 async function displayRazorpay(
   props: IBookNowFooter,
   userDetails: IUser | null,
-  setLoading: (loading: boolean) => void
+  setLoading: (loading: boolean) => void,
 ) {
   setLoading(true);
   const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
@@ -164,7 +165,7 @@ async function displayRazorpay(
 async function displayCashfree(
   props: IBookNowFooter,
   userDetails: IUser | null,
-  setLoading: (loading: boolean) => void
+  setLoading: (loading: boolean) => void,
 ) {
   setLoading(true);
   const res = await loadScript("https://sdk.cashfree.com/js/v3/cashfree.js");
@@ -191,7 +192,7 @@ async function displayCashfree(
     if (result.error) {
       // This will be true whenever user clicks on close icon inside the modal or any error happens during the payment
       console.log(
-        "User has closed the popup or there is some payment error, Check for Payment Status"
+        "User has closed the popup or there is some payment error, Check for Payment Status",
       );
       console.log(result.error);
     }
@@ -220,7 +221,7 @@ async function displayCashfree(
 
 function MixpanelBookNowFooterInit(
   props: IBookNowFooter,
-  checkoutType: ECheckoutType
+  checkoutType: ECheckoutType,
 ) {
   Mixpanel.track("open_payment_page", {
     ...props,
@@ -232,8 +233,9 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [showDiscount, setShowDiscount] = useState(true);
   const [discountedAmount, setDiscountedAmount] = useState(props.totalAmount);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [_, setAfterLoginRedirectAtom] = useAtom(afterLoginRedirectAtom);
-
+  const BACKEND_URL = process.env.REACT_APP_BE_URL;
   let locationStates = useLocation().state;
   console.log(locationStates);
 
@@ -260,8 +262,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     props.gymData?.discountType == "FLAT"
       ? `FLAT ${offerPercentage}% off on 1st booking at this center`
       : props.gymData?.discountType == "PERCENTAGE"
-      ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center`
-      : ``;
+        ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center`
+        : ``;
 
   async function processBookNowCta() {
     if (props.forceBookNowCta) {
@@ -306,7 +308,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       });
 
       const batchDetailsResp = await fetch(
-        `https://be.zenfitx.link/gyms/batch/byBatchId?batchId=${props.batchId}`
+        `${BACKEND_URL}/gyms/batch/byBatchId?batchId=${props.batchId}`,
       );
 
       const r = await batchDetailsResp?.json();
@@ -365,7 +367,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     if (showDiscount && props.batchDetails) {
       const [newTotalAmount] = deductPercentage(
         props.batchDetails?.price || 0,
-        50
+        50,
       );
       let noOfGuests = 1;
       if (props.totalGuests) {
@@ -414,6 +416,18 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   // const discountLine = () => <div className="discountLine">{discountTxt}</div>;
   const discountLine = () => <div className="discountLine">{discountText}</div>;
 
+  const handleBookNowClick = async () => {
+    if (props.disabled) {
+      setErrorMessage(
+        `Please select ${props.totalGuests} ${props.totalGuests === 1 ? "bike" : "bikes"} to continue`,
+      );
+      // Clear error message after 3 seconds
+      setTimeout(() => setErrorMessage(null), 3000);
+      return;
+    }
+    await processBookNowCta();
+  };
+
   return (
     <>
       <Flex
@@ -433,6 +447,11 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         }}
       >
         {showDiscount ? discountLine() : null}
+        {errorMessage && (
+          <div className="text-sm text-red-600 text-center absolute -top-8 left-0 right-0">
+            {errorMessage}
+          </div>
+        )}
         {showCTA() ? (
           <Flex
             flex={1}
@@ -520,19 +539,18 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                   ? "conversion-book-now"
                   : "book-now"
               }
-              style={{
-                color: "white",
-                fontWeight: "700",
-                fontSize: "16px",
-                backgroundColor: "#05070B",
-                borderRadius: "8px",
-                padding: "12px 24px",
-                display: "flex",
-                alignItems: "center",
-              }}
-              onClick={async () => {
-                await processBookNowCta();
-              }}
+              className={`
+                text-white font-bold text-base
+                rounded-lg px-6 py-3
+                flex items-center
+                ${
+                  props.disabled
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#05070B] cursor-pointer"
+                }
+              `}
+              onClick={handleBookNowClick}
+              disabled={props.disabled}
             >
               <span>Book Now</span>
             </button>

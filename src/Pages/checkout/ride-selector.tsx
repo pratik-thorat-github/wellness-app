@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface RideSelectorProps {
   totalRides: number;
@@ -13,8 +13,10 @@ const RideSelector: React.FC<RideSelectorProps> = ({
   availableRides,
   selectedRides,
   onRideSelect,
-  noOfGuests
+  noOfGuests,
 }) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const handleRideClick = (rideNumber: number) => {
     if (!availableRides.includes(rideNumber)) return;
 
@@ -22,18 +24,22 @@ const RideSelector: React.FC<RideSelectorProps> = ({
     
     if (selectedRides.includes(rideNumber)) {
       newSelectedRides = newSelectedRides.filter(ride => ride !== rideNumber);
-    } else if (selectedRides.length < noOfGuests) {
-      newSelectedRides.push(rideNumber);
+      onRideSelect(newSelectedRides);
+      setErrorMessage(null);
     } else {
-      newSelectedRides.shift();
-      newSelectedRides.push(rideNumber);
+      if (selectedRides.length < noOfGuests) {
+        newSelectedRides.push(rideNumber);
+      } else {
+        newSelectedRides.pop();
+        newSelectedRides.push(rideNumber);
+      }
+      onRideSelect(newSelectedRides);
+      setErrorMessage(null);
     }
-
-    onRideSelect(newSelectedRides);
   };
 
   return (
-    <div className="p-4">
+    <div className="py-4">
       {/* Header */}
       <h3 className="text-lg font-normal text-gray-900 mb-1">Select Rides</h3>
       <p className="text-sm text-gray-600 mb-3">
@@ -41,7 +47,7 @@ const RideSelector: React.FC<RideSelectorProps> = ({
       </p>
 
       {/* Rides in scrollable row */}
-      <div className="flex gap-1 overflow-x-auto pb-2 mb-3">
+      <div className="flex flex-wrap gap-2 mb-3">
         {Array.from({ length: totalRides }).map((_, index) => {
           const rideNumber = index + 1;
           const isAvailable = availableRides.includes(rideNumber);
@@ -55,12 +61,12 @@ const RideSelector: React.FC<RideSelectorProps> = ({
               className={`
                 min-w-[28px] h-7
                 flex items-center justify-center
-                text-sm border rounded
+                text-sm border rounded-full
                 ${isAvailable 
                   ? isSelected
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white border-gray-300 text-gray-700'
-                  : 'bg-gray-100 text-gray-500 border-gray-200'
+                    ? 'bg-green-600 text-white border-green-600'
+                    : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                  : 'bg-gray-200 text-gray-500 border-gray-200 cursor-not-allowed'
                 }
               `}
             >
@@ -70,15 +76,23 @@ const RideSelector: React.FC<RideSelectorProps> = ({
         })}
       </div>
 
+      {errorMessage && (
+        <p className="text-sm text-red-600 mb-3">{errorMessage}</p>
+      )}
+
       {/* Legend */}
-      <div className="text-sm text-gray-600">
-        <div className="flex items-center">
-          <span className="mr-1">1</span>
-          <span>Available</span>
-        </div>
-        <div className="flex items-center">
-          <span className="mr-1">2</span>
+      <div className="flex gap-10 text-sm text-black-600">
+        <div className="flex gap-2 items-center">
+          <span className="min-w-[28px] h-7
+                flex items-center justify-center
+                text-sm border rounded-full bg-gray-200 border-gray-200"></span>
           <span>Booked</span>
+        </div>
+        <div className="flex gap-2 items-center">
+          <span className="min-w-[28px] h-7
+                flex items-center justify-center
+                text-sm border rounded-full border-gray-300"></span>
+          <span>Available</span>
         </div>
       </div>
     </div>
