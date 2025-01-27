@@ -77,14 +77,28 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
   return payload;
 }
 
+async function handleNativePayment(options: any) {
+  // Post message to React Native
+  window.ReactNativeWebView?.postMessage(JSON.stringify({
+    type: 'RAZORPAY_PAYMENT',
+    payload: options
+  }));
+
+  // Create a promise that will be resolved when payment is complete
+  return new Promise((resolve) => {
+    window.paymentCallback = (response: any) => {
+      resolve(response);
+    };
+  });
+}
+
 async function displayRazorpay(
   props: IBookNowFooter,
   userDetails: IUser | null,
   setLoading: (loading: boolean) => void,
 ) {
   setLoading(true);
-  const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-
+  
   let payload = createOrderPayload(props, userDetails as IUser);
   let orderResult;
 
@@ -92,59 +106,24 @@ async function displayRazorpay(
     orderResult = await createRzpOrder(payload);
   } catch (error) {
     console.log({ error });
+    setLoading(false);
+    return;
   }
 
-  console.log({ orderResult });
-  setLoading(false);
-
-  if (!orderResult && !orderResult?.orderId) {
+  if (!orderResult?.orderId) {
     alert(`Could not place order!`);
+    setLoading(false);
     return;
   }
-
-  if (!res) {
-    alert("Razorpay SDK failed to load. Are you online?");
-    return;
-  }
-
-  let description = `Checkout for batch - ${props.batchId}`;
-  // if (props.plusMembershipOpted)
-  //   description += `, and plus membership for onePass`;
 
   const options = {
     key: process.env.REACT_APP_RZP_CLIENT_KEY,
     amount: props.totalAmount * 100,
     currency: "INR",
-    name: "ZenFitX",
-    description,
+    name: "ZenfitX",
+    description: `Checkout for batch - ${props.batchId}`,
     image: { logo },
     order_id: orderResult.orderId,
-    method: {
-      upi: true,
-    },
-    webview_intent: true,
-    handler: (response: any) => {
-      if (response.razorpay_payment_id) {
-        if (props.checkoutType == ECheckoutType.BATCH)
-          navigate("/checkout/success", {
-            state: {
-              gymData: props.gymData,
-              batchDetails: props.batchDetails,
-            },
-          });
-        else if (props.checkoutType === ECheckoutType.PLUS) {
-          navigate("/plus/success");
-        }
-        trackEvent("slot_purchase", {
-          activity_name: props.batchDetails?.activityName,
-          total_amount: props.totalAmount,
-          guests: props.totalGuests,
-          booking_at: new Date().toISOString(),
-        });
-      }
-    },
-
-    //todo user details
     prefill: {
       name: userDetails?.name as string,
       email: `${userDetails?.name as string}@example.com`,
@@ -157,9 +136,34 @@ async function displayRazorpay(
 
   setLoading(false);
 
-  //@ts-ignore
-  const paymentObject = new window.Razorpay(options);
-  paymentObject.open();
+  // Check if running in React Native WebView
+  if (window.platformInfo?.platform === 'ios' || window.platformInfo?.platform === 'android') {
+    const response = await handleNativePayment(options);
+    
+    // Handle payment response
+    if (response.razorpay_payment_id) {
+      if (props.checkoutType == ECheckoutType.BATCH)
+        navigate("/checkout/success", {
+          state: {
+            gymData: props.gymData,
+            batchDetails: props.batchDetails,
+          },
+        });
+      else if (props.checkoutType === ECheckoutType.PLUS) {
+        navigate("/plus/success");
+      }
+    }
+  } else {
+    // Web flow remains the same
+    const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+    if (!res) {
+      alert("Razorpay SDK failed to load. Are you online?");
+      return;
+    }
+    //@ts-ignore
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  }
 }
 
 async function displayCashfree(
