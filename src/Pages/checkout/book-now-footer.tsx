@@ -19,6 +19,19 @@ import Loader from "../../components/Loader";
 import { deductPercentage, discountTxt } from "../../utils/offers";
 import { trackEvent } from "../../firebase/config";
 
+interface RazorpayResponse {
+  razorpay_payment_id?: string;
+  razorpay_order_id?: string;
+  razorpay_signature?: string;
+  error?: {
+    code: string;
+    description: string;
+    source: string;
+    step: string;
+    reason: string;
+  };
+}
+
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
 }
@@ -77,7 +90,7 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
   return payload;
 }
 
-async function handleNativePayment(options: any) {
+async function handleNativePayment(options: any): Promise<RazorpayResponse> {
   // Post message to React Native
   window.ReactNativeWebView?.postMessage(JSON.stringify({
     type: 'RAZORPAY_PAYMENT',
@@ -138,7 +151,7 @@ async function displayRazorpay(
 
   // Check if running in React Native WebView
   if (window.platformInfo?.platform === 'ios' || window.platformInfo?.platform === 'android') {
-    const response = await handleNativePayment(options);
+    const response: RazorpayResponse = await handleNativePayment(options);
     
     // Handle payment response
     if (response.razorpay_payment_id) {
