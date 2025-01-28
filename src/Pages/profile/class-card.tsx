@@ -94,6 +94,22 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
           </Flex>
         </Flex>
 
+        {booking.rideNumbers && booking.rideNumbers.length > 0 && (
+          <Flex 
+            flex={1} 
+            style={{ 
+              paddingTop: "16px",
+              fontSize: "12px",
+              color: colors.secondary 
+            }}
+          >
+            {booking.rideNumbers.length === 1 
+              ? `Ride number: ${booking.rideNumbers[0]}`
+              : `Rides numbers: ${booking.rideNumbers.join(', ')}`
+            }
+          </Flex>
+        )}
+
         <Flex flex={1} style={{ paddingTop: "16px", fontSize: "12px" }}>
           <Flex flex={1} justify="flex-start">
             <span style={{ marginRight: "8px" }}>
@@ -122,3 +138,4 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
 };
 
 export default ClassCardInProfile;
+

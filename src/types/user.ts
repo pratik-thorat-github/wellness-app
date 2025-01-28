@@ -30,9 +30,9 @@ export interface IBookings {
   date: Date;
   addressLine1: string;
   addressLine2: string;
-
   venueAddressLine1?: string;
   venueAddressLine2?: string;
+  rideNumbers?: number[];
 }
 
 export default IUser;
