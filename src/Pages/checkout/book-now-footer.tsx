@@ -150,7 +150,7 @@ async function displayRazorpay(
   setLoading(false);
 
   // Check if running in React Native WebView
-  if (window.platformInfo?.platform === 'ios' || window.platformInfo?.platform === 'android') {
+  if (false) { //window.platformInfo?.platform === 'ios' || window.platformInfo?.platform === 'android') {
     const response: RazorpayResponse = await handleNativePayment(options);
     
     // Handle payment response
