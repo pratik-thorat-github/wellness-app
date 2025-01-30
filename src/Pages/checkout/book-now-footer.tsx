@@ -92,10 +92,12 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
 
 async function handleNativePayment(options: any): Promise<RazorpayResponse> {
   // Post message to React Native
-  window.ReactNativeWebView?.postMessage(JSON.stringify({
-    type: 'RAZORPAY_PAYMENT',
-    payload: options
-  }));
+  window.ReactNativeWebView?.postMessage(
+    JSON.stringify({
+      type: "RAZORPAY_PAYMENT",
+      payload: options,
+    }),
+  );
 
   // Create a promise that will be resolved when payment is complete
   return new Promise((resolve) => {
@@ -111,7 +113,7 @@ async function displayRazorpay(
   setLoading: (loading: boolean) => void,
 ) {
   setLoading(true);
-  
+
   let payload = createOrderPayload(props, userDetails as IUser);
   let orderResult;
 
@@ -143,40 +145,45 @@ async function displayRazorpay(
       contact: userDetails?.phone as string,
     },
     theme: {
-      color: "#61dafb",
+      color: "#1a1a1a",
+    },
+    method: {
+      upi: true,
+    },
+    webview_intent: true,
+    handler: (response: any) => {
+      if (response.razorpay_payment_id) {
+        if (props.checkoutType == ECheckoutType.BATCH)
+          navigate("/checkout/success", {
+            state: {
+              gymData: props.gymData,
+              batchDetails: props.batchDetails,
+            },
+          });
+        else if (props.checkoutType === ECheckoutType.PLUS) {
+          navigate("/plus/success");
+        }
+        trackEvent("slot_purchase", {
+          activity_name: props.batchDetails?.activityName,
+          total_amount: props.totalAmount,
+          guests: props.totalGuests,
+          booking_at: new Date().toISOString(),
+        });
+      }
     },
   };
 
   setLoading(false);
 
-  // Check if running in React Native WebView
-  if (false) { //window.platformInfo?.platform === 'ios' || window.platformInfo?.platform === 'android') {
-    const response: RazorpayResponse = await handleNativePayment(options);
-    
-    // Handle payment response
-    if (response.razorpay_payment_id) {
-      if (props.checkoutType == ECheckoutType.BATCH)
-        navigate("/checkout/success", {
-          state: {
-            gymData: props.gymData,
-            batchDetails: props.batchDetails,
-          },
-        });
-      else if (props.checkoutType === ECheckoutType.PLUS) {
-        navigate("/plus/success");
-      }
-    }
-  } else {
-    // Web flow remains the same
-    const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-    if (!res) {
-      alert("Razorpay SDK failed to load. Are you online?");
-      return;
-    }
-    //@ts-ignore
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
+  // Web flow remains the same
+  const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+  if (!res) {
+    alert("Razorpay SDK failed to load. Are you online?");
+    return;
   }
+  //@ts-ignore
+  const paymentObject = new window.Razorpay(options);
+  paymentObject.open();
 }
 
 async function displayCashfree(
@@ -334,22 +341,25 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       if (r?.batch?.slotsBooked + props.totalGuests > r.batch.slots) {
         if (r?.batch?.slotsBooked == r?.batch?.slots) {
           alert(
-            `Sorry, all spots are booked for this slot. Please choose the next available slot.`
+            `Sorry, all spots are booked for this slot. Please choose the next available slot.`,
           );
         } else
           alert(
             `Sorry, only ${
               r.batch.slots - r.batch.slotsBooked
-            } spots are available for this slot. Please choose the next available slot!`
+            } spots are available for this slot. Please choose the next available slot!`,
           );
         window.location.reload();
       } else {
-          if (window.platformInfo?.platform === 'ios' || window.platformInfo?.platform === 'android') {
-//            displayCashfree(props, userDetails, setLoading);
-            await displayRazorpay(props, userDetails, setLoading);
-          } else {
-            await displayRazorpay(props, userDetails, setLoading);
-          }
+        if (
+          window.platformInfo?.platform === "ios" ||
+          window.platformInfo?.platform === "android"
+        ) {
+          //            displayCashfree(props, userDetails, setLoading);
+          await displayRazorpay(props, userDetails, setLoading);
+        } else {
+          await displayRazorpay(props, userDetails, setLoading);
+        }
         // displayCashfree(props, userDetails, setLoading);
       }
     }
