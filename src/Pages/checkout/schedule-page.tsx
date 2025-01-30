@@ -313,7 +313,11 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                       {batch.duration} min
                     </Flex>
                   ) : null}
-                  {(slotsRemainingVisible.includes(gym.gymId)) && batch.slots && batch.slotsBooked >= 0 && batch.slots != batch.slotsBooked ? (
+                  {(slotsRemainingVisible.includes(gym.gymId)) &&
+                      batch.slots &&
+                      batch.slotsBooked >= 0 &&
+                      batch.slots != batch.slotsBooked &&
+                          batch.slots != 1 ? (
                     <Flex 
                       style={{
                         color: "#C15700",
@@ -374,7 +378,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                       fontSize: '12px',
                       color: '#828081'
                     }}>
-                    {!showDiscountText(gym, userDetails, isFromApp, pastAppBookings) ?  `per person` : ``}
+                    {!showDiscountText(gym, userDetails, isFromApp, pastAppBookings) && batch.slots != 1 ?  `per person` : ``}
                     </div>
                   </Flex>
                 </Flex>

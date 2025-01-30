@@ -15,7 +15,11 @@ import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import { useAtom } from "jotai/react";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import { Mixpanel } from "../../mixpanel/init";
-import { getActivityById, getGymById, getPastAppBookings } from "../../apis/gym/activities";
+import {
+  getActivityById,
+  getGymById,
+  getPastAppBookings,
+} from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
@@ -24,7 +28,7 @@ import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
 import MetaPixel from "../../components/meta-pixel";
 import ShareMetadata from "../../components/share-metadata";
 import Loader from "../../components/Loader";
-import {handleRefresh} from '../../utils/refresh';
+import { handleRefresh } from "../../utils/refresh";
 import SwipeHandler from "../../components/back-swipe-handler";
 
 interface PastAppBookingObject {
@@ -55,7 +59,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   // const pastAppBookings = JSON.parse(data).pastAppBookings
   const batchId = window.location.pathname.split("/")[3];
   const [selectedPlan, setSelectedPlan] = useState<ESelectedPlan>(
-    ESelectedPlan.BATCH
+    ESelectedPlan.BATCH,
   );
   const [batchDetails, setBatchDetails] = useState<IBatch>();
   const [gym, setGym] = useState<IGymDetails | null>(null);
@@ -71,7 +75,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
 
   const [isFromApp, setIsFromApp] = useState(false);
   const [pastAppBookings, setPastAppBookings] = useState({});
-  const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];  
+  const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];
 
   useEffect(() => {
     setIsFromApp(window?.isFromApp || false);
@@ -155,7 +159,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
         navigator
           .share({
             title: "ZenfitX",
-            text: `Hey, Join me for ${batchDetails?.activityName} at ${("0"+batchDetails?.startTime.toString()).slice(-4).substring(0, 2)}:00 on ${new Date(`${batchDetails?.date}`).toDateString()} at the ${gym?.name}. Let's sweat it out together! 😬`,
+            text: `Hey, Join me for ${batchDetails?.activityName} at ${("0" + batchDetails?.startTime.toString()).slice(-4).substring(0, 2)}:00 on ${new Date(`${batchDetails?.date}`).toDateString()} at the ${gym?.name}. Let's sweat it out together! 😬`,
             url: window.location.href,
           })
           .then(() => console.log("Successful share"))
@@ -313,173 +317,201 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
       </svg>
     );
   };
-  const mapsLink = createMapsLink(batchDetails?.venueAddressLine1 || '', batchDetails?.venueAddressLine1 || '');
+  const mapsLink = createMapsLink(
+    batchDetails?.venueAddressLine1 || "",
+    batchDetails?.venueAddressLine1 || "",
+  );
 
-
-  if(loading){
-    return <Loader/>
+  if (loading) {
+    return <Loader />;
   }
 
   return (
     <>
-    {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
-    {/* <PullToRefresh onRefresh={handleRefresh}> */}
-    <Flex
-      flex={1}
-      vertical
-      style={{
-        backgroundColor: "#F8F8F8",
-        minHeight: "100vh",
-      }}
-    >
-      {shareAndBack()}
-      {batchDetails?.image && (
-        <div style={{ clipPath: "ellipse(100% 93% at 50% 5%)" }}>
-          <img
-            width="360px"
-            height="250px"
-            className="activityImg"
-            src={batchDetails?.image}
-            alt="img"
-          ></img>
-        </div>
-      )}
-      <div className="activityContainer">
-        <div className="activityHeading">
-          <span style={{ maxWidth: "220px" }}>
-            {batchDetails?.activityName}
-            {batchDetails?.trainer && ` with ${batchDetails?.trainer}`}
-          </span>
-        </div>
-        <div className="activityDate">
-          <span>
-            {batchDetails?.date
-              ? formatDate(batchDetails.date)["date suffix"]
-              : "Date not available"}
-          </span>
-          {batchDetails?.isDayPass ? "" : (
-            <>
-              <span className="dot"></span>
-              {formatTimeIntToAmPm(batchDetails?.startTime || 0)}
-            </>
-          )}
-          <span className="dot"></span>{" "}
-          {batchDetails?.isDayPass ? "All Day" : batchDetails?.DurationMin + " min" || "Duration not available"}
-        </div>
-        <div className="activityLoc">
-          <span className="locIcon">{locationIcon()}</span>
-          {gym?.name},{gym?.area}
-        </div>
-        {(slotsRemainingVisible.includes(gym?.gymId || 0)) && batchDetails?.slots && batchDetails?.slotsBooked >= 0 ?
-        <div className="remainingSlots">
-        <span>
-            {batchDetails.slots-batchDetails.slotsBooked} spot(s) left out of {batchDetails?.slots}
-        </span>
-        </div>
-        : ""}
-        <div className="desc">
-          {batchDetails?.aboutTheActivity && (
-            <div className="sectionAct">
-              <div className="sectionActHeading">
-                {leftDivider()}
-                <span style={{ margin: "0px 12px" }}>ABOUT THE ACTIVITY</span>
-                {rightDivider()}
-              </div>
-              <div className="sectionActItems">
-                <ol type="1">
-                  {batchDetails?.aboutTheActivity?.split("\n").map((e) => {
-                    return <li>{e}</li>;
-                  })}
-                </ol>
-              </div>
+      {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
+      {/* <PullToRefresh onRefresh={handleRefresh}> */}
+      <Flex
+        flex={1}
+        vertical
+        style={{
+          backgroundColor: "#F8F8F8",
+          minHeight: "100vh",
+        }}
+      >
+        {shareAndBack()}
+        {batchDetails?.image && (
+          <div style={{ clipPath: "ellipse(100% 93% at 50% 5%)" }}>
+            <img
+              width="360px"
+              height="250px"
+              className="activityImg"
+              src={batchDetails?.image}
+              alt="img"
+            ></img>
+          </div>
+        )}
+        <div className="activityContainer">
+          <div className="activityHeading">
+            <span style={{ maxWidth: "220px" }}>
+              {batchDetails?.activityName}
+              {batchDetails?.trainer && ` with ${batchDetails?.trainer}`}
+            </span>
+          </div>
+          <div className="activityDate">
+            <span>
+              {batchDetails?.date
+                ? formatDate(batchDetails.date)["date suffix"]
+                : "Date not available"}
+            </span>
+            {batchDetails?.isDayPass ? (
+              ""
+            ) : (
+              <>
+                <span className="dot"></span>
+                {formatTimeIntToAmPm(batchDetails?.startTime || 0)}
+              </>
+            )}
+            <span className="dot"></span>{" "}
+            {batchDetails?.isDayPass
+              ? "All Day"
+              : batchDetails?.DurationMin + " min" || "Duration not available"}
+          </div>
+          <div className="activityLoc">
+            <span className="locIcon">{locationIcon()}</span>
+            {gym?.name},{gym?.area}
+          </div>
+          {slotsRemainingVisible.includes(gym?.gymId || 0) &&
+          batchDetails?.slots &&
+          batchDetails?.slotsBooked >= 0 &&
+          batchDetails?.slots != 1 ? (
+            <div className="remainingSlots">
+              <span>
+                {batchDetails.slots - batchDetails.slotsBooked} spot(s) left out
+                of {batchDetails?.slots}
+              </span>
             </div>
+          ) : (
+            ""
           )}
-          {batchDetails?.whatToExpect && (
-            <div className="sectionAct">
-              <div className="sectionActHeading">
-                {leftDivider()}
-                <span style={{ margin: "0px 12px" }}>What TO Expect?</span>
-                {rightDivider()}
+          <div className="desc">
+            {batchDetails?.aboutTheActivity && (
+              <div className="sectionAct">
+                <div className="sectionActHeading">
+                  {leftDivider()}
+                  <span style={{ margin: "0px 12px" }}>ABOUT THE ACTIVITY</span>
+                  {rightDivider()}
+                </div>
+                <div className="sectionActItems">
+                  <ol type="1">
+                    {batchDetails?.aboutTheActivity?.split("\n").map((e) => {
+                      return <li>{e}</li>;
+                    })}
+                  </ol>
+                </div>
               </div>
-              <div className="sectionActItems">
-                <ol type="1">
-                  {batchDetails?.whatToExpect?.split("\n").map((e) => {
-                    return <li>{e}</li>;
-                  })}
-                </ol>
-              </div>{" "}
-            </div>
-          )}
-          {batchDetails?.whatToBring && (
-            <div className="sectionAct">
-              <div className="sectionActHeading">
-                {leftDivider()}
-                <span style={{ margin: "0px 12px" }}>What TO Bring?</span>
-                {rightDivider()}
+            )}
+            {batchDetails?.whatToExpect && (
+              <div className="sectionAct">
+                <div className="sectionActHeading">
+                  {leftDivider()}
+                  <span style={{ margin: "0px 12px" }}>What TO Expect?</span>
+                  {rightDivider()}
+                </div>
+                <div className="sectionActItems">
+                  <ol type="1">
+                    {batchDetails?.whatToExpect?.split("\n").map((e) => {
+                      return <li>{e}</li>;
+                    })}
+                  </ol>
+                </div>{" "}
               </div>
-              <div className="sectionActItems">
-                <ol type="1">
-                  {batchDetails?.whatToBring?.split("\n").map((e) => {
-                    return <li>{e}</li>;
-                  })}
-                </ol>
+            )}
+            {batchDetails?.whatToBring && (
+              <div className="sectionAct">
+                <div className="sectionActHeading">
+                  {leftDivider()}
+                  <span style={{ margin: "0px 12px" }}>What TO Bring?</span>
+                  {rightDivider()}
+                </div>
+                <div className="sectionActItems">
+                  <ol type="1">
+                    {batchDetails?.whatToBring?.split("\n").map((e) => {
+                      return <li>{e}</li>;
+                    })}
+                  </ol>
+                </div>
               </div>
-            </div>
-          )}
-          {batchDetails?.moreInfo && (
-            <div className="sectionAct">
-              <div className="sectionActHeading">
-                {leftDivider()}
-                <span style={{ margin: "0px 12px" }}>More info</span>
-                {rightDivider()}
+            )}
+            {batchDetails?.moreInfo && (
+              <div className="sectionAct">
+                <div className="sectionActHeading">
+                  {leftDivider()}
+                  <span style={{ margin: "0px 12px" }}>More info</span>
+                  {rightDivider()}
+                </div>
+                <div className="sectionActItems">
+                  <ol type="1">
+                    {batchDetails?.moreInfo?.split("\n").map((e) => {
+                      return <li>{e}</li>;
+                    })}
+                  </ol>
+                </div>
               </div>
-              <div className="sectionActItems">
-                <ol type="1">
-                  {batchDetails?.moreInfo?.split("\n").map((e) => {
-                    return <li>{e}</li>;
-                  })}
-                </ol>
+            )}
+            {batchDetails?.venue && (
+              <div className="sectionAct">
+                <div className="sectionActHeading">
+                  {leftDivider()}
+                  <span style={{ margin: "0px 12px" }}>Address</span>
+                  {rightDivider()}
+                </div>
+                <div className="locWrp locWrpCol">
+                  <div
+                    className="baseTxt baseTxt1"
+                    style={{ color: "#828081", marginLeft: "16px" }}
+                  >
+                    <span
+                      className="baseTxt"
+                      style={{ color: "#828081", alignItems: "flex-start" }}
+                    >
+                      <LocationLogo
+                        style={{ marginRight: "8px", marginTop: "4px" }}
+                      />{" "}
+                      <span style={{ color: "#828081", maxWidth: "80%" }}>
+                        {batchDetails?.venue}
+                      </span>
+                    </span>
+                    <span
+                      style={{
+                        textDecoration: "underline",
+                        color: "#000",
+                        minWidth: "30%",
+                      }}
+                      onClick={() => {
+                        window.open(mapsLink);
+                      }}
+                    >
+                      View on map
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
-          {batchDetails?.venue &&(
-            <div className="sectionAct">
-            <div className="sectionActHeading">
-              {leftDivider()}
-              <span style={{ margin: "0px 12px" }}>Address</span>
-              {rightDivider()}
-            </div>
-             <div className="locWrp locWrpCol">
-               <div
-                 className="baseTxt baseTxt1"
-                 style={{ color: "#828081", marginLeft: "16px" }}
-               >
-                <span className="baseTxt"  style={{ color: "#828081",alignItems:'flex-start'}}>
-                  <LocationLogo style={{ marginRight: "8px",marginTop:'4px' }} /> <span  style={{ color: "#828081" ,maxWidth:'80%' }}>{batchDetails?.venue}</span>
-                </span>
-                 <span style={{textDecoration:'underline',color:"#000",minWidth:'30%'}}  onClick={() => {
-                    window.open(mapsLink);
-                  }}>View on map</span>
-               </div>
-           </div>
-           </div>
-
-          )}
+            )}
+          </div>
         </div>
-      </div>
-      <BookNowFooter
-        checkoutType={ECheckoutType.BATCH}
-        batchDetails={batchDetails}
-        gymData={gym || undefined}
-        batchId={Number(batchId)}
-        totalAmount={batchDetails?.price as number}
-        comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
-        forceBookNowCta={true}
-      />
-    </Flex>
-    {/* </PullToRefresh> */}
-    {/* </SwipeHandler> */}
-    <MetaPixel />
+        <BookNowFooter
+          checkoutType={ECheckoutType.BATCH}
+          batchDetails={batchDetails}
+          gymData={gym || undefined}
+          batchId={Number(batchId)}
+          totalAmount={batchDetails?.price as number}
+          comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
+          forceBookNowCta={true}
+        />
+      </Flex>
+      {/* </PullToRefresh> */}
+      {/* </SwipeHandler> */}
+      <MetaPixel />
     </>
   );
 };

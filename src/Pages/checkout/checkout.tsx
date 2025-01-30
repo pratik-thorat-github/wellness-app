@@ -66,7 +66,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   const [isFromApp, setIsFromApp] = useState(false);
   const [gotPastBookings, setGotPastAppBookings] = useState(false);
   const [selectedRides, setSelectedRides] = useState<number[]>([]);
-  const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];  
+  const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];
 
   const { mutate: _getPastAppBookings } = useMutation({
     mutationFn: getPastAppBookings,
@@ -559,9 +559,10 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
                   </>
                 )}
               </div>
-              {(slotsRemainingVisible.includes(gym.gymId)) &&
+              {slotsRemainingVisible.includes(gym.gymId) &&
               batchDetails?.slots &&
-              batchDetails.slotsBooked >= 0 ? (
+              batchDetails.slotsBooked >= 0 &&
+              batchDetails.slots != 1 ? (
                 <div className="actTime">
                   <span style={{ color: "#C15700" }}>
                     {batchDetails.slots - batchDetails.slotsBooked} spot(s) left
@@ -602,7 +603,6 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
             </>
           )}
 
-        
           {!batchDetails?.guestsAllowed && (
             <div className="priceArea">
               <div className="priceHead">Total</div>
@@ -638,7 +638,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
 
           {/* Offer strip */}
           {offerStrip.current && (
-            <div className={totalSavings ? "offer offerGreen" : "offer offerGray"}>
+            <div
+              className={totalSavings ? "offer offerGreen" : "offer offerGray"}
+            >
               {totalSavings ? discountIconGreen() : discountIconGray()}
               {offerStrip.current ? offerStrip.current : null}
             </div>
@@ -672,7 +674,9 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
           totalSavings={totalSavings}
           isFromApp={isFromApp}
           pastAppBookings={pastAppBookings}
-          disabled={selectedRides.length !== noOfGuests && batchDetails?.isRideActivity}
+          disabled={
+            selectedRides.length !== noOfGuests && batchDetails?.isRideActivity
+          }
         />
       </Flex>
     </div>
