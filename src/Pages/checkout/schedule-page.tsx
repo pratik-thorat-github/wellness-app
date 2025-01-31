@@ -541,19 +541,35 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       </Flex>
     );
 
-    const weekDateAndDays = [];
-    for (let days = 0; days < 14; days++) {
-      let date = addDays(new Date(), days);
-      let dateNumber = date.getDate();
-      let day = toLetterCase(getDayOfWeek(date));
-      let dateString = formatDate(date).isoDate;
+    // fallback dates (next 14 days)
+    const generateFallbackDates = () => {
+      const dates = [];
+      for (let days = 0; days < 14; days++) {
+        let date = addDays(new Date(), days);
+        let dateNumber = date.getDate();
+        let day = toLetterCase(getDayOfWeek(date));
+        let dateString = formatDate(date).isoDate;
 
-      weekDateAndDays.push({
-        number: dateNumber,
-        day,
-        dateString,
-      });
-    }
+        dates.push({
+          number: dateNumber,
+          day,
+          dateString,
+        });
+      }
+      return dates;
+    };
+
+    // API dates if available, otherwise fallback dates
+    const weekDateAndDays = gym?.availableDates?.length 
+      ? gym.availableDates.map(dateString => {
+          const date = new Date(dateString);
+          return {
+            number: date.getDate(),
+            day: toLetterCase(getDayOfWeek(date)),
+            dateString: dateString 
+          };
+        })
+      : generateFallbackDates();
 
     return (
       <Flex
