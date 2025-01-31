@@ -109,6 +109,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     mutationFn: getGymById,
     onSuccess: (result) => {
       setGym(result.gym);
+      
       //   MixpanelGymInit(result.gym);
     },
     onError: (error) => {
@@ -537,7 +538,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     );
 
     const weekDateAndDays = [];
-    for (let days = 0; days < 7; days++) {
+    for (let days = 0; days < 14; days++) {
       let date = addDays(new Date(), days);
       let dateNumber = date.getDate();
       let day = toLetterCase(getDayOfWeek(date));
