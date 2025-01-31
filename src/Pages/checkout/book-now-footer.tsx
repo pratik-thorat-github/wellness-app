@@ -354,8 +354,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           window.platformInfo?.platform === "ios" ||
           window.platformInfo?.platform === "android"
         ) {
-          //            displayCashfree(props, userDetails, setLoading);
-          await displayRazorpay(props, userDetails, setLoading);
+          displayCashfree(props, userDetails, setLoading);
         } else {
           await displayRazorpay(props, userDetails, setLoading);
         }
