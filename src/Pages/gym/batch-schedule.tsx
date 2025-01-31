@@ -194,7 +194,7 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
       </Flex>
     );
     
-    // // fallback function to generate next 14 days
+    //generate code
     const generateNext14Days = () => {
       const dates = [];
       console.log(availableDates);
