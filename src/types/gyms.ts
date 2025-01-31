@@ -83,5 +83,6 @@ export interface IGymDetails extends Omit<IGymCard, "medias"> {
   isExclusive: boolean;
   instaLink?: string;
   isOnlyWeekend: boolean;
+  availableDates: string[];
   medias: [{ type: string; url: string }];
 }
