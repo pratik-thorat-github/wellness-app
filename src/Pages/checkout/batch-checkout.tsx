@@ -407,7 +407,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
               (section) =>
                 section.content && (
                   <div key={section.title} className="mb-4">
-                    <div className="flex items-center justify-center text-[12px] font-semibold uppercase tracking-widest text-[#05070B] my-2">
+                    <div className="flex items-center justify-center text-[12px] font-semibold uppercase tracking-widest text-[#05070B] my-2 whitespace-nowrap">
                       {leftDivider()}
                       <span className="mx-3">{section.title}</span>
                       {rightDivider()}
