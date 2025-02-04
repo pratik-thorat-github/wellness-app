@@ -531,8 +531,12 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
         <div className="checkWrapper">
           <div className="backBtn2">{backBtn()}</div>
           <div className="checkoutDetail">
-            <span className="actImg">
-              <img src={batchDetails?.image} width="90px" height="90px" />
+            <span className="flex-shrink-0">
+              <img
+                src={batchDetails?.image}
+                className="w-[90px] h-[90px] rounded-xl object-cover"
+                alt={batchDetails?.activityName}
+              />
             </span>
             <span className="actDetail">
               <div className="actName">
@@ -580,11 +584,35 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
               <span className="guestIcon">
                 {guestIcon()} &nbsp;Guest{noOfGuests > 1 && "s"}
               </span>
-              <span className="counter">
-                <span onClick={() => manageGuests(false)}>{dscIcon()}</span>
-                <span style={{ marginBottom: "2px" }}>{noOfGuests}</span>
-                <span onClick={() => manageGuests(true)}>{incIcon()}</span>
-              </span>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => manageGuests(false)}
+                  className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+                    noOfGuests <= 1
+                      ? "border-gray-300 text-gray-300 cursor-not-allowed"
+                      : "border-black hover:bg-black hover:text-white"
+                  }`}
+                  disabled={noOfGuests <= 1}
+                >
+                  -
+                </button>
+                <span className="text-lg font-medium w-4 text-center">
+                  {noOfGuests}
+                </span>
+                <button
+                  onClick={() => manageGuests(true)}
+                  className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+                    noOfGuests >= batchDetails.slots - batchDetails.slotsBooked
+                      ? "border-gray-300 text-gray-300 cursor-not-allowed"
+                      : "border-black hover:bg-black hover:text-white"
+                  }`}
+                  disabled={
+                    noOfGuests >= batchDetails.slots - batchDetails.slotsBooked
+                  }
+                >
+                  +
+                </button>
+              </div>
             </div>
           )}
           {batchDetails?.guestsAllowed && <div className="actLine"></div>}
