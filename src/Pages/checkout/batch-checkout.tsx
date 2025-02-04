@@ -393,71 +393,34 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
           ) : (
             ""
           )}
-          <div className="desc">
-            {batchDetails?.aboutTheActivity && (
-              <div className="sectionAct">
-                <div className="sectionActHeading">
-                  {leftDivider()}
-                  <span style={{ margin: "0px 12px" }}>ABOUT THE ACTIVITY</span>
-                  {rightDivider()}
-                </div>
-                <div className="sectionActItems">
-                  <ol type="1">
-                    {batchDetails?.aboutTheActivity?.split("\n").map((e) => {
-                      return <li>{e}</li>;
-                    })}
-                  </ol>
-                </div>
-              </div>
+
+        <div className="text-[#696969]">
+            {[
+              {
+                title: "ABOUT THE ACTIVITY",
+                content: batchDetails?.aboutTheActivity,
+              },
+              { title: "What To Expect?", content: batchDetails?.whatToExpect },
+              { title: "What To Bring?", content: batchDetails?.whatToBring },
+              { title: "More info", content: batchDetails?.moreInfo },
+            ].map(
+              (section) =>
+                section.content && (
+                  <div key={section.title} className="mb-4">
+                    <div className="flex items-center justify-center text-[12px] font-semibold uppercase tracking-widest text-[#05070B] my-2">
+                      {leftDivider()}
+                      <span className="mx-3">{section.title}</span>
+                      {rightDivider()}
+                    </div>
+                    <ol className="list-decimal pl-5 text-[14px]">
+                      {section.content.split("\n").map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ol>
+                  </div>
+                )
             )}
-            {batchDetails?.whatToExpect && (
-              <div className="sectionAct">
-                <div className="sectionActHeading">
-                  {leftDivider()}
-                  <span style={{ margin: "0px 12px" }}>What TO Expect?</span>
-                  {rightDivider()}
-                </div>
-                <div className="sectionActItems">
-                  <ol type="1">
-                    {batchDetails?.whatToExpect?.split("\n").map((e) => {
-                      return <li>{e}</li>;
-                    })}
-                  </ol>
-                </div>{" "}
-              </div>
-            )}
-            {batchDetails?.whatToBring && (
-              <div className="sectionAct">
-                <div className="sectionActHeading">
-                  {leftDivider()}
-                  <span style={{ margin: "0px 12px" }}>What TO Bring?</span>
-                  {rightDivider()}
-                </div>
-                <div className="sectionActItems">
-                  <ol type="1">
-                    {batchDetails?.whatToBring?.split("\n").map((e) => {
-                      return <li>{e}</li>;
-                    })}
-                  </ol>
-                </div>
-              </div>
-            )}
-            {batchDetails?.moreInfo && (
-              <div className="sectionAct">
-                <div className="sectionActHeading">
-                  {leftDivider()}
-                  <span style={{ margin: "0px 12px" }}>More info</span>
-                  {rightDivider()}
-                </div>
-                <div className="sectionActItems">
-                  <ol type="1">
-                    {batchDetails?.moreInfo?.split("\n").map((e) => {
-                      return <li>{e}</li>;
-                    })}
-                  </ol>
-                </div>
-              </div>
-            )}
+          </div>
             {batchDetails?.venue && (
               <div className="sectionAct">
                 <div className="sectionActHeading">
@@ -498,7 +461,6 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
               </div>
             )}
           </div>
-        </div>
         <BookNowFooter
           checkoutType={ECheckoutType.BATCH}
           batchDetails={batchDetails}
