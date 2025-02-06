@@ -30,6 +30,7 @@ import ShareMetadata from "../../components/share-metadata";
 import Loader from "../../components/Loader";
 import { handleRefresh } from "../../utils/refresh";
 import SwipeHandler from "../../components/back-swipe-handler";
+import { shouldShowDiscount } from "../../utils/offers";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -78,37 +79,22 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];
 
   useEffect(() => {
-    setIsFromApp(window?.isFromApp || false);
-    setPastAppBookings(window?.pastAppBookings || {});
+    // Get isFromApp from window object
+    const userSource = window?.platformInfo?.platform || 'web';
+    const appFlag = userSource !== 'web';
+    setIsFromApp(appFlag);
+
+    // Get pastAppBookings from window object or initialize empty
+    const storedBookings = window?.pastAppBookings || {};
+    setPastAppBookings(storedBookings);
   }, []);
 
-  // const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
-  // const [isFromApp, setIsFromApp] = useState(false);
-  // const [gotPastAppBookings, setGotPastAppBookings] = useState(false);
-
-  // const { mutate: _getPastAppBookings } = useMutation({
-  //   mutationFn: getPastAppBookings,
-  //   onError: () => {
-  //     errorToast("Error in getting past app bookings");
-  //   },
-  //   onSuccess: (result) => {
-  //     console.log("past app bookings - ", result);
-  //     setPastAppBookings(result.bookings);
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   const userSource = window?.platformInfo?.platform  || 'web';
-  //   const appFlag = userSource != 'web' ? true : false;
-  //   setIsFromApp(appFlag);
-  //   if(userDetails){
-  //     const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
-  //     _getPastAppBookings(userId)
-  //     setGotPastAppBookings(true);
-  //   } else {
-  //     setGotPastAppBookings(true);
-  //   }
-  // }, [])
+  const showDiscountForUser = gym && shouldShowDiscount(
+    gym,
+    userDetails,
+    isFromApp,
+    pastAppBookings
+  );
 
   const gymId = batchDetails?.gymId;
 

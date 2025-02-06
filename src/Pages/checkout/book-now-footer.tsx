@@ -90,23 +90,6 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
   return payload;
 }
 
-async function handleNativePayment(options: any): Promise<RazorpayResponse> {
-  // Post message to React Native
-  window.ReactNativeWebView?.postMessage(
-    JSON.stringify({
-      type: "RAZORPAY_PAYMENT",
-      payload: options,
-    }),
-  );
-
-  // Create a promise that will be resolved when payment is complete
-  return new Promise((resolve) => {
-    window.paymentCallback = (response: any) => {
-      resolve(response);
-    };
-  });
-}
-
 async function displayRazorpay(
   props: IBookNowFooter,
   userDetails: IUser | null,
@@ -257,10 +240,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [showDiscount, setShowDiscount] = useState(true);
   const [discountedAmount, setDiscountedAmount] = useState(props.totalAmount);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [_, setAfterLoginRedirectAtom] = useAtom(afterLoginRedirectAtom);
   const BACKEND_URL = process.env.REACT_APP_BE_URL;
-  let locationStates = useLocation().state;
-  console.log(locationStates);
 
   const [loading, setLoading] = useState(false);
   const batchBookingUrl = `/checkout/batch/${props.batchId}/booking`;
@@ -269,18 +249,46 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const discountType = props.batchDetails?.discountType || "";
   const price = props.batchDetails?.price || 0;
   let noOfGuests = 1;
+
+  const shouldShowDiscountToUser = () => {
+    if (!props.batchDetails) return false;
+    if (props.batchDetails.discountType === "NONE") return false;
+    if (!props.isFromApp) return false;
+    if (props.pastAppBookings?.[props.batchDetails.gymId]) return false;
+    if (props.comingFrom === EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) return false;
+    if (props.batchDetails.offerType === "BATCH_WITH_GUESTS") return false;
+    
+    return !userDetails || true;
+  };
+
+  const calculateFinalPrice = () => {
+    if (!price || !noOfGuests) return 0;
+    
+    let finalPrice = price * noOfGuests;
+    if (discountType === "FLAT") {
+      finalPrice = (price * noOfGuests * (100 - offerPercentage)) / 100;
+    } else {
+      const percentageDiscount = (price * noOfGuests * offerPercentage) / 100;
+      const discountAmount = Math.min(maxDiscount, percentageDiscount);
+      finalPrice = price * noOfGuests - discountAmount;
+    }
+    return Math.floor(finalPrice);
+  };
+
+  useEffect(() => {
+    setShowDiscount(shouldShowDiscountToUser());
+  }, [
+    props.batchDetails,
+    props.isFromApp,
+    props.pastAppBookings,
+    props.comingFrom,
+    userDetails
+  ]);
+
   if (props.totalGuests && props.totalGuests > 1) {
     noOfGuests = props.totalGuests;
   }
-  let finalPrice =
-    price * noOfGuests - maxDiscount >
-    price * noOfGuests - (price * noOfGuests * offerPercentage) / 100
-      ? price * noOfGuests - maxDiscount
-      : price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
-  if (props.gymData?.discountType == "FLAT") {
-    finalPrice = (price * (100 - offerPercentage)) / 100;
-  }
-  finalPrice = Math.floor(finalPrice);
+  
   const discountText =
     props.gymData?.discountType == "FLAT"
       ? `FLAT ${offerPercentage}% off on 1st booking at this center`
@@ -305,11 +313,6 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       Mixpanel.track("open_batch_checkout_login_with_phone", {
         batchId: props.batchId,
       });
-      setAfterLoginRedirectAtom({
-        ...props,
-        afterLoginUrl: batchBookingUrl,
-      });
-
       navigate("/login", { replace: true });
     } else if (
       props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_PAGE &&
@@ -365,10 +368,6 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   }
 
   useEffect(() => {
-    setAfterLoginRedirectAtom(null);
-  }, []);
-
-  useEffect(() => {
     if (props.batchDetails) {
       console.log(props?.batchDetails);
       if (props.batchDetails?.discountType == "NONE") {
@@ -417,24 +416,6 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       setDiscountedAmount(finalPrice);
     }
   }, [showDiscount]);
-
-  // useEffect(() => {
-  //   if (showDiscount && props.batchDetails) {
-  //     const [newTotalAmount] = calculateDiscountedPrice(
-  //       props.batchDetails?.price || 0,
-  //       50
-  //     );
-
-  //     let noOfGuests = 1;
-  //     if(props.totalGuests){
-  //       noOfGuests = props.totalGuests;
-  //     }
-  //     let finalPrice = (price * noOfGuests  - maxDiscount > (price * noOfGuests - price * noOfGuests * offerPercentage / 100))
-  //                     ?  price * noOfGuests  - maxDiscount
-  //                     : (price * noOfGuests - price * noOfGuests * offerPercentage / 100);
-  //     setDiscountedAmount(finalPrice);
-  //   }
-  // }, [props.totalAmount]);
 
   if (loading) return <Loader />;
   const showCTA = () => {
