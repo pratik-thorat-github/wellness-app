@@ -289,6 +289,36 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     noOfGuests = props.totalGuests;
   }
   
+  useEffect(() => {
+    if (props.batchDetails) {
+      // Get isFromApp and pastAppBookings directly from window
+      const userSource = window?.platformInfo?.platform || 'web';
+      const appFlag = userSource !== 'web';
+      const storedBookings = window?.pastAppBookings || {};
+  
+      if (props.batchDetails?.discountType == "NONE") {
+        setShowDiscount(false);
+      } else if (!userDetails) {
+        setShowDiscount(true);
+      } else if (!appFlag) {  // Use appFlag instead of props.isFromApp
+        setShowDiscount(false);
+      } else if (storedBookings[props.batchDetails.gymId]) {  // Use storedBookings instead of props.pastAppBookings
+        setShowDiscount(false);
+      } else if (
+        props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE
+      ) {
+        setShowDiscount(false);
+      } else {
+        setShowDiscount(true);
+      }
+    } else {
+      setShowDiscount(false);
+    }
+    if (showCTA()) {
+      setShowDiscount(false);
+    }
+  }, [props.batchDetails]);
+
   const discountText =
     props.gymData?.discountType == "FLAT"
       ? `FLAT ${offerPercentage}% off on 1st booking at this center`
