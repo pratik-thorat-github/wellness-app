@@ -272,7 +272,7 @@ const shouldShowDiscount = (
   if (pastAppBookings?.[batchDetails.gymId]) return false;
   if (comingFrom === EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE) return false;
   if (batchDetails.offerType === "BATCH_WITH_GUESTS") return false;
-  
+ 
   return !userDetails || true;
 };
 
