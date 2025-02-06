@@ -18,7 +18,7 @@ import {
 } from "../../utils/string-operation";
 import { formatTimeIntToAmPm } from "../../utils/date";
 import { Mixpanel } from "../../mixpanel/init";
-import { discountTxt, showDiscountText } from "../../utils/offers";
+import { calculateDiscountedPrice, shouldShowDiscount } from "../../utils/offers";
 import { useAtom } from "jotai";
 import { userDetailsAtom } from "../../atoms/atom";
 import { getPastAppBookings } from "../../apis/gym/activities";
@@ -73,7 +73,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     setPastAppBookings(window?.pastAppBookings || {});
   }, []);
 
-  let showDiscount = showDiscountText(
+  let showDiscount = shouldShowDiscount(
     gymData,
     userDetails,
     isFromApp,
@@ -300,7 +300,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   const discountLine = () => {
     console.log({ discountText });
     return showDiscount ? (
-      // <div className="discountLine1">{discountTxt}</div>
+      // <div className="discountLine1">{calculateDiscountedPrice}</div>
       <div className="discountLine1">{discountText}</div>
     ) : null;
   };

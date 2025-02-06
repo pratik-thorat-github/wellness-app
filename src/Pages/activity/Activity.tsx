@@ -10,7 +10,7 @@ import ActivityTiles from "../../components/activity-tiles";
 import { useAtom } from "jotai";
 import { userDetailsAtom } from "../../atoms/atom";
 import { concatAndUpperCaseActivities } from "../../utils/activities";
-import { discountTxt, showDiscountText } from "../../utils/offers";
+import { shouldShowDiscount } from "../../utils/offers";
 import { Rs } from "../../constants/symbols";
 import MetaPixel from "../../components/meta-pixel";
 import {handleRefresh} from '../../utils/refresh';
@@ -172,7 +172,7 @@ const exclusiveIcon = () => {
   const cardWidget = (gymCard: IGymCard, isFromApp: boolean, pastAppBookings: PastAppBookingObject) => {
     const { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage, discountType } = gymCard;
     const finalPrice = (minPrice - maxDiscount) >  (minPrice *  (100 - offerPercentage) / 100) ? (minPrice - maxDiscount) : (minPrice * (100 - offerPercentage) / 100)
-    let showDiscount = showDiscountText(gymCard, userDetails, isFromApp, pastAppBookings);
+    let showDiscount = shouldShowDiscount(gymCard, userDetails, isFromApp, pastAppBookings);
     const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on your 1st booking at this center` :
                          discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on your 1st booking at this center` : ``;
 

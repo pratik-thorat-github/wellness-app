@@ -36,7 +36,7 @@ import { getGymById, getPastAppBookings } from "../../apis/gym/activities";
 import Loader from "../../components/Loader";
 import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
-import { showDiscountText } from "../../utils/offers";
+import { shouldShowDiscount } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 
 interface PastAppBookingObject {
@@ -354,7 +354,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   <Flex style={{
                     justifyContent: 'space-evenly'
                   }}>
-                  {showDiscountText(gym, userDetails, isFromApp, pastAppBookings) ? (
+                  {shouldShowDiscount(gym, userDetails, isFromApp, pastAppBookings) ? (
                     discountedPrice(batch.price, finalPrice, discountText, discountType)
                   ) : (
                     <span style={{
@@ -378,7 +378,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                       fontSize: '12px',
                       color: '#828081'
                     }}>
-                    {!showDiscountText(gym, userDetails, isFromApp, pastAppBookings) && batch.slots != 1 ?  `per person` : ``}
+                    {!shouldShowDiscount(gym, userDetails, isFromApp, pastAppBookings) && batch.slots != 1 ?  `per person` : ``}
                     </div>
                   </Flex>
                 </Flex>
@@ -387,12 +387,12 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             <Flex style={{
                   justifyContent:'center',
                   color:'#1AAC6D', 
-                  fontSize: showDiscountText(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ? '11px' : '0px', 
+                  fontSize: shouldShowDiscount(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ? '11px' : '0px', 
                   borderBottomWidth: "1px",
                   borderBottomColor: colors.border,
                   borderBottomStyle: "solid"
                 }}>
-              {showDiscountText(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ?
+              {shouldShowDiscount(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ?
                 `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center` : `.`
               }
             </Flex>

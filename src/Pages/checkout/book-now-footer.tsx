@@ -16,7 +16,7 @@ import IUser from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
-import { deductPercentage, discountTxt } from "../../utils/offers";
+import { calculateDiscountedPrice } from "../../utils/offers";
 import { trackEvent } from "../../firebase/config";
 
 interface RazorpayResponse {
@@ -396,7 +396,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
 
   useEffect(() => {
     if (showDiscount && props.batchDetails) {
-      const [newTotalAmount] = deductPercentage(
+      const [newTotalAmount] = calculateDiscountedPrice(
         props.batchDetails?.price || 0,
         50,
       );
@@ -420,7 +420,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
 
   // useEffect(() => {
   //   if (showDiscount && props.batchDetails) {
-  //     const [newTotalAmount] = deductPercentage(
+  //     const [newTotalAmount] = calculateDiscountedPrice(
   //       props.batchDetails?.price || 0,
   //       50
   //     );

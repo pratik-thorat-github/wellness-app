@@ -1,22 +1,17 @@
-import { Card, Flex } from "antd";
+import { Flex } from "antd";
 
-import { Link, NavigateFn, navigate, useNavigate } from "@reach/router";
-import { EOfferType, IGymCard } from "../../types/gyms";
+import { navigate, useNavigate } from "@reach/router";
+import { IGymCard } from "../../types/gyms";
 import { useEffect, useState } from "react";
 import ActivityTiles from "../../components/activity-tiles";
 import { concatAndUpperCaseActivities } from "../../utils/activities";
-import colors from "../../constants/colours";
 
-import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
 import { Rs } from "../../constants/symbols";
-import PlusOfferBanner from "../../components/plus-offer-banner";
 import { useAtom } from "jotai/react";
 import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import IUser, { IPlusDetails } from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
-import GymPhotos from "../gym/gym-photos";
-import { min } from "moment";
-import { discountTxt, showDiscountText } from "../../utils/offers";
+import { shouldShowDiscount } from "../../utils/offers";
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
 }
@@ -153,7 +148,7 @@ function getListOfCenters(
     const { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage, discountType } = gymCard;
     console.log(medias, "media");
 
-    let showDiscount = showDiscountText(gymCard, userDetails, isFromApp, pastAppBookings);
+    let showDiscount = shouldShowDiscount(gymCard, userDetails, isFromApp, pastAppBookings);
     const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on your 1st booking at this center` :
                          discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on your 1st booking at this center` : ``;
 
