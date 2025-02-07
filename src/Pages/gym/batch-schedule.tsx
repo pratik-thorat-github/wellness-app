@@ -1,3 +1,4 @@
+
 import { Card, Flex } from "antd";
 import ActivityTiles from "../../components/activity-tiles";
 import {
@@ -8,7 +9,7 @@ import {
 } from "../../utils/date";
 import { RightOutlined } from "@ant-design/icons";
 import { IBatch, IGymDetails } from "../../types/gyms";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { getGymBatchesForDate } from "../../apis/gym/batches";
 import { errorToast } from "../../components/Toast";
@@ -19,6 +20,7 @@ import colors from "../../constants/colours";
 import { Rs } from "../../constants/symbols";
 import { toLetterCase } from "../../utils/string-operation";
 import { Mixpanel } from "../../mixpanel/init";
+import { Slide } from "react-toastify";
 
 function generateBatchTile(gymData: IGymDetails, batches: IBatch[]) {
   const batchTile = (batch: IBatch) => {
@@ -141,7 +143,7 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
     mutationFn: getGymBatchesForDate,
     onSuccess: (result) => {
       let batches = result.batches;
-
+      
       setBatches(result.batches);
       if (!batches.length) errorToast("No batches found");
     },
@@ -156,6 +158,8 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
       marginLeft: "11px",
       cursor: "pointer",
       fontSize: "14px",
+      minWidth: "60px",
+      flex: "0 0 auto"
     };
 
     let selectedStyle: React.CSSProperties = {
@@ -167,7 +171,6 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
 
     const dateTile = (number: number, day: string, dateString: string) => (
       <Flex
-        flex={1}
         vertical
         justify="center"
         align="center"
@@ -190,20 +193,32 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
         <span> {day} </span>
       </Flex>
     );
+    
+    //generate code
+    const generateNext14Days = () => {
+      const dates = [];
+      console.log(availableDates);
+      console.log('14days');
+      for (let days = 0; days < 1; days++) {
+        let date = addDays(new Date(), days);
+        dates.push(formatDate(date).isoDate);
+      }
+      return dates;
+    };
 
-    const weekDateAndDays = [];
-    for (let days = 0; days < 7; days++) {
-      let date = addDays(new Date(), days);
-      let dateNumber = date.getDate();
-      let day = toLetterCase(getDayOfWeek(date));
-      let dateString = formatDate(date).isoDate;
+    // API dates if available, otherwise fallback
+    const availableDates = gymData.availableDates?.length 
+      ? gymData.availableDates 
+      : generateNext14Days();
 
-      weekDateAndDays.push({
-        number: dateNumber,
-        day,
-        dateString,
-      });
-    }
+    const weekDateAndDays = availableDates.map((dateString: string) => {
+      const date = new Date(dateString);
+      return {
+        number: date.getDate(),
+        day: toLetterCase(getDayOfWeek(date)),
+        dateString: dateString,
+      };
+    });
 
     return (
       <Flex
@@ -212,8 +227,10 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
           borderBottomWidth: "1px",
           borderBottomStyle: "solid",
           borderBottomColor: colors.border,
+          overflowX: "auto",
+          WebkitOverflowScrolling: "touch",
         }}
-        justify="space-evenly"
+        justify="flex-start"
       >
         {weekDateAndDays.map(({ number, day, dateString }) => (
           <span key={dateString}> {dateTile(number, day, dateString)} </span>

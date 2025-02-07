@@ -109,6 +109,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     mutationFn: getGymById,
     onSuccess: (result) => {
       setGym(result.gym);
+      
       //   MixpanelGymInit(result.gym);
     },
     onError: (error) => {
@@ -155,7 +156,14 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   useEffect(() => {
     if (gym?.gymId) {
-      if (gym?.isOnlyWeekend) {
+      if (gym.availableDates && gym.availableDates.length > 0) {
+        setSelectedDate(gym.availableDates[0]);
+        _getGymBatchesForDate({
+          id: gym.gymId,
+          date: gym.availableDates[0],
+          activity: selectedActivity,
+        });
+      } else if (gym?.isOnlyWeekend) {
         _getGymBatchesForSchedulePage({
           id: gym.gymId,
           isWeekendOnly: true,
@@ -540,35 +548,68 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       </Flex>
     );
 
-    const weekDateAndDays = [];
-    for (let days = 0; days < 7; days++) {
-      let date = addDays(new Date(), days);
-      let dateNumber = date.getDate();
-      let day = toLetterCase(getDayOfWeek(date));
-      let dateString = formatDate(date).isoDate;
+    // fallback dates (next 14 days)
+    const generateFallbackDates = () => {
+      const dates = [];
+      for (let days = 0; days < 14; days++) {
+        let date = addDays(new Date(), days);
+        let dateNumber = date.getDate();
+        let day = toLetterCase(getDayOfWeek(date));
+        let dateString = formatDate(date).isoDate;
 
-      weekDateAndDays.push({
-        number: dateNumber,
-        day,
-        dateString,
-      });
-    }
+        dates.push({
+          number: dateNumber,
+          day,
+          dateString,
+        });
+      }
+      return dates;
+    };
+
+    // API dates if available, otherwise fallback dates
+    const weekDateAndDays = gym?.availableDates?.length 
+      ? gym.availableDates.map(dateString => {
+          const date = new Date(dateString);
+          return {
+            number: date.getDate(),
+            day: toLetterCase(getDayOfWeek(date)),
+            dateString: dateString
+          };
+        })
+      : generateFallbackDates();
 
     return (
-      <Flex
-        flex={1}
-        justify="space-evenly"
-        style={{
-          width: "100%",
-          overflowX: "auto",
-          scrollBehavior: "smooth",
-          scrollbarWidth: "none",
-        }}
-      >
-        {weekDateAndDays.map(({ number, day, dateString }) => (
-          <span key={dateString}> {dateTile(number, day, dateString)} </span>
-        ))}
-      </Flex>
+      <div style={{ 
+        width: "100%",
+        display: "flex",
+        justifyContent: "center"
+      }}>
+        <Flex
+          style={{
+            width: "100%",
+            maxWidth: "100%",
+            overflowX: "auto",
+            scrollBehavior: "smooth",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            WebkitOverflowScrolling: "touch",
+            gap: "9px",
+            display: "flex",
+            justifyContent: "space-between",
+            // padding: "0"
+          }}
+        >
+          {weekDateAndDays.map(({ number, day, dateString }) => (
+            <span key={dateString} style={{ 
+              flex: "0 0 44px",
+              display: "flex",
+              justifyContent: "center"
+            }}>
+              {dateTile(number, day, dateString)}
+            </span>
+          ))}
+        </Flex>
+      </div>
     );
   }
 

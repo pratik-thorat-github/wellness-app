@@ -211,7 +211,9 @@ const Login: React.FC<ILoginProps> = () => {
                   padding: "10px",
                   width: "95%",
                   borderRadius: "5px",
-                  height: "30px",
+                  height: "35px",
+                  border: "1px solid #D9D9D9",
+                  marginBottom: "15px",
                 }}
                 type="text"
                 required
@@ -231,13 +233,16 @@ const Login: React.FC<ILoginProps> = () => {
             <span>Mobile Number</span>
             <span style={{ marginTop: "8px" }}>
               <input
-                style={{
+                  style={{
+                  border: "1px solid #D9D9D9",
                   width: "95%",
-                  height: "30px",
+                  height: "35px",
                   borderRadius: "5px",
                   padding: "10px",
+                  
                 }}
-                type="tel"
+                  type="tel"
+                  
                 onChange={setValue}
                 name="phone"
                 value={input.phone}
