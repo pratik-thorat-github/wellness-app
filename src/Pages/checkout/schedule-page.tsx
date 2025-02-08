@@ -618,23 +618,27 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     };
 
     // API dates if available, otherwise fallback dates
-    const weekDateAndDays = gym?.availableDates?.length
-      ? gym.availableDates
-          .filter((dateString) => {
-            const date = new Date(dateString);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate date comparison
-            return date >= today;
-          })
-          .map((dateString) => {
-            const date = new Date(dateString);
-            return {
-              number: date.getDate(),
-              day: toLetterCase(getDayOfWeek(date)),
-              dateString: dateString,
-            };
-          })
-      : generateFallbackDates();
+    var weekDateAndDays;
+
+    if (gym?.availableDates?.length && gym?.availableDates?.length > 5) {
+      weekDateAndDays = gym.availableDates
+        .filter((dateString) => {
+          const date = new Date(dateString);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate date comparison
+          return date >= today;
+        })
+        .map((dateString) => {
+          const date = new Date(dateString);
+          return {
+            number: date.getDate(),
+            day: toLetterCase(getDayOfWeek(date)),
+            dateString: dateString,
+          };
+        });
+    } else {
+      weekDateAndDays = generateFallbackDates();
+    }
 
     return (
       <div
