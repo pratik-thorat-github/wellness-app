@@ -45,12 +45,11 @@ interface PastAppBookingObject {
 
 interface IClassCheckout extends RouteComponentProps {}
 
-interface IClassCheckout {
-}
+interface IClassCheckout {}
 
 const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [selectedDate, setSelectedDate] = useState(
-    formatDate(new Date()).isoDate
+    formatDate(new Date()).isoDate,
   );
 
   const location = useLocation();
@@ -58,7 +57,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [selectedActivity, setSelectedActivity] = useState("all");
   const [batches, setBatches] = useState<IBatch[]>([]);
   const activityFromURl = new URLSearchParams(window.location.search).get(
-    "activity"
+    "activity",
   );
   console.log(activityFromURl, "activityFromURl");
 
@@ -68,7 +67,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [isFromApp, setIsFromApp] = useState(false);
   const [pastAppBookings, setPastAppBookings] = useState({});
-  const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];  
+  const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];
 
   useEffect(() => {
     setIsFromApp(window?.isFromApp || false);
@@ -109,7 +108,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     mutationFn: getGymById,
     onSuccess: (result) => {
       setGym(result.gym);
-      
+
       //   MixpanelGymInit(result.gym);
     },
     onError: (error) => {
@@ -178,7 +177,12 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     }
   }, [gym]);
 
-  const discountedPrice = (price: number, finalPrice: number, discountText: string, discountType: string) => (
+  const discountedPrice = (
+    price: number,
+    finalPrice: number,
+    discountText: string,
+    discountType: string,
+  ) => (
     <span
       style={{
         display: "flex",
@@ -222,7 +226,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           fontSize: "12px",
           fontWeight: "400",
         }}
-        >
+      >
         {/* 50% off */}
         {discountType == "FLAT" ? discountText : ``}
       </span>
@@ -233,17 +237,24 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   function generateBatchTile(gym: IGymDetails, batches: IBatch[]) {
     const batchTile = (batch: IBatch) => {
-      const { maxDiscount, offerPercentage, discountType} = gym;
+      const { maxDiscount, offerPercentage, discountType } = gym;
       const { price } = batch;
-      let finalPrice = (price - maxDiscount) >  (price *  (100 - offerPercentage) / 100) ? (price - maxDiscount) : (price * (100 - offerPercentage) / 100)
-      if(discountType == 'FLAT'){
-        finalPrice = (price * (100 - offerPercentage) / 100);
+      let finalPrice =
+        price - maxDiscount > (price * (100 - offerPercentage)) / 100
+          ? price - maxDiscount
+          : (price * (100 - offerPercentage)) / 100;
+      if (discountType == "FLAT") {
+        finalPrice = (price * (100 - offerPercentage)) / 100;
       }
-      const discountText = discountType == 'FLAT' ? `${offerPercentage}% off` : 
-                           discountType == 'PERCENTAGE' ? 
-                           `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center` : ``;
+      const discountText =
+        discountType == "FLAT"
+          ? `${offerPercentage}% off`
+          : discountType == "PERCENTAGE"
+            ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center`
+            : ``;
       return (
-        <Card className={ batch.slots == batch.slotsBooked ? "disabledSoldOut": ""}
+        <Card
+          className={batch.slots == batch.slotsBooked ? "disabledSoldOut" : ""}
           style={{
             // paddingTop: "16px",
             // paddingBottom: "16px",
@@ -263,12 +274,12 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 batchDetails: batch,
                 gym,
                 isFromApp,
-                pastAppBookings
+                pastAppBookings,
               },
             });
           }}
         >
-          <Flex flex='auto' vertical={true}>
+          <Flex flex="auto" vertical={true}>
             <Flex flex={1}>
               <Flex flex={1}>
                 <span>
@@ -291,11 +302,11 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   // borderBottomWidth: "1px",
                   // borderBottomColor: colors.border,
                   // borderBottomStyle: "solid",
-                  marginLeft: '16px',
+                  marginLeft: "16px",
                   paddingBottom: "8px",
                 }}
               >
-                <Flex flex={4} vertical >
+                <Flex flex={4} vertical>
                   <div
                     style={{
                       display: "flex",
@@ -321,88 +332,128 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                       {batch.duration} min
                     </Flex>
                   ) : null}
-                  {(slotsRemainingVisible.includes(gym.gymId)) &&
-                      batch.slots &&
-                      batch.slotsBooked >= 0 &&
-                      batch.slots != batch.slotsBooked &&
-                          batch.slots != 1 ? (
-                    <Flex 
+                  {slotsRemainingVisible.includes(gym.gymId) &&
+                  batch.slots &&
+                  batch.slotsBooked >= 0 &&
+                  batch.slots != batch.slotsBooked &&
+                  batch.slots != 1 ? (
+                    <Flex
                       style={{
                         color: "#C15700",
                         fontSize: "14px",
                         fontWeight: "400",
                         margin: "-4px 0px",
                         marginTop: "2px",
-                        fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif"
+                        fontFamily:
+                          "-apple-system, BlinkMacSystemFont, sans-serif",
                       }}
                       flex={1}
                     >
-                      {batch.slots - batch.slotsBooked} spot(s) left out of {batch.slots}
+                      {batch.slots - batch.slotsBooked} spot(s) left out of{" "}
+                      {batch.slots}
                     </Flex>
-                  )
-                  :
-                  batch.slots && batch.slotsBooked >= 0 && batch.slots == batch.slotsBooked ? (
-                    <Flex 
+                  ) : batch.slots &&
+                    batch.slotsBooked >= 0 &&
+                    batch.slots == batch.slotsBooked ? (
+                    <Flex
                       style={{
                         color: "#C15700",
                         fontSize: "14px",
                         fontWeight: "400",
                         margin: "-4px 0px",
                         marginTop: "2px",
-                        fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif"
+                        fontFamily:
+                          "-apple-system, BlinkMacSystemFont, sans-serif",
                       }}
                       flex={1}
                     >
                       Sold Out!
                     </Flex>
-                  )
-                  : null}
+                  ) : null}
                 </Flex>
                 <Flex flex={2} vertical>
-                  <Flex style={{
-                    justifyContent: 'space-evenly'
-                  }}>
-                  {shouldShowDiscount(gym, userDetails, isFromApp, pastAppBookings) ? (
-                    discountedPrice(batch.price, finalPrice, discountText, discountType)
-                  ) : (
-                    <span style={{
-                      marginRight: '-14px'
-                    }}>
-                      {Rs}
-                      {batch.price}
+                  <Flex
+                    style={{
+                      justifyContent: "space-evenly",
+                    }}
+                  >
+                    {shouldShowDiscount(
+                      gym,
+                      userDetails,
+                      isFromApp,
+                      pastAppBookings,
+                    ) ? (
+                      discountedPrice(
+                        batch.price,
+                        finalPrice,
+                        discountText,
+                        discountType,
+                      )
+                    ) : (
+                      <span
+                        style={{
+                          marginRight: "-14px",
+                        }}
+                      >
+                        {Rs}
+                        {batch.price}
+                      </span>
+                    )}
+                    <span></span>
+                    <span>
+                      <RightOutlined />
                     </span>
-                  )}
-                  <span>
-                    
-                  </span>
-                  <span>
-                    <RightOutlined />
-                  </span>
                   </Flex>
-                  <Flex style={{
-                    justifyContent: 'start'
-                  }}>
-                    <div style={{
-                      fontSize: '12px',
-                      color: '#828081'
-                    }}>
-                    {!shouldShowDiscount(gym, userDetails, isFromApp, pastAppBookings) && batch.slots != 1 ?  `per person` : ``}
+                  <Flex
+                    style={{
+                      justifyContent: "start",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: "#828081",
+                      }}
+                    >
+                      {!shouldShowDiscount(
+                        gym,
+                        userDetails,
+                        isFromApp,
+                        pastAppBookings,
+                      ) && batch.slots != 1
+                        ? `per person`
+                        : ``}
                     </div>
                   </Flex>
                 </Flex>
               </Flex>
             </Flex>
-            <Flex style={{
-                  justifyContent:'center',
-                  color:'#1AAC6D', 
-                  fontSize: shouldShowDiscount(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ? '11px' : '0px', 
-                  borderBottomWidth: "1px",
-                  borderBottomColor: colors.border,
-                  borderBottomStyle: "solid"
-                }}>
-              {shouldShowDiscount(gym, userDetails, isFromApp, pastAppBookings) && (batch.discountType == 'PERCENTAGE') ?
-                `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center` : `.`
-              }
+            <Flex
+              style={{
+                justifyContent: "center",
+                color: "#1AAC6D",
+                fontSize:
+                  shouldShowDiscount(
+                    gym,
+                    userDetails,
+                    isFromApp,
+                    pastAppBookings,
+                  ) && batch.discountType == "PERCENTAGE"
+                    ? "11px"
+                    : "0px",
+                borderBottomWidth: "1px",
+                borderBottomColor: colors.border,
+                borderBottomStyle: "solid",
+              }}
+            >
+              {shouldShowDiscount(
+                gym,
+                userDetails,
+                isFromApp,
+                pastAppBookings,
+              ) && batch.discountType == "PERCENTAGE"
+                ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center`
+                : `.`}
             </Flex>
           </Flex>
         </Card>
@@ -500,7 +551,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   const handleSwipeRight = async () => {
     goToGymPage();
-  }
+  };
 
   const goToGymPage = () => {
     navigate(`/gym/${gymId}`);
@@ -567,23 +618,32 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     };
 
     // API dates if available, otherwise fallback dates
-    const weekDateAndDays = gym?.availableDates?.length 
-      ? gym.availableDates.map(dateString => {
-          const date = new Date(dateString);
-          return {
-            number: date.getDate(),
-            day: toLetterCase(getDayOfWeek(date)),
-            dateString: dateString
-          };
-        })
+    const weekDateAndDays = gym?.availableDates?.length
+      ? gym.availableDates
+          .filter((dateString) => {
+            const date = new Date(dateString);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate date comparison
+            return date >= today;
+          })
+          .map((dateString) => {
+            const date = new Date(dateString);
+            return {
+              number: date.getDate(),
+              day: toLetterCase(getDayOfWeek(date)),
+              dateString: dateString,
+            };
+          })
       : generateFallbackDates();
 
     return (
-      <div style={{ 
-        width: "100%",
-        display: "flex",
-        justifyContent: "center"
-      }}>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <Flex
           style={{
             width: "100%",
@@ -600,11 +660,14 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           }}
         >
           {weekDateAndDays.map(({ number, day, dateString }) => (
-            <span key={dateString} style={{ 
-              flex: "0 0 44px",
-              display: "flex",
-              justifyContent: "center"
-            }}>
+            <span
+              key={dateString}
+              style={{
+                flex: "0 0 44px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               {dateTile(number, day, dateString)}
             </span>
           ))}
@@ -615,63 +678,62 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   return (
     <>
-    <MetaPixel />
-    {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
-    {/* <PullToRefresh onRefresh={handleRefresh}> */}
-    <div>
-      <div className="stickyWrap">
-        {" "}
-        <Banner />
-        <div className="dateTileWrap">
-          <div className="detailWrap">
-            <div className="backBtn" onClick={() => goToGymPage()}>
-              {backBtn()}
-            </div>
-            <div className="gymNames">{gym?.name}</div>
-            {gym?.area && (
-              <div className="locationName">
-                <span>{locationIcon()}</span>
-                <span>{gym?.area}</span>
+      <MetaPixel />
+      {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
+      {/* <PullToRefresh onRefresh={handleRefresh}> */}
+      <div>
+        <div className="stickyWrap">
+          {" "}
+          <Banner />
+          <div className="dateTileWrap">
+            <div className="detailWrap">
+              <div className="backBtn" onClick={() => goToGymPage()}>
+                {backBtn()}
               </div>
-            )}
-          </div>
-          <div style={{ margin: "0px 8px 0px 24px" }}>
-            {!gym?.isOnlyWeekend && generateDateTiles()}
+              <div className="gymNames">{gym?.name}</div>
+              {gym?.area && (
+                <div className="locationName">
+                  <span>{locationIcon()}</span>
+                  <span>{gym?.area}</span>
+                </div>
+              )}
+            </div>
+            <div style={{ margin: "0px 8px 0px 24px" }}>
+              {!gym?.isOnlyWeekend && generateDateTiles()}
+            </div>
           </div>
         </div>
-      </div>
 
-      {!gym?.isOnlyWeekend && (
-        <Flex flex={1} style={{ paddingLeft: "24px" }}>
-          <ActivityTiles
-            activities={gym.activities}
-            activitySelected={selectedActivity}
-            onClickFunction={(activity: string) => {
-              Mixpanel.track("clicked_activity_pill_gym", {
-                gymId: gym.gymId,
-                activity,
-              });
-              setSelectedActivity(activity);
-              _getGymBatchesForDate({
-                id: gym.gymId,
-                date: selectedDate,
-                activity: activity,
-              });
-            }}
-            reposition
-          />
+        {!gym?.isOnlyWeekend && (
+          <Flex flex={1} style={{ paddingLeft: "24px" }}>
+            <ActivityTiles
+              activities={gym.activities}
+              activitySelected={selectedActivity}
+              onClickFunction={(activity: string) => {
+                Mixpanel.track("clicked_activity_pill_gym", {
+                  gymId: gym.gymId,
+                  activity,
+                });
+                setSelectedActivity(activity);
+                _getGymBatchesForDate({
+                  id: gym.gymId,
+                  date: selectedDate,
+                  activity: activity,
+                });
+              }}
+              reposition
+            />
+          </Flex>
+        )}
+
+        <Flex flex={3} style={{ marginTop: "10px" }}>
+          {batches && batches.length
+            ? generateBatchTile(gym, batches)
+            : noBatchComponent()}
         </Flex>
-      )}
-
-      <Flex flex={3} style={{ marginTop: "10px" }}>
-        {batches && batches.length
-          ? 
-            generateBatchTile(gym, batches) 
-          : noBatchComponent()}
-      </Flex>
-    </div>
-    {/* </PullToRefresh> */}
-    {/* </SwipeHandler> */}
+      </div>
+      {/* </PullToRefresh> */}
+      {/* </SwipeHandler> */}
     </>
   );
 };
