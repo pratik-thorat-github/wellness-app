@@ -73,33 +73,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     setIsFromApp(window?.isFromApp || false);
     setPastAppBookings(window?.pastAppBookings || {});
   }, []);
-  // const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
-  // const [isFromApp, setIsFromApp] = useState(false);
-  // const [gotPastBookings, setGotPastAppBookings] = useState(false);
-
-  // const { mutate: _getPastAppBookings } = useMutation({
-  //   mutationFn: getPastAppBookings,
-  //   onError: () => {
-  //     errorToast("Error in getting past app bookings");
-  //   },
-  //   onSuccess: (result) => {
-  //     console.log("past app bookings - ", result);
-  //     setPastAppBookings(result.bookings);
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   const userSource = window?.platformInfo?.platform  || 'web';
-  //   const appFlag = userSource != 'web' ? true : false;
-  //   setIsFromApp(appFlag);
-  //   if(userDetails){
-  //     const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
-  //     _getPastAppBookings(userId)
-  //     setGotPastAppBookings(true);
-  //   }
-  //   setGotPastAppBookings(true);
-  // }, [])
-
+  
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");
   }, [activityFromURl]);
