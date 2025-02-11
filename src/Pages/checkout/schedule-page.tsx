@@ -67,38 +67,13 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [isFromApp, setIsFromApp] = useState(false);
   const [pastAppBookings, setPastAppBookings] = useState({});
+  const [scheduleDates, setScheduleDates] = useState<string[]>([]);
   const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];
 
   useEffect(() => {
     setIsFromApp(window?.isFromApp || false);
     setPastAppBookings(window?.pastAppBookings || {});
   }, []);
-  // const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
-  // const [isFromApp, setIsFromApp] = useState(false);
-  // const [gotPastBookings, setGotPastAppBookings] = useState(false);
-
-  // const { mutate: _getPastAppBookings } = useMutation({
-  //   mutationFn: getPastAppBookings,
-  //   onError: () => {
-  //     errorToast("Error in getting past app bookings");
-  //   },
-  //   onSuccess: (result) => {
-  //     console.log("past app bookings - ", result);
-  //     setPastAppBookings(result.bookings);
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   const userSource = window?.platformInfo?.platform  || 'web';
-  //   const appFlag = userSource != 'web' ? true : false;
-  //   setIsFromApp(appFlag);
-  //   if(userDetails){
-  //     const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
-  //     _getPastAppBookings(userId)
-  //     setGotPastAppBookings(true);
-  //   }
-  //   setGotPastAppBookings(true);
-  // }, [])
 
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");
@@ -108,7 +83,15 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     mutationFn: getGymById,
     onSuccess: (result) => {
       setGym(result.gym);
-
+      if (gym) {
+        const result = gym.availableDates.filter((dateString) => {
+          const date = new Date(dateString);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate date comparison
+          return date >= today;
+        });
+        setScheduleDates(result);
+      }
       //   MixpanelGymInit(result.gym);
     },
     onError: (error) => {
@@ -155,14 +138,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   useEffect(() => {
     if (gym?.gymId) {
-      if (gym.availableDates && gym.availableDates.length > 0) {
-        setSelectedDate(gym.availableDates[0]);
-        _getGymBatchesForDate({
-          id: gym.gymId,
-          date: gym.availableDates[0],
-          activity: selectedActivity,
-        });
-      } else if (gym?.isOnlyWeekend) {
+      if (gym?.isOnlyWeekend) {
         _getGymBatchesForSchedulePage({
           id: gym.gymId,
           isWeekendOnly: true,
@@ -175,7 +151,13 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
         });
       }
     }
-  }, [gym]);
+  }, [gym, selectedDate]);
+
+  useEffect(() => {
+    if (scheduleDates.length) {
+      setSelectedDate(scheduleDates[0]);
+    }
+  }, [scheduleDates]);
 
   const discountedPrice = (
     price: number,
@@ -586,7 +568,6 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             date: dateString,
             day: `${number}-${day}`,
           });
-          setSelectedDate(dateString);
           _getGymBatchesForDate({
             id: gym?.gymId ?? 0,
             date: dateString,
@@ -621,21 +602,22 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     var weekDateAndDays;
 
     if (gym?.availableDates?.length && gym?.availableDates?.length > 5) {
-      weekDateAndDays = gym.availableDates
-        .filter((dateString) => {
-          const date = new Date(dateString);
-          const today = new Date();
-          today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate date comparison
-          return date >= today;
-        })
-        .map((dateString) => {
-          const date = new Date(dateString);
-          return {
-            number: date.getDate(),
-            day: toLetterCase(getDayOfWeek(date)),
-            dateString: dateString,
-          };
-        });
+      const result = gym.availableDates.filter((dateString) => {
+        const date = new Date(dateString);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate date comparison
+        return date >= today;
+      });
+
+      setScheduleDates(result);
+      weekDateAndDays = result.map((dateString) => {
+        const date = new Date(dateString);
+        return {
+          number: date.getDate(),
+          day: toLetterCase(getDayOfWeek(date)),
+          dateString: dateString,
+        };
+      });
     } else {
       weekDateAndDays = generateFallbackDates();
     }
