@@ -13,6 +13,7 @@ import { ReactComponent as Dance } from "./dance.svg";
 import { ReactComponent as Football } from "./football.svg";
 import { ReactComponent as Pickleball } from "./pickleball.svg";
 import { ReactComponent as GymDayPass } from "./gymdaypass.svg";
+import { ReactComponent as Ride } from "./ride.svg"
 
 const activityToSvgMap = (activity: string): JSX.Element => {
   activity = activity.toLowerCase();
@@ -98,6 +99,12 @@ const activityToSvgMap = (activity: string): JSX.Element => {
     </span>
   );
 
+  const ride = (
+    <span>
+      <Ride />
+    </span>
+  );
+
   const empty = <span></span>;
 
   let map: object = {
@@ -118,6 +125,7 @@ const activityToSvgMap = (activity: string): JSX.Element => {
     football: football,
     gymdaypass: gymdaypass,
     "personal training": pt,
+    ride: ride,
   };
 
   if (map[activity as keyof object]) return map[activity as keyof object];
