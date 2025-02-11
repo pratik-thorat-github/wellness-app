@@ -73,7 +73,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     setIsFromApp(window?.isFromApp || false);
     setPastAppBookings(window?.pastAppBookings || {});
   }, []);
-  
+
   useEffect(() => {
     setSelectedActivity(activityFromURl ?? "all");
   }, [activityFromURl]);
@@ -129,11 +129,18 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   useEffect(() => {
     if (gym?.gymId) {
-      if (gym.availableDates && gym.availableDates.length > 0) {
-        setSelectedDate(gym.availableDates[0]);
+      if (gym.availableDates && gym.availableDates.length > 4) {
+        const result = gym.availableDates.filter((dateString) => {
+          const date = new Date(dateString);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate date comparison
+          return date >= today;
+        });
+
+        setSelectedDate(result[0]);
         _getGymBatchesForDate({
           id: gym.gymId,
-          date: gym.availableDates[0],
+          date: result[0],
           activity: selectedActivity,
         });
       } else if (gym?.isOnlyWeekend) {
