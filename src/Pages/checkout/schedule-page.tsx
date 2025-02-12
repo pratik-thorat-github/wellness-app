@@ -132,7 +132,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   useEffect(() => {
     if (gym?.gymId) {
-      if (gym.availableDates && gym.availableDates.length > 4) {
+      if (gym.availableDates) {
         const result = gym.availableDates.filter((dateString) => {
           const date = new Date(dateString);
           const today = new Date();
@@ -605,7 +605,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
     // API dates if available, otherwise fallback dates
     var weekDateAndDays;
 
-    if (gym?.availableDates?.length && gym?.availableDates?.length > 5) {
+    if (gym?.availableDates?.length) {
       weekDateAndDays = gym.availableDates
         .filter((dateString) => {
           const date = new Date(dateString);
