@@ -1,15 +1,8 @@
 import { RouteComponentProps, navigate, useLocation } from "@reach/router";
-import BatchInfoOnCheckout from "./batch-info";
-import BatchPrice from "./batch-price";
-import CheckoutPlusPrice from "./batch-checkout-plus-price";
-import { useEffect, useRef } from "react";
-import { ECheckoutType, ESelectedPlan } from "../../types/checkout";
-import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
+import { useEffect } from "react";
+import { userDetailsAtom } from "../../atoms/atom";
 import { useAtom } from "jotai/react";
-import activityToSvgMap from "../../images/class-images/activity-map";
 import { Mixpanel } from "../../mixpanel/init";
-import BookClassBanner from "../gym/book-class-banner";
-import BatchSchedule from "../gym/batch-schedule";
 import { Card, Flex } from "antd";
 import ActivityTiles from "../../components/activity-tiles";
 import {
@@ -39,6 +32,9 @@ import "./style.css";
 import { shouldShowDiscount } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 
+const COUPLE_BATCH_IDS = [25992, 25993, 25994];
+const SLOTS_REMAINING_VISIBLE_GYM_IDS = [6, 22, 24, 25, 27, 28, 31, 32];
+
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
 }
@@ -67,7 +63,14 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [isFromApp, setIsFromApp] = useState(false);
   const [pastAppBookings, setPastAppBookings] = useState({});
-  const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const dateFromURL = urlParams.get("date");
+
+  useEffect(() => {
+    const initialDate = dateFromURL || formatDate(new Date()).isoDate;
+    setSelectedDate(initialDate);
+  }, [dateFromURL]);
 
   useEffect(() => {
     setIsFromApp(window?.isFromApp || false);
@@ -136,7 +139,6 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate date comparison
           return date >= today;
         });
-
         setSelectedDate(result[0]);
         _getGymBatchesForDate({
           id: gym.gymId,
@@ -156,7 +158,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
         });
       }
     }
-  }, [gym]);
+  }, [gym, dateFromURL]);
 
   const discountedPrice = (
     price: number,
@@ -313,7 +315,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                       {batch.duration} min
                     </Flex>
                   ) : null}
-                  {slotsRemainingVisible.includes(gym.gymId) &&
+                  {SLOTS_REMAINING_VISIBLE_GYM_IDS.includes(gym.gymId) &&
                   batch.slots &&
                   batch.slotsBooked >= 0 &&
                   batch.slots != batch.slotsBooked &&
@@ -402,8 +404,10 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                         isFromApp,
                         pastAppBookings,
                       ) && batch.slots != 1
-                        ? `per person`
-                        : ``}
+                        ? COUPLE_BATCH_IDS.includes(batch.batchId)
+                          ? "per couple"
+                          : "per person"
+                        : ""}
                     </div>
                   </Flex>
                 </Flex>
