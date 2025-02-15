@@ -43,6 +43,22 @@ interface IClassCheckout extends RouteComponentProps {}
 
 interface IClassCheckout {}
 
+const getPlatformInfo = () => {
+  const storedPlatformInfo = localStorage.getItem('platformInfo');
+  if (storedPlatformInfo) {
+    return JSON.parse(storedPlatformInfo).platform !== 'web';
+  }
+  return window?.platformInfo?.platform !== 'web' || false;
+};
+
+const getPastBookings = () => {
+  const storedBookings = localStorage.getItem('pastAppBookings');
+  if (storedBookings) {
+    return JSON.parse(storedBookings);
+  }
+  return window?.pastAppBookings || {};
+};
+
 const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [selectedDate, setSelectedDate] = useState(
     formatDate(new Date()).isoDate,
@@ -73,8 +89,19 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   }, [dateFromURL]);
 
   useEffect(() => {
-    setIsFromApp(window?.isFromApp || false);
-    setPastAppBookings(window?.pastAppBookings || {});
+    const isApp = getPlatformInfo();
+    setIsFromApp(isApp);
+    
+    if (window?.platformInfo) {
+      localStorage.setItem('platformInfo', JSON.stringify(window.platformInfo));
+    }
+
+    const bookings = getPastBookings();
+    setPastAppBookings(bookings);
+    
+    if (window?.pastAppBookings) {
+      localStorage.setItem('pastAppBookings', JSON.stringify(window.pastAppBookings));
+    }
   }, []);
 
   useEffect(() => {
