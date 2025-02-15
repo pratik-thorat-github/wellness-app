@@ -1,6 +1,7 @@
 import { atomWithStorage, createJSONStorage } from "jotai/utils";
 import IUser, { IPlusDetails } from "../types/user";
 import { IBookNowFooter } from "../Pages/checkout/book-now-footer";
+import { atom } from "jotai";
 
 const storage = createJSONStorage(() => localStorage);
 export const accessTokenAtom = atomWithStorage(

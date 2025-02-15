@@ -23,7 +23,7 @@ const Login: React.FC<ILoginProps> = () => {
     name: "",
   });
 
-  // useAuthRedirect();
+  useAuthRedirect();
 
   function setValue(e: React.ChangeEvent<HTMLInputElement>) {
     var toSet = { ...input };

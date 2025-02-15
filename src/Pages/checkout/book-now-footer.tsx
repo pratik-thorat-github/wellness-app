@@ -282,6 +282,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [discountedAmount, setDiscountedAmount] = useState(props.totalAmount);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [, setAfterLoginRedirect] = useAtom(afterLoginRedirectAtom);
 
   const BACKEND_URL = process.env.REACT_APP_BE_URL;
   const batchBookingUrl = `/checkout/batch/${props.batchId}/booking`;
@@ -340,6 +341,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
 
     if (!userDetails) {
       Mixpanel.track("open_batch_checkout_login_with_phone", { batchId: props.batchId });
+      setAfterLoginRedirect({ afterLoginUrl: window.location.pathname });
       navigate("/login", { replace: true });
       return;
     }
