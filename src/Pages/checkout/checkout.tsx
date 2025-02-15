@@ -580,40 +580,48 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
 
           {/* Guest count section */}
           {batchDetails?.guestsAllowed && (
-            <div className="guestCount flexy">
-              <span className="guestIcon">
-                {guestIcon()} &nbsp;Guest{noOfGuests > 1 && "s"}
-              </span>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => manageGuests(false)}
-                  className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
-                    noOfGuests <= 1
-                      ? "border-gray-300 text-gray-300 cursor-not-allowed"
-                      : "border-black hover:bg-black hover:text-white"
-                  }`}
-                  disabled={noOfGuests <= 1}
-                >
-                  -
-                </button>
-                <span className="text-lg font-medium w-4 text-center">
-                  {noOfGuests}
-                </span>
-                <button
-                  onClick={() => manageGuests(true)}
-                  className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
-                    noOfGuests >= batchDetails.slots - batchDetails.slotsBooked
-                      ? "border-gray-300 text-gray-300 cursor-not-allowed"
-                      : "border-black hover:bg-black hover:text-white"
-                  }`}
-                  disabled={
-                    noOfGuests >= batchDetails.slots - batchDetails.slotsBooked
-                  }
-                >
-                  +
-                </button>
-              </div>
-            </div>
+           <div className="flex items-center justify-between py-3">
+           <span className="flex items-center gap-2">
+             {guestIcon()} 
+             <span className="text-sm text-gray-700">
+               Guest{noOfGuests > 1 && "s"}
+             </span>
+           </span>
+           
+           <div className="flex">
+             <button
+               onClick={() => manageGuests(false)}
+               className={`h-9 px-4 flex items-center justify-center transition-all
+                 border-y border-l border-gray-300 rounded-l-lg
+                 ${noOfGuests <= 1 
+                   ? 'bg-gray-50 text-gray-300 cursor-not-allowed' 
+                   : 'bg-white text-gray-700 hover:bg-gray-50 active:bg-gray-100'
+                 }`}
+               disabled={noOfGuests <= 1}
+             >
+               −
+             </button>
+             
+             <div className="h-9 min-w-[36px] flex items-center justify-center border-y border-gray-300 bg-white">
+               <span className="text-base font-medium text-gray-900">
+                 {noOfGuests}
+               </span>
+             </div>
+             
+             <button
+               onClick={() => manageGuests(true)}
+               className={`h-9 px-4 flex items-center justify-center transition-all
+                 border-y border-r border-gray-300 rounded-r-lg
+                 ${noOfGuests >= batchDetails.slots - batchDetails.slotsBooked
+                   ? 'bg-gray-50 text-gray-300 cursor-not-allowed'
+                   : 'bg-white text-gray-700 hover:bg-gray-50 active:bg-gray-100'
+                 }`}
+               disabled={noOfGuests >= batchDetails.slots - batchDetails.slotsBooked}
+             >
+               +
+             </button>
+           </div>
+         </div>
           )}
           {batchDetails?.guestsAllowed && <div className="actLine"></div>}
 
