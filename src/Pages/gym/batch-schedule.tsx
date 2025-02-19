@@ -197,9 +197,7 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
     //generate code
     const generateNext14Days = () => {
       const dates = [];
-      console.log(availableDates);
-      console.log('14days');
-      for (let days = 0; days < 1; days++) {
+      for (let days = 0; days < 7; days++) {
         let date = addDays(new Date(), days);
         dates.push(formatDate(date).isoDate);
       }

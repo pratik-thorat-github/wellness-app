@@ -1,4 +1,5 @@
 import { Flex } from "antd";
+import { useState } from "react";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import colors from "../../constants/colours";
 
@@ -10,10 +11,17 @@ import useWindowDimensions from "../../hooks/getWindowDimensions";
 import { createMapsLink, toLetterCase } from "../../utils/string-operation";
 
 interface BookingClassCard {
-  booking: IBookings;
+  booking: IBookings & {
+    guests?: Array<{
+      name: string;
+      skillLevel: string;
+      gamesPlayed: number;
+    }>;
+  };
 }
 
 const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
   let addressLine1: string, addressLine2: string;
   if (booking.venueAddressLine1 && booking.venueAddressLine2) {
     addressLine1 = booking.venueAddressLine1;
@@ -33,6 +41,9 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
         borderRadius: "12px",
         minWidth: "90vw",
         marginBottom: "10px",
+        boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.2)",
+        transition: "all 0.3s ease",
+        height: isExpanded ? "auto" : undefined
       }}
     >
       <Flex
@@ -119,19 +130,100 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
             <span> {booking.name} </span>
           </Flex>
 
-          <Flex
-            justify="flex-end"
-            style={{
-              fontWeight: "bold",
-              marginLeft: "8px",
-            }}
-            onClick={() => {
-              window.open(mapsLink);
-            }}
-          >
-            <u> Get Direction </u>
+          <Flex style={{ gap: "24px" }}>
+            <Flex
+              justify="flex-end"
+              style={{
+                fontWeight: "bold",
+                cursor: "pointer"
+              }}
+              onClick={() => {
+                window.open(mapsLink);
+              }}
+            >
+              <u>Get Direction</u>
+            </Flex>
+
+            <Flex
+              justify="flex-end"
+              style={{
+                fontWeight: "bold",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px"
+              }}
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              <u>{isExpanded ? "Less Info" : "More Info"}</u>
+              <span style={{ 
+                transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.3s ease'
+              }}>
+                ↓
+              </span>
+            </Flex>
           </Flex>
         </Flex>
+
+        {/* Expanded Section */}
+        {isExpanded && (
+          <Flex 
+            vertical 
+            style={{
+              marginTop: "24px",
+              borderTop: "1px solid",
+              borderTopColor: colors.border,
+              paddingTop: "16px"
+            }}
+          >
+            <Flex vertical gap="16px">
+              <h3 style={{ margin: 0, fontSize: "16px" }}>Participants</h3>
+              
+              {booking.guests?.map((guest, index) => (
+                <Flex 
+                  key={index} 
+                  justify="space-between" 
+                  style={{
+                    padding: "10px",
+                    background: "#F8F8F8",
+                    borderRadius: "8px"
+                  }}
+                >
+                  <Flex vertical gap="4px">
+                    <span style={{ fontSize: "12px", fontWeight: "500" }}>
+                      {guest.name}
+                    </span>
+                    <span style={{ 
+                      fontSize: "12px", 
+                      color: colors.secondary,
+                      padding: "2px 8px",
+                      background: guest.skillLevel.toLowerCase() === "advanced" ? "#F0E6FF" : "#E6F0FF",
+                      borderRadius: "4px",
+                      display: "inline-block"
+                    }}>
+                      {guest.skillLevel}
+                    </span>
+                  </Flex>
+                  <Flex vertical align="flex-end" gap="4px">
+                    <span style={{ 
+                      fontSize: "12px", 
+                      color: colors.secondary 
+                    }}>
+                      Games Played:
+                    </span>
+                    <span style={{ 
+                      fontSize: "12px",
+                      fontWeight: "500"
+                    }}>
+                      {guest.gamesPlayed}
+                    </span>
+                  </Flex>
+                </Flex>
+              ))}
+            </Flex>
+          </Flex>
+        )}
       </Flex>
     </Flex>
   );

@@ -33,6 +33,10 @@ export interface IBookings {
   venueAddressLine1?: string;
   venueAddressLine2?: string;
   rideNumbers?: number[];
+  noOfParticipants?: number;
+  participants?: Array<{
+    participantName: string;
+  }>;
 }
 
 export default IUser;
