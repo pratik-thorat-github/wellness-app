@@ -21,7 +21,7 @@ interface BookingClassCard {
 }
 
 const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   let addressLine1: string, addressLine2: string;
   if (booking.venueAddressLine1 && booking.venueAddressLine2) {
     addressLine1 = booking.venueAddressLine1;
