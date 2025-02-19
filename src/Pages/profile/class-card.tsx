@@ -13,9 +13,9 @@ import { createMapsLink, toLetterCase } from "../../utils/string-operation";
 interface BookingClassCard {
   booking: IBookings & {
     guests?: Array<{
-      name: string;
-      skillLevel: string;
-      gamesPlayed: number;
+      name?: string;
+      skillLevel?: string;
+      gamesPlayed?: number;
     }>;
   };
 }
@@ -192,12 +192,12 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
                   }}
                 >
                   <Flex vertical gap="4px">
-                    {guest.name && (
+                    {guest?.name && (
                       <span style={{ fontSize: "12px", fontWeight: "500" }}>
                         {guest.name}
                       </span>
                     )}
-                    {guest.skillLevel && (
+                    {guest?.skillLevel && (
                       <span
                         style={{
                           fontSize: "12px",
@@ -215,7 +215,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
                       </span>
                     )}
                   </Flex>
-                  {guest.gamesPlayed && (
+                  {guest?.gamesPlayed && (
                     <Flex vertical align="flex-end" gap="4px">
                       <span
                         style={{
